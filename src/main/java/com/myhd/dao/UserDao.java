@@ -33,6 +33,7 @@ public interface UserDao {
      * @author CYQH
      * @date: 2023/09/22 19:40
      */
+    @Select("SELECT * FROM user WHERE account = #{account} AND password = #{password}")
     User selectByUserId(User user);
 
     /**
@@ -42,5 +43,6 @@ public interface UserDao {
      * @author CYQH
      * @date: 2023/09/22 19:43
      */
+
     Integer updateUserById(User user);
 }
