@@ -1,10 +1,7 @@
 package com.myhd.dao;
 
 import com.myhd.pojo.Enterprise;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -28,6 +25,8 @@ public interface EnterpriseDao {
      * @author JoneElmo
      * @date: 2023-9-23 10:50
      */
+
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     @Insert("insert into enterprise(name, social_uniform_code, email, phone, address, scale, fax) \n" +
             "values ( #{name},#{socialUniformCode},#{email},#{phone},#{address},#{scale},#{fax} );")
     Integer insertEnterprise(Enterprise enterprise);
