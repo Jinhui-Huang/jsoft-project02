@@ -15,12 +15,12 @@ import com.myhd.pojo.User;
 public interface UserService {
     /**
      * @description: 判断用户id是否在用户表里面。
-     * @param id
+     * @param account
      * @return: java.lang.Boolean
      * @author CYQH
      * @date: 2023/09/22 19:36
      */
-    Boolean judgeUserIsExists(Integer id);
+    Boolean judgeUserIsExists(String account);
     /**
      * @description: 判断用户账户密码是否正确，如果正确，将查询的信息返回给企业认证页面，如果错误返回一个空对象null。
      * @param user
@@ -28,7 +28,7 @@ public interface UserService {
      * @author CYQH
      * @date: 2023/09/22 19:40
      */
-    User selectByUserId(User user);
+    User selectByUserAccountPwd(User user);
 
     /**
      * @description: 将企业认证页面传过来的用户认证信息更新到用户表中
