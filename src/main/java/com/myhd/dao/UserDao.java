@@ -16,13 +16,13 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface UserDao {
     /**
-     * @description: 判断用户id是否在用户表里面。
-     * @param id
+     * @description: 判断用户帐号account是否在用户表里面。
+     * @param account
      * @return: java.lang.Integer
      * @author CYQH
      * @date: 2023/09/22 19:36
      */
-    Integer countId(Integer id);
+    Integer countId(String account);
     /**
      * @description: 判断用户账户密码是否正确，如果正确，将查询的信息返回给企业认证页面，如果错误返回一个空对象null。
      * @param user
@@ -30,7 +30,7 @@ public interface UserDao {
      * @author CYQH
      * @date: 2023/09/22 19:40
      */
-    User selectByUserId(User user);
+    User selectUserByAccountPwd(User user);
 
     /**
      * @description: 将企业认证页面传过来的用户认证信息更新到用户表中

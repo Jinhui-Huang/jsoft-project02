@@ -11,7 +11,6 @@ out/
 src/test
 src/main/resources/logback.xml
 
-
 ### IntelliJ IDEA ###
 .idea/modules.xml
 .idea/jarRepositories.xml
