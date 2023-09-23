@@ -30,7 +30,7 @@ public interface UserDao {
      * @author CYQH
      * @date: 2023/09/22 19:40
      */
-    User selectByUserId(User user);
+    User selectUserByAccountPwd(User user);
 
     /**
      * @description: 将企业认证页面传过来的用户认证信息更新到用户表中
