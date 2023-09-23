@@ -21,7 +21,8 @@ import java.util.List;
 @Mapper
 public interface EnterpriseDao {
     /**
-     * @description: 将信息认证页面的企业认证信息更新到企业表中。
+     * @description: 将信息认证页面的企业认证信息更新到企业表中, 通过mybatis把新增的主键返回给插入的对象,在方法上再加如下注解: @Options(useGeneratedKeys = true, keyProperty = "实体类字段名", keyColumn = "数据库表字段名")
+     * 注意企业名称和统一信用代码利用数据库的唯一约束进行了查重, 服务层必需要进行异常捕捉。
      * @param enterprise
      * @return: java.lang.Integer
      * @author JoneElmo
