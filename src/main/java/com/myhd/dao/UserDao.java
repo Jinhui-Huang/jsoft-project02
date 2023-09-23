@@ -34,7 +34,7 @@ public interface UserDao {
      * @date: 2023/09/22 19:40
      */
     @Select("SELECT * FROM user WHERE account = #{account} AND password = #{password}")
-    User selectByUserId(User user);
+    User selectUserByAccountPwd(User user);
 
     /**
      * @description: 将企业认证页面传过来的用户认证信息更新到用户表中
