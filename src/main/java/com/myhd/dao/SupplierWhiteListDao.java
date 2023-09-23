@@ -28,13 +28,13 @@ public interface SupplierWhiteListDao {
      */
 //    @Select("select wlv.* from (select @id:=#{enterpriseId} p) parm, white_list_vive wlv")
     @Select("<script>\n" +
-            "    select wlv.* from (select @id:=#{enterpriseId} p) parm, white_list_vive wlv\n" +
+            "    select wlv.* from (select @id:=#{id} p) parm, white_list_vive wlv\n" +
             "    <where>\n" +
             "        <if test=\"enterpriseName != null\">\n" +
             "            and enterprise_name like #{enterpriseName}\n" +
             "        </if>\n" +
-            "        <if test=\"variableInfo != null\">\n" +
-            "            and variable_info = #{variableInfo}\n" +
+            "        <if test=\"supplierLevel != null\">\n" +
+            "            and variable_info = #{supplierLevel}\n" +
             "        </if>\n" +
             "    </where>\n" +
             "</script>")
