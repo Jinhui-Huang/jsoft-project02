@@ -21,18 +21,19 @@ public class UserServiceImpl implements UserService {
      private static final  SqlSession session =  MyBatisUtil.openSession(true);
      public static final UserDao userDaoImpl =  session.getMapper(UserDao.class);
 
+
     @Override
-    public Boolean judgeUserIsExists(Integer id) {
-        return null;
+    public Boolean judgeUserIsExists(String account) {
+        return userDaoImpl.countAccount(account) == 1;
     }
 
     @Override
-    public User selectByUserId(User user) {
+    public User selectByUserAccountPwd(User user) {
         return userDaoImpl.selectUserByAccountPwd(user);
     }
 
     @Override
     public Boolean updateUserById(User user) {
-        return null;
+        return userDaoImpl.updateUserById(user) == 1;
     }
 }
