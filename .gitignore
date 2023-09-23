@@ -9,6 +9,7 @@ target/
 out/
 /src/test/
 src/test
+src/main/resources/logback.xml
 
 
 ### IntelliJ IDEA ###
