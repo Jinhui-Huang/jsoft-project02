@@ -26,7 +26,6 @@ public interface SupplierWhiteListDao {
      * @author JoneElmo
      * @date: 2023-9-23 10:50
      */
-//    @Select("select wlv.* from (select @id:=#{enterpriseId} p) parm, white_list_vive wlv")
     @Select("<script>\n" +
             "    select wlv.* from (select @id:=#{id} p) parm, white_list_vive wlv\n" +
             "    <where>\n" +
