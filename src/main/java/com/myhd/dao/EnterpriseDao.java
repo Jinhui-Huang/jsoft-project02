@@ -1,6 +1,7 @@
 package com.myhd.dao;
 
 import com.myhd.pojo.Enterprise;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public interface EnterpriseDao {
      * @author CYQH
      * @date: 2023/09/22 20:06
      */
+    @Insert("")
     Integer insertEnterprise(Enterprise enterprise);
 
     /**

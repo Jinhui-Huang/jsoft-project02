@@ -34,7 +34,7 @@ public interface UserDao {
      * @author CYQH
      * @date: 2023/09/22 19:40
      */
-    @Select("SELECT * FROM user WHERE account = #{account} AND password = #{password}")
+    @Select("SELECT id,name,enterprise_id,enterprise_name,phone,account,password,idcard_name,idcard_no FROM user WHERE account = #{account} AND password = #{password}")
     User selectUserByAccountPwd(User user);
 
     /**
