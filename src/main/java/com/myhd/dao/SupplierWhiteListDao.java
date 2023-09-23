@@ -1,5 +1,6 @@
 package com.myhd.dao;
 
+import com.myhd.pojo.Enterprise;
 import com.myhd.pojo.SupplierWhiteList;
 import com.myhd.pojo.ThreeTablesQuery;
 import org.apache.ibatis.annotations.*;
@@ -25,8 +26,19 @@ public interface SupplierWhiteListDao {
      * @author JoneElmo
      * @date: 2023-9-23 10:50
      */
-    @Select("select wlv.* from (select @id:=#{enterpriseId} p) parm, white_list_vive wlv")
-    List<ThreeTablesQuery>  selectWhiteInfoByEnterpriseId(Integer enterpriseId);
+//    @Select("select wlv.* from (select @id:=#{enterpriseId} p) parm, white_list_vive wlv")
+    @Select("<script>\n" +
+            "    select wlv.* from (select @id:=#{enterpriseId} p) parm, white_list_vive wlv\n" +
+            "    <where>\n" +
+            "        <if test=\"enterpriseName != null\">\n" +
+            "            and enterprise_name like #{enterpriseName}\n" +
+            "        </if>\n" +
+            "        <if test=\"variableInfo != null\">\n" +
+            "            and variable_info = #{variableInfo}\n" +
+            "        </if>\n" +
+            "    </where>\n" +
+            "</script>")
+    List<ThreeTablesQuery>  selectWhiteInfoByEnterpriseId(@Param("enterpriseId") Integer enterpriseId,@Param("enterpriseName") String enterpriseName,@Param("variableInfo") String variableInfo);
     /**
      * @description: 根据添加供应商获取的白名单信息更新白名单表。
      * @param supplierWhiteList
