@@ -3,6 +3,7 @@ package com.myhd.dao;
 import com.myhd.pojo.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * className UserDao
@@ -43,6 +44,6 @@ public interface UserDao {
      * @author CYQH
      * @date: 2023/09/22 19:43
      */
-
+    @Update("UPDATE user set enterprise_id = #{enterpriseId} ,enterprise_name = #{enterpriseName},idcard_name = #{idcardName} ,idcard_no = #{idcardNo} WHERE id = #{id}")
     Integer updateUserById(User user);
 }
