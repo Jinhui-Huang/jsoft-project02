@@ -1,6 +1,7 @@
 package com.myhd.dao;
 
 import com.myhd.pojo.Enterprise;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

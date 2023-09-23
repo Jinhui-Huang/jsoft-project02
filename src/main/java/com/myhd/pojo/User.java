@@ -26,6 +26,6 @@ public class User {
     private String account;
     private String password;
     private String idcardName;
-    private Integer idcardNo;
+    private String idcardNo;
 
 }
