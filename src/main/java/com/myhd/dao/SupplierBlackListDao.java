@@ -1,5 +1,6 @@
 package com.myhd.dao;
 
+import com.myhd.pojo.SelectLikeInfo;
 import com.myhd.pojo.SupplierBlackList;
 import com.myhd.pojo.SupplierWhiteList;
 import com.myhd.pojo.ThreeTablesQuery;
@@ -20,13 +21,13 @@ import java.util.List;
 @Mapper
 public interface SupplierBlackListDao {
     /**
-     * @description: 根据用户表查询到的企业id查询本企业的黑名单表信息，再根据黑名单表信息中的供应商id查询对应用户表信息和企业表信息，将数据存入到三表联查实体类中，并进行分页展示.并在sql语句上拼接动态sql进行模糊查询。
-     * @param enterpriseId
+     * @description: 根据模糊查询实体类中根据用户表查询到的企业id查询本企业的黑名单表信息，再根据黑名单表信息中的供应商id查询对应用户表信息和企业表信息，在根据模糊查询条件查询对应数据，将数据存入到三表联查实体类中，并进行模糊查询与分页展示。
+     * @param selectLikeInfo
      * @return: com.myhd.pojo.ThreeTablesQuery
      * @author CYQH
      * @date: 2023/09/22 20:59
      */
-    List<ThreeTablesQuery> selectBlackInfoByEnterpriseId(Integer enterpriseId);
+    List<ThreeTablesQuery> selectBlackInfoByEnterpriseId(SelectLikeInfo selectLikeInfo);
     /**
      * @description: 根据添加供应商获取的黑名单信息更新黑名单表。
      * @param supplierBlackList
