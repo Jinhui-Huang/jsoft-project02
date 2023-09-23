@@ -3,7 +3,10 @@ package com.myhd.dao;
 import com.myhd.pojo.SupplierBlackList;
 import com.myhd.pojo.SupplierWhiteList;
 import com.myhd.pojo.ThreeTablesQuery;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -26,6 +29,7 @@ public interface SupplierBlackListDao {
      * @author CYQH
      * @date: 2023/09/22 20:59
      */
+    @Select("")
     List<ThreeTablesQuery> selectBlackInfoByEnterpriseId(Integer enterpriseId);
     /**
      * @description: 根据添加供应商获取的黑名单信息更新黑名单表。
@@ -34,6 +38,8 @@ public interface SupplierBlackListDao {
      * @author CYQH
      * @date: 2023/09/22 21:04
      */
+    @Insert("insert into supplier_black_list(enterprise_id,supplier_id,reason,update_date)\n" +
+            "values(?,?,?,?);")
     Integer insertBlack(SupplierBlackList supplierBlackList);
     /**
      * @description: 根据本企业id和选择的供应商id确定唯一一条黑名单数据并移除黑名单表
@@ -43,5 +49,6 @@ public interface SupplierBlackListDao {
      * @author CYQH
      * @date: 2023/09/22 21:13
      */
+    @Delete("delete from supplier_black_list where enterprise_id=? and supplier_id=?;")
     Integer deleteBlack(Integer enterprise_id,Integer supplier_id);
 }
