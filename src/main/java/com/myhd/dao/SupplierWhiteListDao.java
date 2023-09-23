@@ -26,7 +26,17 @@ public interface SupplierWhiteListDao {
      * @author JoneElmo
      * @date: 2023-9-23 10:50
      */
-    @Select("select wlv.* from (select @id:=#{enterpriseId} p) parm, white_list_vive wlv")
+    @Select("<script>\n" +
+            "    select wlv.* from (select @id:=#{id} p) parm, white_list_vive wlv\n" +
+            "    <where>\n" +
+            "        <if test=\"enterpriseName != null\">\n" +
+            "            and enterprise_name like #{enterpriseName}\n" +
+            "        </if>\n" +
+            "        <if test=\"supplierLevel != null\">\n" +
+            "            and variable_info = #{supplierLevel}\n" +
+            "        </if>\n" +
+            "    </where>\n" +
+            "</script>")
     List<ThreeTablesQuery>  selectWhiteInfoByEnterpriseId(SelectLikeInfo selectLikeInfo);
     /**
      * @description: 根据添加供应商获取的白名单信息更新白名单表。
