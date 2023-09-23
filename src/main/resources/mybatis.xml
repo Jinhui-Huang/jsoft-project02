@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--引入properties文件-->
+    <properties resource="druid.properties"/>
+
+    <!--将下划线映射为驼峰-->
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
+    <!--设置类型别名-->
+    <typeAliases>
+        <package name="com.myhd.pojo"/>
+    </typeAliases>
+
+    <!--分页配置,必须写在这里-->
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <property name="reasonable" value="true"/>
+        </plugin>
+    </plugins>
+
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="com.myhd.config.DruidDataSourceFactory">
+                <property name="driverClassName" value="${driverClassName}"/>
+                <property name="url" value="${url}"/>
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
+                <!--连接池初始连接数-->
+                <property name="initialSize" value="10"/>
+                <!--连接池最大连接数-->
+                <property name="maxActive" value="20"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!-- 引入映射文件 -->
+    <mappers>
+        <package name="com.myhd.dao"/>
+
+    </mappers>
+
+
+</configuration>
