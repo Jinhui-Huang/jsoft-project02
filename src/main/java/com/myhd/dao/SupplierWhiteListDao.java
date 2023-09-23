@@ -3,6 +3,7 @@ package com.myhd.dao;
 import com.myhd.pojo.SupplierWhiteList;
 import com.myhd.pojo.ThreeTablesQuery;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -25,6 +26,22 @@ public interface SupplierWhiteListDao {
      * @author CYQH
      * @date: 2023/09/22 20:59
      */
+    @Select("SELECT\n" +
+            "swl.supplier_id AS supplierID,\n" +
+            "    e.name AS EnterpriseName,\n" +
+            "    u.idcard_name AS idcardName,\n" +
+            "    u.phone,\n" +
+            "    e.email,\n" +
+            "    swl.supplier_level AS VariableInfo,\n" +
+            "    swl.update_date AS updateDate\n" +
+            "FROM\n" +
+            "    supplier_white_list AS swl\n" +
+            "        INNER JOIN\n" +
+            "    enterprise AS e ON swl.supplier_id = e.id\n" +
+            "        LEFT JOIN\n" +
+            "    user AS u ON e.id = u.enterprise_id\n" +
+            "WHERE\n" +
+            "        swl.enterprise_id = #")
     List<ThreeTablesQuery>  selectWhiteInfoByEnterpriseId(Integer enterpriseId);
     /**
      * @description: 根据添加供应商获取的白名单信息更新白名单表。
