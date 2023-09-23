@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 public class User {
     private Integer id;
     private String name;
-    private String enterpriseId;
+    private Integer enterpriseId;
     private String enterpriseName;
     private String phone;
     private String account;
