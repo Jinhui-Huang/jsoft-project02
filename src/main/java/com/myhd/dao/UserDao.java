@@ -22,7 +22,7 @@ public interface UserDao {
      * @author CYQH
      * @date: 2023/09/22 19:36
      */
-    Integer countId(String account);
+    Integer countAccount(String account);
     /**
      * @description: 判断用户账户密码是否正确，如果正确，将查询的信息返回给企业认证页面，如果错误返回一个空对象null。
      * @param user
