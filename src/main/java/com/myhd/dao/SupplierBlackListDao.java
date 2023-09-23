@@ -16,10 +16,10 @@ import java.util.List;
  * packageName com.myhd.dao
  * Description TODO 对黑名单表进行分页查询，并将数据返回给黑名单页面，将添加企业供应商的信息更新黑名单表；如果添加企业在白名单中就移除白名单；解除黑名单将选定企业从黑名单表中删除
  *
- * @author "DY"
+ * @author "CYQH"
  * @version 1.0
  * @email 1660855825@qq.com
- * @Date: 2023/09/23/   20:09/09/22 18:13
+ * @Date: 2023/09/22 18:13
  */
 @Mapper
 public interface SupplierBlackListDao {
@@ -27,8 +27,8 @@ public interface SupplierBlackListDao {
      * @description: 根据模糊查询实体类中根据用户表查询到的企业id查询本企业的黑名单表信息，再根据黑名单表信息中的供应商id查询对应用户表信息和企业表信息，在根据模糊查询条件查询对应数据，将数据存入到三表联查实体类中，并进行模糊查询与分页展示。
      * @param selectLikeInfo
      * @return: com.myhd.pojo.ThreeTablesQuery
-     * @author DY
-     * @date: 2023/09/23 20:59
+     * @author CYQH
+     * @date: 2023/09/22 20:59
      */
     @Select("<script>\n" +
             "    select blv.* from (select @id:=#{id} p) parm, black_list_vive blv\n" +
@@ -43,8 +43,8 @@ public interface SupplierBlackListDao {
      * @description: 根据添加供应商获取的黑名单信息更新黑名单表。
      * @param supplierBlackList
      * @return: java.lang.Integer
-     * @author DY
-     * @date: 2023/09/23 21:04
+     * @author CYQH
+     * @date: 2023/09/22 21:04
      */
     @Insert("insert into supplier_bLack_list(enterprise_id, supplier_id, supplier_level, update_date) \n" +
             "values (#{enterpriseId}, #{supplierId} , #{reason} , #{updateDate})")
@@ -54,8 +54,8 @@ public interface SupplierBlackListDao {
      * @param enterprise_id
      * @param supplier_id
      * @return: java.lang.Integer
-     * @author DY
-     * @date: 2023/09/23 21:13
+     * @author CYQH
+     * @date: 2023/09/22 21:13
      */
     @Delete("delete from supplier_black_list " +
             "where enterprise_id = #{enterpriseId} and supplier_id = #{supplierId}")
