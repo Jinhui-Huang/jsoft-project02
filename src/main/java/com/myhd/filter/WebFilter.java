@@ -3,6 +3,8 @@ package com.myhd.filter;
 import com.myhd.util.ReqRespMsgUtil;
 import com.myhd.util.code.Code;
 import com.myhd.util.Result;
+import lombok.extern.slf4j.Slf4j;
+
 import javax.servlet.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
+@Slf4j
 @javax.servlet.annotation.WebFilter("*")
 public class WebFilter implements Filter {
     /*过滤路径*/
@@ -27,14 +30,16 @@ public class WebFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        System.out.println("全路径过滤器初始化");
+        log.info("全路径过滤器初始化");
     }
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-        System.out.println("路径进来了");
+        log.info("路径进来了");
         HttpServletResponse response = (HttpServletResponse) res;
         HttpServletRequest request = (HttpServletRequest) req;
+        request.setCharacterEncoding("UTF-8");
+
         Cookie[] cookies = request.getCookies();
         String url = "*";
         if (cookies != null){
@@ -51,7 +56,7 @@ public class WebFilter implements Filter {
         response.setHeader("Access-Control-Allow-Credentials", "true");
 
         String requestURI = request.getRequestURI();
-        System.out.println(requestURI);
+        log.info(requestURI);
         /*单/进入*/
         if (paths.contains(requestURI)){
             chain.doFilter(request,response);
@@ -79,7 +84,7 @@ public class WebFilter implements Filter {
 
     @Override
     public void destroy() {
-        System.out.println("全路径过滤器销毁");
+        log.info("全路径过滤器销毁");
     }
 
 }
