@@ -19,6 +19,7 @@ import java.util.List;
  */
 @Mapper
 public interface SupplierWhiteListDao {
+
     /**
      * @description: 根据模糊查询实体类中根据用户表查询到的企业id查询本企业的白名单表信息，再根据白名单表信息中的供应商id查询对应用户表信息和企业表信息，在根据模糊查询条件查询对应数据，将数据存入到三表联查实体类中，并进行模糊查询与分页展示。
      * @param selectLikeInfo
@@ -38,6 +39,7 @@ public interface SupplierWhiteListDao {
             "    </where>\n" +
             "</script>")
     List<ThreeTablesQuery>  selectWhiteInfoByEnterpriseId(SelectLikeInfo selectLikeInfo);
+
     /**
      * @description: 根据添加供应商获取的白名单信息更新白名单表。
      * @param supplierWhiteList
@@ -45,10 +47,10 @@ public interface SupplierWhiteListDao {
      * @author JoneElmo
      * @date: 2023-9-23 10:50
      */
-
     @Insert("insert into supplier_white_list(enterprise_id, supplier_id, supplier_level, update_date) \n" +
             "values (#{enterpriseId}, #{supplierId} , #{supplierLevel} , #{updateDate})")
     Integer insertWhite(SupplierWhiteList supplierWhiteList);
+
     /**
      * @description: 根据本企业id和选择的供应商id确定唯一一条白名单数据并移除白名单表
      * @param enterprise_id
@@ -57,7 +59,6 @@ public interface SupplierWhiteListDao {
      * @author JoneElmo
      * @date: 2023-9-23 10:50
      */
-
     @Delete("delete from supplier_white_list " +
             "where enterprise_id = #{enterpriseId} and supplier_id = #{supplierId}")
     Integer deleteWhite(@Param("enterpriseId") Integer enterprise_id,@Param("supplierId") Integer supplier_id);
