@@ -46,7 +46,7 @@ public interface SupplierBlackListDao {
      * @author CYQH
      * @date: 2023/09/22 21:04
      */
-    @Insert("insert into supplier_bLack_list(enterprise_id, supplier_id, supplier_level, update_date) \n" +
+    @Insert("insert into supplier_black_list(enterprise_id, supplier_id, reason, update_date) \n" +
             "values (#{enterpriseId}, #{supplierId} , #{reason} , #{updateDate})")
     Integer insertBlack(SupplierBlackList supplierBlackList);
     /**
