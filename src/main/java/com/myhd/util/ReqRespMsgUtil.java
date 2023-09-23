@@ -38,12 +38,12 @@ public class ReqRespMsgUtil {
     }
 
     /**
-     * Description: getMsg 仅限于json数据的获取
+     * Description: getMsg 仅限于json数据的获取, 没有获取到对象会返回null
      * @return void
      * @author jinhui-huang
      * @Date 2023/9/18
      * */
-    public static <T> T getMsg(HttpServletRequest req, HttpServletResponse resp, Class<T> clazz) {
+    public static <T> T getMsg(HttpServletRequest req, Class<T> clazz) {
         try {
             return objectMapper.readValue(req.getInputStream(), clazz);
         } catch (IOException | RuntimeException e) {
