@@ -50,8 +50,11 @@ public interface EnterpriseDao {
      * @date: 2023-9-23 10:50
      */
 
-    @Select("")
-    List<Enterprise> selectEnterpriseExceptWhiteAndBlack(Integer enterpriseId);
+    @Select("SELECT id,name,social_uniform_code FROM enterprise as e\n" +
+            "WHERE (SELECT COUNT(1) AS num\n" +
+            "        FROM supplier_white_list as swl\n" +
+            "            WHERE swl.enterprise_id = #{enterpriseId} and  e.id=swl.supplier_id)=0 and e.id != #{enterpriseId}")
+    List<Enterprise> selectEnterpriseExceptWhiteAndBlack(@Param("enterpriseId") Integer enterpriseId);
     /**
      * @description: 查询所有企业信息（企业id、企业名称和信用代码）根据查询到的用户表里的企业id来排除查询到的黑名单供应商企业以及本企业，将查询出的数据作为可选择企业返回到黑名单页面。
      * @param enterpriseId
