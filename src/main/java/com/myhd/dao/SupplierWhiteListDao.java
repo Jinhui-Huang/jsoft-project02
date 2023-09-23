@@ -25,7 +25,7 @@ public interface SupplierWhiteListDao {
      * @author JoneElmo
      * @date: 2023-9-23 10:50
      */
-    @Select(" ")
+    @Select("select wlv.* from (select @id:=#{enterpriseId} p) parm, white_list_vive wlv")
     List<ThreeTablesQuery>  selectWhiteInfoByEnterpriseId(Integer enterpriseId);
     /**
      * @description: 根据添加供应商获取的白名单信息更新白名单表。

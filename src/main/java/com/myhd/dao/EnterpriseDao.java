@@ -63,7 +63,11 @@ public interface EnterpriseDao {
      * @date: 2023-9-23 10:50
      */
 
-    @Select("")
+    @Select("SELECT id, name, social_uniform_code FROM enterprise AS e " +
+            "WHERE e.id != #{enterpriseId} " +
+            "AND e.id NOT IN " +
+            "(SELECT swl.supplier_id FROM supplier_black_list AS swl " +
+            "WHERE swl.enterprise_id = #{enterpriseId})")
     List<Enterprise> selectEnterpriseExceptBlack(Integer enterpriseId);
 
 
