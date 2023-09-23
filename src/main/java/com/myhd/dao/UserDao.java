@@ -17,14 +17,15 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface UserDao {
     /**
-     * @description: 判断用户id是否在用户表里面。
-     * @param id
+     * @description: 判断用户帐号account是否在用户表里面。
+     * @param account
      * @return: java.lang.Integer
      * @author CYQH
      * @date: 2023/09/22 19:36
      */
+
     @Select("SELECT COUNT(id) FROM user WHERE account = #{account}")
-    Integer countId(Integer id);
+    Integer countId(String account);
     /**
      * @description: 判断用户账户密码是否正确，如果正确，将查询的信息返回给企业认证页面，如果错误返回一个空对象null。
      * @param user
@@ -32,7 +33,6 @@ public interface UserDao {
      * @author CYQH
      * @date: 2023/09/22 19:40
      */
-
     User selectByUserId(User user);
 
     /**
