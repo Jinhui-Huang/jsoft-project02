@@ -32,14 +32,14 @@ public class SupplierBlackListServiceImpl implements SupplierBlackListService {
     }
 
     @Override
-    public Integer removeBlack(Integer enterprise_id, Integer supplier_id) {
-        return sbd.deleteBlack(enterprise_id,supplier_id);
+    public Boolean removeBlack(Integer enterprise_id, Integer supplier_id) {
+        return sbd.deleteBlack(enterprise_id,supplier_id) == 1;
     }
 
     @Override
-    public Integer addBlack(SupplierBlackList supplierBlackList) {
+    public Boolean addBlack(SupplierBlackList supplierBlackList) {
         Integer i = swl.deleteWhite(supplierBlackList.getEnterpriseId(), supplierBlackList.getSupplierId());
         Integer j = sbd.insertBlack(supplierBlackList);
-        return i==1&&j==1?1:0;
+        return i==1&&j==1;
     }
 }
