@@ -2,6 +2,8 @@ package com.myhd.service;
 
 import com.myhd.pojo.Enterprise;
 
+import java.util.List;
+
 /**
  * className EnterpriseService
  * packageName com.myhd.service
@@ -30,21 +32,23 @@ public interface EnterpriseService {
      * @date: 2023/09/22 20:17
      */
     Enterprise selectByEnterpriseId(Integer enterpriseId);
+
     /**
      * @description: 查询所有企业信息（企业id、企业名称和信用代码）根据查询到的用户表里的企业id来排除查询到的白名单和黑名单供应商企业以及本企业，将查询出的数据作为可选择企业返回到白名单页面。
      * @param enterpriseId
-     * @return: com.myhd.pojo.Enterprise
+     * @return: java.util.List<com.myhd.pojo.Enterprise>
      * @author CYQH
      * @date: 2023/09/22 20:30
      */
-    Enterprise selectEnterpriseExceptWhiteAndBlack(Integer enterpriseId);
+    List<Enterprise> selectEnterpriseExceptWhiteAndBlack(Integer enterpriseId);
+
     /**
      * @description: 查询所有企业信息（企业id、企业名称和信用代码）根据查询到的用户表里的企业id来排除查询到的黑名单供应商企业以及本企业，将查询出的数据作为可选择企业返回到黑名单页面。
      * @param enterpriseId
-     * @return: com.myhd.pojo.Enterprise
+     * @return: java.util.List<com.myhd.pojo.Enterprise>
      * @author CYQH
      * @date: 2023/09/22 20:34
      */
-    Enterprise selectEnterpriseExceptBlack(Integer enterpriseId);
+    List<Enterprise> selectEnterpriseExceptBlack(Integer enterpriseId);
 
 }
