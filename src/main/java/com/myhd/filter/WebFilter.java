@@ -1,6 +1,8 @@
 package com.myhd.filter;
 
+import com.myhd.exception.SystemException;
 import com.myhd.pojo.User;
+import com.myhd.service.Impl.UserServiceImpl;
 import com.myhd.util.ReqRespMsgUtil;
 import com.myhd.util.TokenUtil;
 import com.myhd.util.code.Code;
@@ -18,8 +20,9 @@ import java.util.Map;
 @Slf4j
 @javax.servlet.annotation.WebFilter("*")
 public class WebFilter implements Filter {
-    /*过滤路径*/
+    /*过滤直接放行路径*/
     public static final ArrayList<String> paths = new ArrayList<>();
+    private UserServiceImpl usi = new UserServiceImpl();
 
     static {
         paths.add("/");
@@ -28,6 +31,7 @@ public class WebFilter implements Filter {
         paths.add("white-list");
         paths.add("black-list");
         paths.add("assets");
+        paths.add("ls");
 
     }
 
@@ -74,7 +78,7 @@ public class WebFilter implements Filter {
         if (split.length > 1 && paths.contains(split[1])) {
             log.info("过滤路径：" + split[1]);
             request.setCharacterEncoding("UTF-8");
-            if (requestURI.equals("/login-page")) {
+            if (requestURI.equals("/login-page") || requestURI.equals("/ls") || split[1].equals("assets")) {
                 chain.doFilter(request, response);
             } else {
                 verifyToken(request, response, chain);
@@ -82,43 +86,49 @@ public class WebFilter implements Filter {
         } else {
             response.sendRedirect("http://localhost:8080");
         }
-
     }
 
     /*进行令牌验证*/
     private void verifyToken(HttpServletRequest request, HttpServletResponse response, FilterChain chain) {
+        log.info("令牌验证");
         try {
             if (paths.contains(request.getRequestURI().substring(1))) {
-                chain.doFilter(request, response);
-            } else {
-                response.sendRedirect("http://localhost:8080");
-            }
-            Cookie[] cookies = request.getCookies();
-            if (cookies != null){
-                for (Cookie cookie : cookies) {
-                    if (cookie.getName().equals("token")){
-                        String token = cookie.getValue();
-                        if (token != null){
-                            Map<String, Object> verify = TokenUtil.verify(token, User.class);
-                            Boolean status = (Boolean) verify.get("status");
-                            if (status){
-                                User user = (User) verify.get(User.class.getSimpleName());
-                                System.out.println(user);
-                                TokenUtil.SERVER_LOCAL.set(user);
-                                chain.doFilter(request,response);
-                                TokenUtil.SERVER_LOCAL.remove();
-                                return;
+                Cookie[] cookies = request.getCookies();
+                if (cookies != null){
+                    for (Cookie cookie : cookies) {
+                        if (cookie.getName().equals("token")){
+                            String token = cookie.getValue();
+                            if (token != null){
+                                Map<String, Object> verify = TokenUtil.verify(token, User.class);
+                                Boolean status = (Boolean) verify.get("status");
+                                log.info("验证状态为"+status);
+                                if (status){
+                                    User user = (User) verify.get(User.class.getSimpleName());
+                                    User datebaseUser = usi.selectByUserAccountPwd(user);
+                                    if (datebaseUser != null){
+                                        log.info("token用户信息为："+user);
+                                        TokenUtil.SERVER_LOCAL.set(user);
+                                        chain.doFilter(request,response);
+                                        TokenUtil.SERVER_LOCAL.remove();
+                                        return;
+                                    }else {
+                                        response.addCookie(new Cookie("token",""));
+                                        response.sendRedirect("http://localhost:8080");
+                                    }
+
+                                }
                             }
                         }
                     }
                 }
+                response.sendRedirect("http://localhost:8080");
+            } else {
+                response.sendRedirect("http://localhost:8080");
             }
-            response.sendRedirect("login-page");
-        } catch (IOException | ServletException e) {
-            ReqRespMsgUtil.sendMsg(response,new Result(Code.BUSINESS_ERR,false,"服务器登录异常"));
+        } catch (IOException | ServletException |RuntimeException e) {
+            throw new SystemException(Code.SYSTEM_ERR,"系统未知异常",e);
         }
     }
-
 
     private long countChar(String text, char targetChar) {
         return text.chars().filter(ch -> ch == targetChar).count();
