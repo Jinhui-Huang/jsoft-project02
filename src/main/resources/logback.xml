@@ -3,7 +3,7 @@
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
 
     <!--定义日志文件的存储地址 勿在LogBack的配置中使用相对路径-->
-    <property name="LOG_HOME" value="/home/huian/logs/jsoft_project02/logs"/>
+    <property name="LOG_HOME" value="C:\\Users\\hui an\\logs"/>
     <!-- 定义日志上下文的名称 -->
     <contextName>${LOG_CONTEXT_NAME}</contextName>
 
