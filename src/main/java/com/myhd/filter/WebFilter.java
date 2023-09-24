@@ -33,6 +33,8 @@ public class WebFilter implements Filter {
         paths.add("assets");
         paths.add("ls");
 
+        paths.add("whiteList"); /*SupplierWhiteListServlet映射的地址*/
+        paths.add("enterprise"); /*EnterpriseServlet映射的地址*/
     }
 
     @Override
