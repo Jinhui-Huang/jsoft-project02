@@ -47,6 +47,7 @@ public class WebFilter implements Filter {
                 }
             }
         }
+        /*允许前后端分离跨域访问*/
         response.setHeader("Access-Control-Allow-Origin", url);
         response.setHeader("Access-Control-Allow-Methods", "*");
         response.setHeader("Access-Control-Max-Age", "3600");
