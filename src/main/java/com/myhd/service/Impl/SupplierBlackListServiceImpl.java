@@ -1,5 +1,6 @@
 package com.myhd.service.Impl;
 
+import com.github.pagehelper.PageInfo;
 import com.myhd.dao.SupplierBlackListDao;
 import com.myhd.dao.SupplierWhiteListDao;
 import com.myhd.pojo.SelectLikeInfo;
@@ -27,8 +28,8 @@ public class SupplierBlackListServiceImpl implements SupplierBlackListService {
     public SupplierWhiteListDao swl =  session.getMapper(SupplierWhiteListDao.class);
 
     @Override
-    public List<ThreeTablesQuery> selectBlackInfoByEnterpriseId(SelectLikeInfo selectLikeInfo) {
-        return sbd.selectBlackInfoByEnterpriseId(selectLikeInfo);
+    public PageInfo<ThreeTablesQuery> selectBlackInfoByEnterpriseId(SelectLikeInfo selectLikeInfo) {
+        return null;
     }
 
     @Override
@@ -38,8 +39,8 @@ public class SupplierBlackListServiceImpl implements SupplierBlackListService {
 
     @Override
     public Boolean addBlack(SupplierBlackList supplierBlackList) {
-        Integer i = swl.deleteWhite(supplierBlackList.getEnterpriseId(), supplierBlackList.getSupplierId());
+        swl.deleteWhite(supplierBlackList.getEnterpriseId(), supplierBlackList.getSupplierId());
         Integer j = sbd.insertBlack(supplierBlackList);
-        return i==1&&j==1;
+        return j==1;
     }
 }
