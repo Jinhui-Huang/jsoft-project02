@@ -29,6 +29,7 @@ public class SupplierBlackListServiceImpl implements SupplierBlackListService {
     private static final SqlSession session =  MyBatisUtil.openSession(true);
     public SupplierBlackListDao sbd =  session.getMapper(SupplierBlackListDao.class);
     public SupplierWhiteListDao swl =  session.getMapper(SupplierWhiteListDao.class);
+
     /**
      * @description: 根据用户表查询到的企业id查询本企业的黑名单表信息，再根据黑名单表信息中的供应商id查询对应用户表信息和企业表信息，将数据存入到三表联查实体类中，并进行分页展示.
      * @param selectLikeInfo
@@ -42,6 +43,7 @@ public class SupplierBlackListServiceImpl implements SupplierBlackListService {
             List<ThreeTablesQuery> trq = sbd.selectBlackInfoByEnterpriseId(selectLikeInfo);
             return new PageInfo<>(trq);
     }
+
     /**
      * @description: 根据本企业id和选择的供应商id确定唯一一条黑名单数据并移除黑名单表
      * @param enterpriseId
@@ -54,6 +56,7 @@ public class SupplierBlackListServiceImpl implements SupplierBlackListService {
     public Boolean removeBlack(Integer enterprise_id, Integer supplier_id) {
             return sbd.deleteBlack(enterprise_id,supplier_id) == 1;
     }
+
     /**
      * @description: 根据添加供应商获取的黑名单信息,先查询本企业所有白名单企业，判断要要加入黑名单的企业是否位于白名单，如果位于白名单要先移除白名单再更新黑名单表。
      * @param supplierBlackList
@@ -72,4 +75,5 @@ public class SupplierBlackListServiceImpl implements SupplierBlackListService {
             return false;
         }
     }
+
 }
