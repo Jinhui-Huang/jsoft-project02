@@ -53,8 +53,8 @@ public class SupplierBlackListServiceImpl implements SupplierBlackListService {
      * @date: 2023/09/23 8:31
      */
     @Override
-    public Boolean removeBlack(Integer enterprise_id, Integer supplier_id) {
-            return sbd.deleteBlack(enterprise_id,supplier_id) == 1;
+    public Boolean removeBlack(Integer enterpriseId, Integer supplierId) {
+            return sbd.deleteBlack(enterpriseId,supplierId) == 1;
     }
 
     /**
