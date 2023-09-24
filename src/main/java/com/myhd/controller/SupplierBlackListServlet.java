@@ -3,7 +3,6 @@ package com.myhd.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageInfo;
 import com.myhd.pojo.SelectLikeInfo;
-import com.myhd.pojo.SupplierBlackList;
 import com.myhd.pojo.ThreeTablesQuery;
 import com.myhd.service.Impl.SupplierBlackListServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +13,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -29,9 +26,10 @@ import java.util.List;
  * @Date: 2023/9/24 20:29
  */
 @Slf4j
-@WebServlet("/whiteList")
+@WebServlet("/blackList")
 public class SupplierBlackListServlet extends HttpServlet {
     private SupplierBlackListServiceImpl impl = new SupplierBlackListServiceImpl();
+
     /**
      * @description: 用于处理数据显示请求
      * @param req,resp
@@ -61,6 +59,7 @@ public class SupplierBlackListServlet extends HttpServlet {
         String s = objectMapper.writeValueAsString(list);
         resp.getWriter().println(s);
     }
+
     /**
      * @description: 处理‘解除黑名单’操作,操作完成再次查询
      * @param: req,resp
@@ -82,6 +81,7 @@ public class SupplierBlackListServlet extends HttpServlet {
             doGet(req, resp);
         }
     }
+
 }
 
 
