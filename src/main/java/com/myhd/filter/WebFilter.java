@@ -16,7 +16,7 @@ import java.util.ArrayList;
 @javax.servlet.annotation.WebFilter("*")
 public class WebFilter implements Filter {
     /*过滤路径*/
-    public static  final ArrayList<String> paths = new ArrayList<>();
+    public static final ArrayList<String> paths = new ArrayList<>();
 
     static {
         paths.add("/");
@@ -35,20 +35,19 @@ public class WebFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-        log.info("路径进来了");
+
         HttpServletResponse response = (HttpServletResponse) res;
         HttpServletRequest request = (HttpServletRequest) req;
-        request.setCharacterEncoding("UTF-8");
-
         Cookie[] cookies = request.getCookies();
         String url = "*";
-        if (cookies != null){
+        if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("reqUrl")) {
                     url = cookie.getValue();
                 }
             }
         }
+        /*允许前后端分离跨域访问*/
         response.setHeader("Access-Control-Allow-Origin", url);
         response.setHeader("Access-Control-Allow-Methods", "*");
         response.setHeader("Access-Control-Max-Age", "3600");
@@ -56,25 +55,40 @@ public class WebFilter implements Filter {
         response.setHeader("Access-Control-Allow-Credentials", "true");
 
         String requestURI = request.getRequestURI();
-        log.info(requestURI);
         /*单/进入*/
-        if (paths.contains(requestURI)){
-            chain.doFilter(request,response);
-        }else if (countChar(requestURI,'/')<20){
-            String[] split = requestURI.split("/");
-            if (split.length > 1 && paths.contains(split[1])){
-                System.out.println("过滤路径："+split[1]);
-                chain.doFilter(request,response);
-            }else {
-                verifyToken(request,response,chain);
-            }
-        }else {
-            ReqRespMsgUtil.sendMsg(response,new Result(Code.BUSINESS_ERR,false,"路径不允许过多的/"));
+        if (requestURI.equals("/")) {
+            response.sendRedirect("login-page");
+            return;
         }
+        /*非/进入, /数量要求少于20*/
+        if (countChar(requestURI, '/') >= 20) {
+            ReqRespMsgUtil.sendMsg(response, new Result(Code.BUSINESS_ERR, false, "路径不允许过多的/"));
+            return;
+        }
+
+        /*分割路径*/
+        String[] split = requestURI.split("/");
+        if (split.length > 1 && paths.contains(split[1])) {
+            log.info("过滤路径：" + split[1]);
+            request.setCharacterEncoding("UTF-8");
+            if (split[1].equals("login-page")) {
+                chain.doFilter(request, response);
+            } else {
+                verifyToken(request, response, chain);
+            }
+        } else {
+            response.sendRedirect("login-page");
+        }
+
     }
+
     /*进行令牌验证*/
     private void verifyToken(HttpServletRequest request, HttpServletResponse response, FilterChain chain) {
-
+        try {
+            chain.doFilter(request, response);
+        } catch (IOException | ServletException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
