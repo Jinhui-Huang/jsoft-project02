@@ -12,6 +12,17 @@ import org.apache.ibatis.session.SqlSession;
 
 import java.util.List;
 
+/**
+ * @description 供应商白名单服务层实现，实现以下功能：
+ * 1. 白名单界面的模糊查询功能
+ * 2. 白名单界面的移入黑名单功能
+ * 3. 白名单界面的添加供应商至白名单功能
+ * @author JoneElmo
+ * @date 2023-09-24 10:42
+ * @version 1.0
+ * @package com.myhd.service.Impl
+ * @class SupplierWhiteListServiceImpl
+ */
 public class SupplierWhiteListServiceImpl implements SupplierWhiteListService {
     private SqlSession session = MyBatisUtil.openSession(true);
     private SupplierWhiteListDao wDao  = session.getMapper(SupplierWhiteListDao.class);

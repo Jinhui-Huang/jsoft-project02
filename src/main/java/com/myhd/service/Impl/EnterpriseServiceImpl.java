@@ -10,7 +10,10 @@ import org.apache.ibatis.session.SqlSession;
 import java.util.List;
 
 /**
- * @description 企业服务层实现
+ * @description 企业服务层实现，实现以下功能：
+ * 1. 企业信息认证插入数据库功能
+ * 2. 回显数据功能
+ * 3. 添加供应商时，在添加界面展示信息功能
  * @author JoneElmo
  * @date 2023-09-24 08:44
  * @version 1.0
