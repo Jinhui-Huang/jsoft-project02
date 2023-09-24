@@ -9,7 +9,12 @@ target/
 out/
 /src/test/
 src/test
+logs
+/logs
+logs/
+
 src/main/resources/logback.xml
+/src/main/resources/logback.xml
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
