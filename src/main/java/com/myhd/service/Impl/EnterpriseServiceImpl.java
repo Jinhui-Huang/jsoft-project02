@@ -22,7 +22,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     EnterpriseDao dao = session.getMapper(EnterpriseDao.class);
 
     /**
-     * @description 添加认证企业
+     * @description 在企业信息认证界面，输入认证信息后，将认证信息插入到数据库，调用此方法
      * @author JoneElmo
      * @date 2023-09-24 09:12
      * @param enterprise
@@ -34,7 +34,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     }
 
     /**
-     * @description 根据企业id获取企业信息。
+     * @description 根据企业id获取企业信息。用于回显数据到信息认证界面
      * @author JoneElmo
      * @date 2023-09-24 09:12
      * @param enterpriseId
@@ -45,13 +45,28 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         return dao.selectByEnterpriseId(enterpriseId);
     }
 
+    /**
+     * @description 查询企业信息。白名单添加供应商时，展示下拉列表信息和统一社会信用代码信息
+     * @author JoneElmo
+     * @date 2023-09-24 09:58
+     * @param enterpriseId
+     * @return java.util.List<com.myhd.pojo.Enterprise>
+     */
     @Override
-    public Enterprise selectEnterpriseExceptWhiteAndBlack(Integer enterpriseId) {
-        return null;
+    public List<Enterprise> selectEnterpriseExceptWhiteAndBlack(Integer enterpriseId) {
+        return dao.selectEnterpriseExceptWhiteAndBlack(enterpriseId);
     }
 
+    /**
+     * @description 查询企业信息。黑名单添加供应商时，展示下拉列表信息和统一社会信用代码信息
+     * @author JoneElmo
+     * @date 2023-09-24 09:40
+     * @param enterpriseId
+     * @return java.util.List<com.myhd.pojo.Enterprise>
+     */
     @Override
-    public Enterprise selectEnterpriseExceptBlack(Integer enterpriseId) {
-        return null;
+    public List<Enterprise> selectEnterpriseExceptBlack(Integer enterpriseId) {
+        return dao.selectEnterpriseExceptBlack(enterpriseId);
     }
+
 }
