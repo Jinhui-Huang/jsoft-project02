@@ -25,7 +25,6 @@ public interface EnterpriseDao {
      * @author JoneElmo
      * @date: 2023-9-23 10:50
      */
-
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     @Insert("insert into enterprise(name, social_uniform_code, email, phone, address, scale, fax) \n" +
             "values ( #{name},#{socialUniformCode},#{email},#{phone},#{address},#{scale},#{fax} );")
