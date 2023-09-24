@@ -5,6 +5,9 @@ import com.myhd.dao.EnterpriseDao;
 import com.myhd.pojo.Enterprise;
 import com.myhd.service.EnterpriseService;
 import com.myhd.util.MyBatisUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.exceptions.PersistenceException;
+import org.apache.ibatis.jdbc.Null;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.List;
@@ -20,6 +23,7 @@ import java.util.List;
  * @package com.myhd.service.Impl
  * @class EnterpriseServiceImpl
  */
+@Slf4j
 public class EnterpriseServiceImpl implements EnterpriseService {
     private static final SqlSession session = MyBatisUtil.openSession(true);
     private EnterpriseDao dao = session.getMapper(EnterpriseDao.class);
@@ -33,7 +37,17 @@ public class EnterpriseServiceImpl implements EnterpriseService {
      */
     @Override
     public Boolean addEnterprise(Enterprise enterprise) {
-        return dao.insertEnterprise(enterprise) == 1;
+        Integer i = null;
+        try {
+            i = dao.insertEnterprise(enterprise);
+        } catch (PersistenceException e) {
+            log.error("插入数据重复");
+            return false;
+        }catch (NullPointerException e){
+            log.error("存在字段为空,请检查字段值");
+            return false;
+        }
+        return true;
     }
 
     /**
