@@ -61,6 +61,6 @@ public interface SupplierWhiteListDao {
      */
     @Delete("delete from supplier_white_list " +
             "where enterprise_id = #{enterpriseId} and supplier_id = #{supplierId}")
-    Integer deleteWhite(@Param("enterpriseId") Integer enterprise_id,@Param("supplierId") Integer supplier_id);
+    Integer deleteWhite(@Param("enterpriseId") Integer enterpriseId,@Param("supplierId") Integer supplierId);
 
 }

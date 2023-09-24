@@ -21,7 +21,6 @@ public class UserServiceImpl implements UserService {
      private static final  SqlSession session =  MyBatisUtil.openSession(true);
      public static final UserDao userDaoImpl =  session.getMapper(UserDao.class);
 
-
     @Override
     public Boolean judgeUserIsExists(String account) {
         return userDaoImpl.countAccount(account) == 1;
