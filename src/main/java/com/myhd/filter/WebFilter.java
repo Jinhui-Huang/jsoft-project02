@@ -35,11 +35,9 @@ public class WebFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-        log.info("路径进来了");
+
         HttpServletResponse response = (HttpServletResponse) res;
         HttpServletRequest request = (HttpServletRequest) req;
-        request.setCharacterEncoding("UTF-8");
-
         Cookie[] cookies = request.getCookies();
         String url = "*";
         if (cookies != null){
@@ -56,14 +54,14 @@ public class WebFilter implements Filter {
         response.setHeader("Access-Control-Allow-Credentials", "true");
 
         String requestURI = request.getRequestURI();
-        log.info(requestURI);
         /*单/进入*/
         if (paths.contains(requestURI)){
             chain.doFilter(request,response);
         }else if (countChar(requestURI,'/')<20){
             String[] split = requestURI.split("/");
             if (split.length > 1 && paths.contains(split[1])){
-                System.out.println("过滤路径："+split[1]);
+                log.info("过滤路径："+split[1]);
+                request.setCharacterEncoding("UTF-8");
                 chain.doFilter(request,response);
             }else {
                 verifyToken(request,response,chain);
