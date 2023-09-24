@@ -19,8 +19,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Slf4j
-@WebServlet("/whiteList")
 /**
  * @description
  * @author JoneElmo
@@ -29,6 +27,8 @@ import java.util.List;
  * @package com.myhd.controller
  * @class SupplierWhiteListServlet
  */
+@Slf4j
+@WebServlet("/whiteList")
 public class SupplierWhiteListServlet extends   HttpServlet {
     private SupplierWhiteListServiceImpl impl = new SupplierWhiteListServiceImpl();
 
@@ -90,7 +90,11 @@ public class SupplierWhiteListServlet extends   HttpServlet {
         sbl.setReason(reason);
         sbl.setUpdateDate(date);
         /*移除白名单并添加至黑名单*/
-        impl.addBlackFromWhite(sbl);
+        try {
+            impl.addBlackFromWhite(sbl);
+        } catch (Exception e) {
+            log.error(e.getMessage(), "移除白名单或加入黑名单失败");
+        }
         /*查询新的数据*/
         doGet(req, resp);
     }
