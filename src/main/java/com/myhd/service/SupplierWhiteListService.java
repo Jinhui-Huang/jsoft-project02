@@ -1,5 +1,6 @@
 package com.myhd.service;
 
+import com.myhd.pojo.SelectLikeInfo;
 import com.myhd.pojo.SupplierBlackList;
 import com.myhd.pojo.SupplierWhiteList;
 import com.myhd.pojo.ThreeTablesQuery;
@@ -24,7 +25,7 @@ public interface SupplierWhiteListService {
      * @author CYQH
      * @date: 2023/09/23 8:16
      */
-    List<ThreeTablesQuery> selectWhiteInfoByEnterpriseId(Integer enterpriseId);
+    List<ThreeTablesQuery> selectWhiteInfoByEnterpriseId(SelectLikeInfo selectLikeInfo);
     /**
      * @description: 根据选中的白名单供应商信息并填写添加理由后移除白名单表并添加至黑名单中。
      * @param supplierBlackList
