@@ -56,7 +56,7 @@ public class WebFilter implements Filter {
         String requestURI = request.getRequestURI();
         /*单/进入*/
         if (paths.contains(requestURI)){
-            chain.doFilter(request,response);
+            response.sendRedirect("login-page");
         }else if (countChar(requestURI,'/')<20){
             String[] split = requestURI.split("/");
             if (split.length > 1 && paths.contains(split[1])){
