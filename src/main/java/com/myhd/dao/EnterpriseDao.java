@@ -56,7 +56,7 @@ public interface EnterpriseDao {
             "WHERE e.id != #{enterpriseId}\n" +
             "  AND swl.supplier_id IS NULL\n" +
             "  AND sbl.supplier_id IS NULL;")
-    List<Enterprise> selectEnterpriseExceptWhiteAndBlack(@Param("enterpriseId") Integer enterpriseId);
+    List<Enterprise> selectEnterpriseExceptWhiteAndBlack(Integer enterpriseId);
 
     /**
      * @description: 查询所有企业信息（企业id、企业名称和信用代码）根据查询到的用户表里的企业id来排除查询到的黑名单供应商企业以及本企业，将查询出的数据作为可选择企业返回到黑名单页面。
