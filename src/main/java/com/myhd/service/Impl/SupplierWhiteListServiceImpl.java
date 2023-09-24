@@ -24,7 +24,7 @@ import java.util.List;
  * @class SupplierWhiteListServiceImpl
  */
 public class SupplierWhiteListServiceImpl implements SupplierWhiteListService {
-    private SqlSession session = MyBatisUtil.openSession(true);
+    private static final SqlSession session = MyBatisUtil.openSession(true);
     private SupplierWhiteListDao wDao  = session.getMapper(SupplierWhiteListDao.class);
     private SupplierBlackListDao bDao = session.getMapper(SupplierBlackListDao.class);
 
@@ -51,7 +51,7 @@ public class SupplierWhiteListServiceImpl implements SupplierWhiteListService {
     public Boolean addBlackFromWhite(SupplierBlackList sbl) {
         Integer i1 = wDao.deleteWhite(sbl.getEnterpriseId(), sbl.getSupplierId());
         Integer i2 = bDao.insertBlack(sbl);
-        return i1==1&&i2==1?true:false;
+        return i1 == 1 && i2 == 1;
     }
 
     /**
@@ -63,8 +63,7 @@ public class SupplierWhiteListServiceImpl implements SupplierWhiteListService {
      */
     @Override
     public Boolean addWhite(SupplierWhiteList supplierWhiteList) {
-        Integer i = wDao.insertWhite(supplierWhiteList);
-        return i==1?true:false;
+        return wDao.insertWhite(supplierWhiteList) == 1;
     }
 
 }

@@ -22,7 +22,7 @@ import java.util.List;
  * @Date: 2023/9/24 09:00
  */
 public class SupplierBlackListServiceImpl implements SupplierBlackListService {
-    private SqlSession session =  MyBatisUtil.openSession(true);
+    private static final SqlSession session =  MyBatisUtil.openSession(true);
     public SupplierBlackListDao sbd =  session.getMapper(SupplierBlackListDao.class);
     public SupplierWhiteListDao swl =  session.getMapper(SupplierWhiteListDao.class);
 
@@ -39,7 +39,7 @@ public class SupplierBlackListServiceImpl implements SupplierBlackListService {
     @Override
     public Integer addBlack(SupplierBlackList supplierBlackList) {
         Integer i = swl.deleteWhite(supplierBlackList.getEnterpriseId(), supplierBlackList.getSupplierId());
-        Integer i1 = sbd.insertBlack(supplierBlackList);
-        return i==1&&i1==1?1:0;
+        Integer j = sbd.insertBlack(supplierBlackList);
+        return i==1&&j==1?1:0;
     }
 }
