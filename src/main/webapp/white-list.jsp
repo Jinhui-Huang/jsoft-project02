@@ -137,15 +137,7 @@
                                     <td class="am-hide-sm-only">马化腾</td>
                                     <td class="am-hide-sm-only">18556658588</td>
                                     <td class="am-hide-sm-only">18556658588@163.com</td>
-                                    <td class="am-hide-sm-only">
-                                        <div class="">
-                                            <select data-am-selected="{btnSize: 'xs'}">
-                                                <option value="option2" selected>1级</option>
-                                                <option value="option3">2级</option>
-                                                <option value="option3">3级</option>
-                                            </select>
-                                        </div>
-                                    </td>
+                                    <td class="am-hide-sm-only">1级</td>
                                     <td class="am-hide-sm-only">2021-12-31</td>
                                     <td>
                                         <div class="am-btn-toolbar">
@@ -174,15 +166,7 @@
                                     <td>刘强东</td>
                                     <td class="am-hide-sm-only">18556658588</td>
                                     <td class="am-hide-sm-only">18556658588@163.com</td>
-                                    <td class="am-hide-sm-only">
-                                        <div class="">
-                                            <select data-am-selected="{btnSize: 'xs'}">
-                                                <option value="option2" selected>1级</option>
-                                                <option value="option3">2级</option>
-                                                <option value="option3">3级</option>
-                                            </select>
-                                        </div>
-                                    </td>
+                                    <td class="am-hide-sm-only">2级</td>
                                     <td class="am-hide-sm-only">2021-12-31</td>
                                     <td>
                                         <div class="am-btn-toolbar">
@@ -200,15 +184,7 @@
                                     <td>张朝阳</td>
                                     <td class="am-hide-sm-only">18556658588</td>
                                     <td class="am-hide-sm-only">18556658588@163.com</td>
-                                    <td class="am-hide-sm-only">
-                                        <div class="">
-                                            <select data-am-selected="{btnSize: 'xs'}">
-                                                <option value="option2">1级</option>
-                                                <option value="option3">2级</option>
-                                                <option value="option3" selected>3级</option>
-                                            </select>
-                                        </div>
-                                    </td>
+                                    <td class="am-hide-sm-only">3级</td>
                                     <td class="am-hide-sm-only">2021-12-31</td>
                                     <td>
                                         <div class="am-btn-toolbar">
@@ -226,15 +202,7 @@
                                     <td>马云</td>
                                     <td class="am-hide-sm-only">18556658588</td>
                                     <td class="am-hide-sm-only">18556658588@163.com</td>
-                                    <td class="am-hide-sm-only">
-                                        <div class="">
-                                            <select data-am-selected="{btnSize: 'xs'}">
-                                                <option value="option2">1级</option>
-                                                <option value="option3" selected>2级</option>
-                                                <option value="option3">3级</option>
-                                            </select>
-                                        </div>
-                                    </td>
+                                    <td class="am-hide-sm-only">1级</td>
                                     <td class="am-hide-sm-only">2021-12-31</td>
                                     <td>
                                         <div class="am-btn-toolbar">
@@ -252,15 +220,7 @@
                                     <td>雷军</td>
                                     <td class="am-hide-sm-only">18556658588</td>
                                     <td class="am-hide-sm-only">18556658588@163.com</td>
-                                    <td class="am-hide-sm-only">
-                                        <div class="">
-                                            <select data-am-selected="{btnSize: 'xs'}">
-                                                <option value="option2" selected>1级</option>
-                                                <option value="option3">2级</option>
-                                                <option value="option3">3级</option>
-                                            </select>
-                                        </div>
-                                    </td>
+                                    <td class="am-hide-sm-only">1级</td>
                                     <td class="am-hide-sm-only">2021-12-31</td>
                                     <td>
                                         <div class="am-btn-toolbar">
