@@ -4,10 +4,7 @@ import com.myhd.pojo.SelectLikeInfo;
 import com.myhd.pojo.SupplierBlackList;
 import com.myhd.pojo.SupplierWhiteList;
 import com.myhd.pojo.ThreeTablesQuery;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -51,13 +48,13 @@ public interface SupplierBlackListDao {
     Integer insertBlack(SupplierBlackList supplierBlackList);
     /**
      * @description: 根据本企业id和选择的供应商id确定唯一一条黑名单数据并移除黑名单表
-     * @param enterprise_id
-     * @param supplier_id
+     * @param enterpriseId
+     * @param supplierId
      * @return: java.lang.Integer
      * @author CYQH
      * @date: 2023/09/22 21:13
      */
     @Delete("delete from supplier_black_list " +
             "where enterprise_id = #{enterpriseId} and supplier_id = #{supplierId}")
-    Integer deleteBlack(Integer enterprise_id,Integer supplier_id);
+    Integer deleteBlack(@Param("enterpriseId") Integer enterpriseId,@Param("supplierId") Integer supplierId);
 }

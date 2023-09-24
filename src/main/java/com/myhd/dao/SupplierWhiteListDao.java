@@ -53,14 +53,14 @@ public interface SupplierWhiteListDao {
 
     /**
      * @description: 根据本企业id和选择的供应商id确定唯一一条白名单数据并移除白名单表
-     * @param enterprise_id
-     * @param supplier_id
+     * @param enterpriseId
+     * @param supplierId
      * @return: java.lang.Integer
      * @author JoneElmo
      * @date: 2023-9-23 10:50
      */
     @Delete("delete from supplier_white_list " +
             "where enterprise_id = #{enterpriseId} and supplier_id = #{supplierId}")
-    Integer deleteWhite(@Param("enterpriseId") Integer enterprise_id,@Param("supplierId") Integer supplier_id);
+    Integer deleteWhite(@Param("enterpriseId") Integer enterpriseId,@Param("supplierId") Integer supplierId);
 
 }
