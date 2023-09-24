@@ -18,8 +18,8 @@ import java.util.List;
  * @class EnterpriseServiceImpl
  */
 public class EnterpriseServiceImpl implements EnterpriseService {
-    SqlSession session = MyBatisUtil.openSession(true);
-    EnterpriseDao dao = session.getMapper(EnterpriseDao.class);
+    private SqlSession session = MyBatisUtil.openSession(true);
+    private EnterpriseDao dao = session.getMapper(EnterpriseDao.class);
 
     /**
      * @description 在企业信息认证界面，输入认证信息后，将认证信息插入到数据库，调用此方法

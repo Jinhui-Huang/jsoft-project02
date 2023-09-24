@@ -13,9 +13,9 @@ import org.apache.ibatis.session.SqlSession;
 import java.util.List;
 
 public class SupplierWhiteListServiceImpl implements SupplierWhiteListService {
-    SqlSession session = MyBatisUtil.openSession(true);
-    SupplierWhiteListDao wDao  = session.getMapper(SupplierWhiteListDao.class);
-    SupplierBlackListDao bDao = session.getMapper(SupplierBlackListDao.class);
+    private SqlSession session = MyBatisUtil.openSession(true);
+    private SupplierWhiteListDao wDao  = session.getMapper(SupplierWhiteListDao.class);
+    private SupplierBlackListDao bDao = session.getMapper(SupplierBlackListDao.class);
 
     /**
      * @description 白名单界面的模糊查询功能
