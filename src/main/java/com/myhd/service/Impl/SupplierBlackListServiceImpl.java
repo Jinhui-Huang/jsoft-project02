@@ -32,24 +32,14 @@ public class SupplierBlackListServiceImpl implements SupplierBlackListService {
 
     @Override
     public PageInfo<ThreeTablesQuery> selectBlackInfoByEnterpriseId(SelectLikeInfo selectLikeInfo) {
-        try {
             PageHelper.startPage(selectLikeInfo.getStartPage(),selectLikeInfo.getPageSize());
             List<ThreeTablesQuery> trq = sbd.selectBlackInfoByEnterpriseId(selectLikeInfo);
-            return new PageInfo<ThreeTablesQuery>(trq);
-        } catch (RuntimeException e) {
-            log.error(e.getMessage(),e);
-            return null;
-        }
+            return new PageInfo<>(trq);
     }
 
     @Override
     public Boolean removeBlack(Integer enterprise_id, Integer supplier_id) {
-        try {
             return sbd.deleteBlack(enterprise_id,supplier_id) == 1;
-        } catch (RuntimeException e) {
-            log.error(e.getMessage(),e);
-            return false;
-        }
     }
 
     @Override

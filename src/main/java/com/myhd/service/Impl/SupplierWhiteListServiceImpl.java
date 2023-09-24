@@ -45,7 +45,7 @@ public class SupplierWhiteListServiceImpl implements SupplierWhiteListService {
     public PageInfo<ThreeTablesQuery> selectWhiteInfoByEnterpriseId(SelectLikeInfo selectLikeInfo) {
         PageHelper.startPage(selectLikeInfo.getStartPage(), selectLikeInfo.getPageSize());
         List<ThreeTablesQuery> trq = wDao.selectWhiteInfoByEnterpriseId(selectLikeInfo);
-        return new PageInfo<ThreeTablesQuery>(trq);
+        return new PageInfo<>(trq);
     }
 
     /**
