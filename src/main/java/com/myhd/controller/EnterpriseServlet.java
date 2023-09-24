@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myhd.pojo.Enterprise;
 import com.myhd.service.Impl.EnterpriseServiceImpl;
 import com.myhd.service.Impl.UserServiceImpl;
+import com.myhd.util.ReqRespMsgUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletException;
@@ -58,23 +59,8 @@ public class EnterpriseServlet extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json");
-        /*获取参数*/
-        String name = req.getParameter("name");
-        String socialUniformCode = req.getParameter("socialUniformCode");
-        String scale = req.getParameter("scale");
-        String email = req.getParameter("email");
-        String phone = req.getParameter("phone");
-        String fax = req.getParameter("fax");
-        String address = req.getParameter("address");
-        /*创建enterprise pojo对象*/
-        Enterprise enterprise = new Enterprise();
-        enterprise.setName(name);
-        enterprise.setSocialUniformCode(socialUniformCode);
-        enterprise.setScale(scale);
-        enterprise.setEmail(email);
-        enterprise.setPhone(phone);
-        enterprise.setFax(fax);
-        enterprise.setAddress(address);
+        /*获取前端json数据*/
+        Enterprise enterprise = ReqRespMsgUtil.getMsg(req, Enterprise.class);
         /*添加企业信息*/
         try {
             enterpriseImpl.addEnterprise(enterprise);
