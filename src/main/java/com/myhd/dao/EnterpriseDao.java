@@ -40,6 +40,7 @@ public interface EnterpriseDao {
             "from enterprise\n" +
             "where id = #{id}")
     Enterprise selectByEnterpriseId(@Param("id") Integer enterpriseId);
+
     /**
      * @description: 查询所有企业信息（企业id、企业名称和信用代码）根据查询到的用户表里的企业id来排除查询到的白名单和黑名单供应商企业以及本企业，将查询出的数据作为可选择企业返回到白名单页面。
      * @param enterpriseId
