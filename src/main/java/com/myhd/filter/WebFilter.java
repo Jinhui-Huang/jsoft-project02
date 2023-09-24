@@ -26,7 +26,8 @@ public class WebFilter implements Filter {
         paths.add("white-list");
         paths.add("black-list");
         paths.add("assets");
-
+        paths.add("whiteList"); /*SupplierWhiteListServlet映射的地址*/
+        paths.add("enterprise"); /*EnterpriseServlet映射的地址*/
     }
 
     @Override
