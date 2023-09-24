@@ -20,7 +20,7 @@ import java.util.List;
 public interface SupplierWhiteListService {
     /**
      * @description: 据用户表查询到的企业id查询本企业的白名单表信息，再根据白名单表信息中的供应商id查询对应用户表信息和企业表信息，将数据存入到三表联查实体类中，并进行分页展示.
-     * @param enterpriseId
+     * @param selectLikeInfo
      * @return: java.util.List<com.myhd.pojo.ThreeTablesQuery>
      * @author CYQH
      * @date: 2023/09/23 8:16
