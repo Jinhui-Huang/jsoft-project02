@@ -1,5 +1,6 @@
 package com.myhd.service;
 
+import com.github.pagehelper.PageInfo;
 import com.myhd.pojo.SelectLikeInfo;
 import com.myhd.pojo.SupplierBlackList;
 import com.myhd.pojo.ThreeTablesQuery;
@@ -20,11 +21,11 @@ public interface SupplierBlackListService {
     /**
      * @description: 根据用户表查询到的企业id查询本企业的黑名单表信息，再根据黑名单表信息中的供应商id查询对应用户表信息和企业表信息，将数据存入到三表联查实体类中，并进行分页展示.
      * @param selectLikeInfo
-     * @return: java.util.List<com.myhd.pojo.ThreeTablesQuery>
+     * @return: com.github.pagehelper.PageInfo<com.myhd.pojo.ThreeTablesQuery>
      * @author CYQH
      * @date: 2023/09/23 8:29
      */
-    List<ThreeTablesQuery> selectBlackInfoByEnterpriseId(SelectLikeInfo selectLikeInfo);
+    PageInfo<ThreeTablesQuery> selectBlackInfoByEnterpriseId(SelectLikeInfo selectLikeInfo);
 
     /**
      * @description: 根据本企业id和选择的供应商id确定唯一一条黑名单数据并移除黑名单表

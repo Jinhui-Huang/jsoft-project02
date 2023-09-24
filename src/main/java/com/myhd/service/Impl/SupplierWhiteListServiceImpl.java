@@ -1,5 +1,6 @@
 package com.myhd.service.Impl;
 
+import com.github.pagehelper.PageInfo;
 import com.myhd.dao.SupplierBlackListDao;
 import com.myhd.dao.SupplierWhiteListDao;
 import com.myhd.exception.BusinessException;
@@ -40,8 +41,8 @@ public class SupplierWhiteListServiceImpl implements SupplierWhiteListService {
      * @return java.util.List<com.myhd.pojo.ThreeTablesQuery>
      */
     @Override
-    public List<ThreeTablesQuery> selectWhiteInfoByEnterpriseId(SelectLikeInfo selectLikeInfo) {
-        return wDao.selectWhiteInfoByEnterpriseId(selectLikeInfo);
+    public PageInfo<ThreeTablesQuery> selectWhiteInfoByEnterpriseId(SelectLikeInfo selectLikeInfo) {
+        return null;
     }
 
     /**
