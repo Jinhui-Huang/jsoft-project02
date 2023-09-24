@@ -72,13 +72,13 @@ public class WebFilter implements Filter {
         if (split.length > 1 && paths.contains(split[1])) {
             log.info("过滤路径：" + split[1]);
             request.setCharacterEncoding("UTF-8");
-            if (requestURI.equals("/login-page") || split[1].equals("asstes")) {
+            if (requestURI.equals("/login-page")) {
                 chain.doFilter(request, response);
             } else {
                 verifyToken(request, response, chain);
             }
         } else {
-            response.sendRedirect("login-page");
+            response.sendRedirect("http://localhost:8080");
         }
 
     }
