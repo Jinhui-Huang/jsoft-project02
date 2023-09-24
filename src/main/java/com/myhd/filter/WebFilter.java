@@ -31,8 +31,8 @@ public class WebFilter implements Filter {
         paths.add("white-list");
         paths.add("black-list");
         paths.add("assets");
-        paths.add("ls");
 
+        paths.add("login");/*LoginServlet映射的地址*/
         paths.add("whiteList"); /*SupplierWhiteListServlet映射的地址*/
         paths.add("enterprise"); /*EnterpriseServlet映射的地址*/
     }
@@ -80,7 +80,7 @@ public class WebFilter implements Filter {
         if (split.length > 1 && paths.contains(split[1])) {
             log.info("过滤路径：" + split[1]);
             request.setCharacterEncoding("UTF-8");
-            if (requestURI.equals("/login-page") || requestURI.equals("/ls") || split[1].equals("assets")) {
+            if (requestURI.equals("/login-page") || requestURI.equals("/login") || split[1].equals("assets")) {
                 chain.doFilter(request, response);
             } else {
                 verifyToken(request, response, chain);

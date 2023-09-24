@@ -38,16 +38,15 @@ public class LoginServlet extends HttpServlet {
         log.info("进入loginPost");
         ObjectMapper jackson = new ObjectMapper();
         /*获取login页面请求传输来的账号和密码*/
-        User user = jackson.readValue(req.getInputStream(), User.class);
+        User user = ReqRespMsgUtil.getMsg(req, User.class);
         /*判断用户是否存在*/
-        Boolean userIsExists = usi.judgeUserIsExists(user.getAccount());
+        boolean userIsExists = user != null && usi.judgeUserIsExists(user.getAccount());
         if (userIsExists){
             /*用户登录方法*/
             user = usi.selectByUserAccountPwd(user);
             if (user != null){
                 log.info(user.toString());
                 log.info("登录成功");
-//                log.info("cookies不存在或token不存在");
                 String token = TokenUtil.sign(user);
                 log.info("生成token====="+token);
                 Cookie cookie = new Cookie("token",token);
