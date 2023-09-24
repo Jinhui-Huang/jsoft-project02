@@ -26,7 +26,6 @@ public class SupplierWhiteListServiceImpl implements SupplierWhiteListService {
      */
     @Override
     public List<ThreeTablesQuery> selectWhiteInfoByEnterpriseId(SelectLikeInfo selectLikeInfo) {
-
         return wDao.selectWhiteInfoByEnterpriseId(selectLikeInfo);
     }
 
