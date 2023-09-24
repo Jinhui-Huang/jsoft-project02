@@ -74,19 +74,25 @@ public class WebFilter implements Filter {
         if (split.length > 1 && paths.contains(split[1])) {
             log.info("过滤路径：" + split[1]);
             request.setCharacterEncoding("UTF-8");
-            if (split[1].equals("login-page")) {
+            if (requestURI.equals("/login-page")) {
                 chain.doFilter(request, response);
             } else {
                 verifyToken(request, response, chain);
             }
         } else {
-            response.sendRedirect("login-page");
+            response.sendRedirect("http://localhost:8080");
         }
 
     }
+
     /*进行令牌验证*/
     private void verifyToken(HttpServletRequest request, HttpServletResponse response, FilterChain chain) {
         try {
+            if (paths.contains(request.getRequestURI().substring(1))) {
+                chain.doFilter(request, response);
+            } else {
+                response.sendRedirect("http://localhost:8080");
+            }
             Cookie[] cookies = request.getCookies();
             if (cookies != null){
                 for (Cookie cookie : cookies) {
@@ -111,7 +117,6 @@ public class WebFilter implements Filter {
         } catch (IOException | ServletException e) {
             ReqRespMsgUtil.sendMsg(response,new Result(Code.BUSINESS_ERR,false,"服务器登录异常"));
         }
-
     }
 
 
