@@ -1,5 +1,6 @@
 package com.myhd.filter;
 
+import com.myhd.exception.SystemException;
 import com.myhd.util.ReqRespMsgUtil;
 import com.myhd.util.TokenUtil;
 import com.myhd.util.code.Code;
@@ -64,7 +65,7 @@ public class WebFilter implements Filter {
         }
         /*非/进入, /数量要求少于20*/
         if (countChar(requestURI, '/') >= 20) {
-            ReqRespMsgUtil.sendMsg(response, new Result(Code.BUSINESS_ERR, false, "路径不允许过多的/"));
+            response.sendError(404);
             return;
         }
 
@@ -73,7 +74,7 @@ public class WebFilter implements Filter {
         if (split.length > 1 && paths.contains(split[1])) {
             log.info("过滤路径：" + split[1]);
             request.setCharacterEncoding("UTF-8");
-            if (requestURI.equals("/login-page")) {
+            if (requestURI.equals("/login-page") || split[1].equals("assets")) {
                 chain.doFilter(request, response);
             } else {
                 verifyToken(request, response, chain);
@@ -92,8 +93,8 @@ public class WebFilter implements Filter {
             } else {
                 response.sendRedirect("http://localhost:8080");
             }
-        } catch (IOException | ServletException e) {
-            throw new RuntimeException(e);
+        } catch (IOException | ServletException | RuntimeException e) {
+            throw new SystemException(Code.SYSTEM_ERR, "系统未知异常", e);
         }
     }
 
