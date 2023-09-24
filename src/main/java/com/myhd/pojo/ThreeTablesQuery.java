@@ -20,11 +20,11 @@ import java.sql.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ThreeTablesQuery {
-    private Integer supplierId;
-    private String enterpriseName;
-    private String idcardName;
-    private String phone;
-    private String email;
-    private String variableInfo;
-    private Date updateDate;
+    private Integer supplierId;/*供应商*/
+    private String enterpriseName;/*企业名称*/
+    private String idcardName;/*企业联系人*/
+    private String phone;/*联系方式*/
+    private String email;/*联系邮箱*/
+    private String variableInfo;/*填入内容可变信息*/
+    private Date updateDate;/*更新日期*/
 }

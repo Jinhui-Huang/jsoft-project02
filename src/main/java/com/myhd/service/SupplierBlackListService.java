@@ -28,8 +28,8 @@ public interface SupplierBlackListService {
 
     /**
      * @description: 根据本企业id和选择的供应商id确定唯一一条黑名单数据并移除黑名单表
-     * @param enterprise_id
-     * @param supplier_id
+     * @param enterpriseId
+     * @param supplierId
      * @return: java.lang.Integer
      * @author CYQH
      * @date: 2023/09/23 8:31
