@@ -20,9 +20,9 @@ import java.sql.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SupplierBlackList {
-    private Integer id;
-    private Integer enterpriseId;
-    private Integer supplierId;
-    private String reason;
-    private Date updateDate;
+    private Integer id;/*自增主键*/
+    private Integer enterpriseId;/*企业主键id*/
+    private Integer supplierId;/*供应商主键id*/
+    private String reason;/*添加理由*/
+    private Date updateDate;/*更新日期*/
 }
