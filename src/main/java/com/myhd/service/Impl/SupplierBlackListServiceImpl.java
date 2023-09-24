@@ -1,5 +1,7 @@
 package com.myhd.service.Impl;
 
+import com.myhd.dao.SupplierBlackListDao;
+import com.myhd.dao.SupplierWhiteListDao;
 import com.myhd.pojo.SelectLikeInfo;
 import com.myhd.pojo.SupplierBlackList;
 import com.myhd.pojo.ThreeTablesQuery;
@@ -20,21 +22,24 @@ import java.util.List;
  * @Date: 2023/9/24 09:00
  */
 public class SupplierBlackListServiceImpl implements SupplierBlackListService {
-    private static final SqlSession session =  MyBatisUtil.openSession(true);
-    public static final SupplierBlackListService supplierBlackListService =  session.getMapper(SupplierBlackListService.class);
+    private SqlSession session =  MyBatisUtil.openSession(true);
+    public SupplierBlackListDao sbd =  session.getMapper(SupplierBlackListDao.class);
+    public SupplierWhiteListDao swl =  session.getMapper(SupplierWhiteListDao.class);
 
     @Override
     public List<ThreeTablesQuery> selectBlackInfoByEnterpriseId(SelectLikeInfo selectLikeInfo) {
-        return null;
+        return sbd.selectBlackInfoByEnterpriseId(selectLikeInfo);
     }
 
     @Override
     public Integer removeBlack(Integer enterprise_id, Integer supplier_id) {
-        return null;
+        return sbd.deleteBlack(enterprise_id,supplier_id);
     }
 
     @Override
     public Integer addBlack(SupplierBlackList supplierBlackList) {
-        return null;
+        Integer i = swl.deleteWhite(supplierBlackList.getEnterpriseId(), supplierBlackList.getSupplierId());
+        Integer i1 = sbd.insertBlack(supplierBlackList);
+        return i==1&&i1==1?1:0;
     }
 }
