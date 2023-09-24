@@ -20,9 +20,9 @@ import java.sql.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SupplierWhiteList {
-    private Integer id;
-    private Integer enterpriseId;
-    private Integer supplierId;
-    private String supplierLevel;
-    private Date updateDate;
+    private Integer id;/*自增主键*/
+    private Integer enterpriseId;/*企业主键id*/
+    private Integer supplierId;/*供应商主键id*/
+    private String supplierLevel;/*企业评级*/
+    private Date updateDate;/*更新日期*/
 }

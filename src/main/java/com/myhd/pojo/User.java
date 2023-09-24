@@ -18,14 +18,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
-    private Integer id;
-    private String name;
-    private Integer enterpriseId;
-    private String enterpriseName;
-    private String phone;
-    private String account;
-    private String password;
-    private String idcardName;
-    private String idcardNo;
+    private Integer id;/*自增主键*/
+    private String name;/*用户名*/
+    private Integer enterpriseId;/*企业id*/
+    private String enterpriseName;/*企业名称*/
+    private String phone;/*用户电话*/
+    private String account;/*账号*/
+    private String password;/*密码*/
+    private String idcardName;/*身份证姓名*/
+    private String idcardNo;/*身份证号码*/
 
 }

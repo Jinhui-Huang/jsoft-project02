@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SelectLikeInfo {
-    private Integer id;
-    private String enterpriseName;
-    private String supplierLevel;
+    private Integer id;/*被查询的企业id*/
+    private String enterpriseName;/*模糊查询时输入的企业名字或包含的字段*/
+    private String supplierLevel;/*白名单模糊查询时的企业评级，黑名单时不需要*/
 }
