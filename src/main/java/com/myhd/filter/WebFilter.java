@@ -1,6 +1,8 @@
 package com.myhd.filter;
 
+import com.myhd.pojo.User;
 import com.myhd.util.ReqRespMsgUtil;
+import com.myhd.util.TokenUtil;
 import com.myhd.util.code.Code;
 import com.myhd.util.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
 @Slf4j
 @javax.servlet.annotation.WebFilter("*")
@@ -81,14 +84,34 @@ public class WebFilter implements Filter {
         }
 
     }
-
     /*进行令牌验证*/
     private void verifyToken(HttpServletRequest request, HttpServletResponse response, FilterChain chain) {
         try {
-            chain.doFilter(request, response);
+            Cookie[] cookies = request.getCookies();
+            if (cookies != null){
+                for (Cookie cookie : cookies) {
+                    if (cookie.getName().equals("token")){
+                        String token = cookie.getValue();
+                        if (token != null){
+                            Map<String, Object> verify = TokenUtil.verify(token, User.class);
+                            Boolean status = (Boolean) verify.get("status");
+                            if (status){
+                                User user = (User) verify.get(User.class.getSimpleName());
+                                System.out.println(user);
+                                TokenUtil.SERVER_LOCAL.set(user);
+                                chain.doFilter(request,response);
+                                TokenUtil.SERVER_LOCAL.remove();
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+            response.sendRedirect("login-page");
         } catch (IOException | ServletException e) {
-            throw new RuntimeException(e);
+            ReqRespMsgUtil.sendMsg(response,new Result(Code.BUSINESS_ERR,false,"服务器登录异常"));
         }
+
     }
 
 
