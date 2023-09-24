@@ -95,17 +95,6 @@
                                    style="border: 1px solid #c2cad8;border-radius: 3px;">
                         </div>
                     </div>
-                    <div class="am-u-sm-6 am-u-md-3">
-                        <div class="am-form-group">
-                            <span style="font-size: 14px;">企业评级</span>
-                            <select data-am-selected="{btnSize: 'sm'}">
-                                <option value="">请选择企业评级</option>
-                                <option value="a">1级</option>
-                                <option value="b">2级</option>
-                                <option value="c">3级</option>
-                            </select>
-                        </div>
-                    </div>
                     <div style="float:right">
                         <div class="am-form-group">
                             <button type="button" class="am-btn am-btn-primary am-btn-sm"
