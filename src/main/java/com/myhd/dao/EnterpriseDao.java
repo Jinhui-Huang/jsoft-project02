@@ -25,6 +25,7 @@ public interface EnterpriseDao {
      * @author JoneElmo
      * @date: 2023-9-23 10:50
      */
+
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     @Insert("insert into enterprise(name, social_uniform_code, email, phone, address, scale, fax) \n" +
             "values ( #{name},#{socialUniformCode},#{email},#{phone},#{address},#{scale},#{fax} );")
@@ -41,7 +42,6 @@ public interface EnterpriseDao {
             "from enterprise\n" +
             "where id = #{id}")
     Enterprise selectByEnterpriseId(@Param("id") Integer enterpriseId);
-
     /**
      * @description: 查询所有企业信息（企业id、企业名称和信用代码）根据查询到的用户表里的企业id来排除查询到的白名单和黑名单供应商企业以及本企业，将查询出的数据作为可选择企业返回到白名单页面。
      * @param enterpriseId
@@ -49,6 +49,7 @@ public interface EnterpriseDao {
      * @author JoneElmo
      * @date: 2023-9-23 10:50
      */
+
     @Select("SELECT e.id, e.name, e.social_uniform_code\n" +
             "FROM enterprise AS e\n" +
             "LEFT JOIN supplier_white_list AS swl ON e.id = swl.supplier_id AND swl.enterprise_id = #{enterpriseId}\n" +
@@ -65,6 +66,7 @@ public interface EnterpriseDao {
      * @author JoneElmo
      * @date: 2023-9-23 10:50
      */
+
     @Select("SELECT id, name, social_uniform_code FROM enterprise AS e " +
             "WHERE e.id != #{enterpriseId} " +
             "AND e.id NOT IN " +

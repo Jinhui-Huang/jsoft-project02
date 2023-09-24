@@ -44,5 +44,5 @@ public interface SupplierBlackListDao {
      * @author CYQH
      * @date: 2023/09/22 21:13
      */
-    Integer deleteBlack(Integer enterprise_id,Integer supplier_id);
+    Integer deleteBlack(Integer enterpriseId,Integer supplierId);
 }
