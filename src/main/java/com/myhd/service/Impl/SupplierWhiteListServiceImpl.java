@@ -2,12 +2,15 @@ package com.myhd.service.Impl;
 
 import com.myhd.dao.SupplierBlackListDao;
 import com.myhd.dao.SupplierWhiteListDao;
+import com.myhd.exception.BusinessException;
 import com.myhd.pojo.SelectLikeInfo;
 import com.myhd.pojo.SupplierBlackList;
 import com.myhd.pojo.SupplierWhiteList;
 import com.myhd.pojo.ThreeTablesQuery;
 import com.myhd.service.SupplierWhiteListService;
 import com.myhd.util.MyBatisUtil;
+import com.myhd.util.code.Code;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.List;
@@ -23,8 +26,9 @@ import java.util.List;
  * @package com.myhd.service.Impl
  * @class SupplierWhiteListServiceImpl
  */
+@Slf4j
 public class SupplierWhiteListServiceImpl implements SupplierWhiteListService {
-    private static final SqlSession session = MyBatisUtil.openSession();
+    private static final SqlSession session = MyBatisUtil.openSession(true);
     private SupplierWhiteListDao wDao  = session.getMapper(SupplierWhiteListDao.class);
     private SupplierBlackListDao bDao = session.getMapper(SupplierBlackListDao.class);
 
@@ -49,9 +53,17 @@ public class SupplierWhiteListServiceImpl implements SupplierWhiteListService {
      */
     @Override
     public Boolean addBlackFromWhite(SupplierBlackList sbl) {
-        Integer i1 = wDao.deleteWhite(sbl.getEnterpriseId(), sbl.getSupplierId());
-        Integer i2 = bDao.insertBlack(sbl);
-        return i1 == 1 && i2 == 1 ;
+        try {
+            Integer i1 = wDao.deleteWhite(sbl.getEnterpriseId(), sbl.getSupplierId());
+            if (i1 == 0){
+                throw new BusinessException(Code.DELETE_ERR, "无该条数据");
+            }
+            Integer i2 = bDao.insertBlack(sbl);
+            return i1 == 1 && i2 == 1 ;
+        } catch (RuntimeException e) {
+            log.error(e.getMessage(), e);
+            return false;
+        }
     }
 
     /**
