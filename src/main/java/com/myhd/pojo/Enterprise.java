@@ -18,12 +18,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Enterprise {
-    private Integer id;
-    private String name;
-    private String socialUniformCode;
-    private String email;
-    private String phone;
-    private String address;
-    private String scale;
-    private String fax;
+    private Integer id;/*主键id*/
+    private String name;/*企业名称*/
+    private String socialUniformCode;/*社会统一代码*/
+    private String email;/*邮箱*/
+    private String phone;/*企业联系人电话*/
+    private String address;/*企业注册详细地址*/
+    private String scale;/*企业规模*/
+    private String fax;/*传真*/
 }
