@@ -54,14 +54,10 @@
          <error-code>500</error-code>
          <location>/error500.html</location>
     </error-page>
-    <!--<error-page>
-         <error-code>403</error-code>
-         <location>/403/403.html</location>
-    </error-page>
     <error-page>
-          <error-code>500</error-code>
-          <location>/500/500.html</location>
-     </error-page>-->
+         <error-code>404</error-code>
+         <location>/error404.html</location>
+    </error-page>
 
     <display-name>Archetype Created Web Application</display-name>
 </web-app>
