@@ -21,7 +21,7 @@ import java.util.List;
  * @class EnterpriseServiceImpl
  */
 public class EnterpriseServiceImpl implements EnterpriseService {
-    private SqlSession session = MyBatisUtil.openSession(true);
+    private static final SqlSession session = MyBatisUtil.openSession(true);
     private EnterpriseDao dao = session.getMapper(EnterpriseDao.class);
 
     /**
@@ -33,7 +33,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
      */
     @Override
     public Boolean addEnterprise(Enterprise enterprise) {
-        return dao.insertEnterprise(enterprise)==1?true:false;
+        return dao.insertEnterprise(enterprise) == 1;
     }
 
     /**
