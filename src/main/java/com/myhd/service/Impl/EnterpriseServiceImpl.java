@@ -37,9 +37,9 @@ public class EnterpriseServiceImpl implements EnterpriseService {
      */
     @Override
     public Boolean addEnterprise(Enterprise enterprise) {
-        Integer i = null;
         try {
-            i = dao.insertEnterprise(enterprise);
+            Integer i = dao.insertEnterprise(enterprise);
+            return true;
         } catch (PersistenceException e) {
             log.error("插入数据重复");
             return false;
@@ -47,7 +47,6 @@ public class EnterpriseServiceImpl implements EnterpriseService {
             log.error("存在字段为空,请检查字段值");
             return false;
         }
-        return true;
     }
 
     /**
