@@ -1,5 +1,6 @@
 package com.myhd.service.Impl;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.myhd.dao.SupplierBlackListDao;
 import com.myhd.dao.SupplierWhiteListDao;
@@ -34,7 +35,7 @@ public class SupplierWhiteListServiceImpl implements SupplierWhiteListService {
     private SupplierBlackListDao bDao = session.getMapper(SupplierBlackListDao.class);
 
     /**
-     * @description 白名单界面的模糊查询功能
+     * @description 白名单界面的模糊查询+分页查询
      * @author JoneElmo
      * @date 2023-09-24 09:58
      * @param selectLikeInfo 该参数由前端页面返回
@@ -42,7 +43,9 @@ public class SupplierWhiteListServiceImpl implements SupplierWhiteListService {
      */
     @Override
     public PageInfo<ThreeTablesQuery> selectWhiteInfoByEnterpriseId(SelectLikeInfo selectLikeInfo) {
-        return null;
+        PageHelper.startPage(selectLikeInfo.getStartPage(), selectLikeInfo.getPageSize());
+        List<ThreeTablesQuery> trq = wDao.selectWhiteInfoByEnterpriseId(selectLikeInfo);
+        return new PageInfo<>(trq);
     }
 
     /**
