@@ -3,6 +3,7 @@ package com.myhd.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageInfo;
 import com.myhd.pojo.SelectLikeInfo;
+import com.myhd.pojo.SupplierBlackList;
 import com.myhd.pojo.ThreeTablesQuery;
 import com.myhd.service.Impl.SupplierBlackListServiceImpl;
 import com.myhd.util.ReqRespMsgUtil;
@@ -61,12 +62,11 @@ public class SupplierBlackListServlet extends HttpServlet {
      */
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Integer id = Integer.valueOf(req.getParameter("id"));
-        Integer enterpriseId = Integer.valueOf(req.getParameter("enterpriseId"));
-        Integer supplierId = Integer.valueOf(req.getParameter("supplierId"));
-        String reason = req.getParameter("reason");
+        /*获取Json数据*/
+        SupplierBlackList sbl = ReqRespMsgUtil.getMsg(req, SupplierBlackList.class);
+        /*移除黑名单*/
         try {
-            impl.removeBlack(enterpriseId,supplierId);
+            impl.removeBlack(sbl.getEnterpriseId(),sbl.getSupplierId());
         } catch (Exception e) {
             log.error(e.getMessage(), "解除黑名单失败");
         }finally {
