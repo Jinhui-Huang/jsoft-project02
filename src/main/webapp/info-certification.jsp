@@ -1,6 +1,6 @@
 <!doctype html>
 <html>
-
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -26,8 +26,89 @@
             width: 100%;
         }
     </style>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.js"></script>
 </head>
 <body data-type="generalComponents">
+
+<%--
+    @author: JoneElmo
+    @date: 2023-9-24 21:45
+--%>
+
+<%--ajax处理异步请求--%>
+<script>
+    $(document).ready(function (){
+        /*点击企业信息认证界面的提交按钮，提交认证信息。接收回显结果并显示*/
+        $("button[name='submit']").on("click",function (event) {
+            console.log("点击了提交按钮")
+            /*阻止超链接的跳转，执行jquery语句*/
+            event.preventDefault();
+            /*发送put请求，处理企业认证信息*/
+            var enterpriseId = null;
+            var address1 = $("input[name='address']").val()
+            var address2 = $("textarea[name='addressDetails']").val()
+            /*拼接两个地址信息*/
+            var address = address1 + "#" + address2
+            console.log(address)
+            $.ajax({
+                url: "http://localhost:8080/enterprise",
+                type: "put",
+                dataType: "json",
+                data:{
+                    name: $("input[name='name']").val(),
+                    socialUniformCode: $("input[name='socialUniformCode']").val(),
+                    email:$("input[name='email']").val(),
+                    phone:$("input[name='phone']").val(),
+                    address: address,
+                    scale:$("input[name='scale']").val(),
+                    fax:$("input[name='fax']").val()
+                },
+                success:function (result){
+                    console.log(result)
+                    enterpriseId = result.id
+                },
+                error:function (result) {
+                    console.log(result)
+                }
+            })
+
+            /*获取输入的姓名和身份证号*/
+            var idcardName = $("input[name='idcardName']").val()
+            var idcardNo = $("input[name='idcardNo']").val()
+            /*发送post请求，处理用户认证信息*/
+            $.ajax({
+                url: "http://localhost:8080/enterprise",
+                type: "post",
+                dataType: "json",
+                data:{
+                    /*put请求回显的企业id信息*/
+                    id : enterpriseId,
+                    /*输入框中的企业姓名信息*/
+                    name : $("input[name='name']").val(),
+                    idcardName : idcardName,
+                    idcardNo : idcardNo
+                },
+                success:function (result) {
+                    console.log(result)
+                },
+                error:function (result){
+                    console.log(result)
+                }
+            })
+        })
+
+
+
+
+
+
+
+
+
+    })
+</script>
+
+
 <header class="am-topbar am-topbar-inverse admin-header">
     <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only"
             data-am-collapse="{target: '#topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span
@@ -58,7 +139,7 @@
                     </a>
                     <ul class="tpl-left-nav-sub-menu" style="display: block;">
                         <li>
-                            <a href="info-certification" class="active">
+                            <a id="enterpriseInfoVeri" href="#" class="active">
                                 <i class="am-icon-angle-right"></i>
                                 <span>企业信息认证</span>
                             </a>
@@ -114,25 +195,25 @@
                             <div class="am-form-group">
                                 <label for="user-name" class="am-u-sm-3 am-form-label">登录账号</label>
                                 <div class="am-u-sm-9">
-                                    usernameTest01
+                                    <span id="userAccount">test</span>
                                 </div>
                             </div>
                             <div class="am-form-group">
                                 <label for="user-email" class="am-u-sm-3 am-form-label">管理员手机号码</label>
                                 <div class="am-u-sm-9">
-                                    18133686868
+                                    <span id="userPhone">test</span>
                                 </div>
                             </div>
                             <div class="am-form-group">
                                 <label for="user-phone" class="am-u-sm-3 am-form-label">管理员姓名</label>
                                 <div class="am-u-sm-9">
-                                    <input type="text" placeholder="请输入管理员姓名">
+                                    <input type="text" name="idcardName" placeholder="请输入管理员姓名">
                                 </div>
                             </div>
                             <div class="am-form-group">
                                 <label for="user-QQ" class="am-u-sm-3 am-form-label">管理员身份证号</label>
                                 <div class="am-u-sm-9">
-                                    <input type="text" placeholder="请入管理员身份证号">
+                                    <input type="text" name="idcardNo" placeholder="请入管理员身份证号">
                                 </div>
                             </div>
                         </form>
@@ -159,19 +240,19 @@
                             <div class="am-form-group">
                                 <label for="user-name" class="am-u-sm-3 am-form-label">企业名称</label>
                                 <div class="am-u-sm-9">
-                                    <input type="text" id="user-name" placeholder="请输入企业名称">
+                                    <input type="text" name="name" id="user-name" placeholder="请输入企业名称">
                                 </div>
                             </div>
                             <div class="am-form-group">
                                 <label for="user-weibo" class="am-u-sm-3 am-form-label">统一社会信用代码</label>
                                 <div class="am-u-sm-9">
-                                    <input type="text" id="user-weibo" placeholder="请输入统一社会信用代码">
+                                    <input type="text" name="socialUniformCode" id="user-weibo" placeholder="请输入统一社会信用代码">
                                 </div>
                             </div>
                             <div class="am-form-group">
                                 <label for="user-weibo" class="am-u-sm-3 am-form-label">企业规模</label>
                                 <div class="am-u-sm-9">
-                                    <select placeholder="请选择企业规模" data-am-selected>
+                                    <select name="scale" placeholder="请选择企业规模" data-am-selected>
                                         <option value="4">请选择企业规模</option>
                                         <option value="a">0-20人</option>
                                         <option value="b">20-50人</option>
@@ -184,37 +265,37 @@
                             <div class="am-form-group">
                                 <label for="user-email" class="am-u-sm-3 am-form-label">企业邮箱</label>
                                 <div class="am-u-sm-9">
-                                    <input type="email" id="user-email" placeholder="请输入企业邮箱">
+                                    <input type="email" name="email" id="user-email" placeholder="请输入企业邮箱">
                                 </div>
                             </div>
                             <div class="am-form-group">
                                 <label for="user-phone" class="am-u-sm-3 am-form-label">企业电话</label>
                                 <div class="am-u-sm-9">
-                                    <input type="tel" id="user-phone" placeholder="请输入企业电话">
+                                    <input type="tel" name="phone" id="user-phone" placeholder="请输入企业电话">
                                 </div>
                             </div>
                             <div class="am-form-group">
                                 <label for="user-QQ" class="am-u-sm-3 am-form-label">传真</label>
                                 <div class="am-u-sm-9">
-                                    <input type="number" pattern="[0-9]*" id="user-QQ" placeholder="请输入传真">
+                                    <input type="number" name="fax" pattern="[0-9]*" id="user-QQ" placeholder="请输入传真">
                                 </div>
                             </div>
                             <div class="am-form-group">
                                 <label for="user-weibo" class="am-u-sm-3 am-form-label">企业注册地</label>
                                 <div class="am-u-sm-9">
-                                    <input type="text" id="user-weibo" placeholder="请企业注册地">
+                                    <input type="text" name="address" id="user-weibo" placeholder="请企业注册地">
                                 </div>
                             </div>
                             <div class="am-form-group">
                                 <label for="user-intro" class="am-u-sm-3 am-form-label">企业注册详细地址</label>
                                 <div class="am-u-sm-9">
-                                    <textarea class="" rows="5" id="user-intro" placeholder="请输入企业注册详细地址"></textarea>
+                                    <textarea class="" name="addressDetails" rows="5" id="user-intro" placeholder="请输入企业注册详细地址"></textarea>
                                     <small>250字以内...</small>
                                 </div>
                             </div>
                             <div class="am-form-group">
                                 <div class="am-u-sm-9 am-u-sm-push-3">
-                                    <button type="button" class="am-btn am-btn-primary">提 交</button>
+                                    <button name="submit" type="button" class="am-btn am-btn-primary">提 交</button>
                                 </div>
                             </div>
                         </form>

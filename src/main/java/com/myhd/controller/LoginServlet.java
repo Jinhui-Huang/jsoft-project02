@@ -50,6 +50,7 @@ public class LoginServlet extends HttpServlet {
         boolean userIsExists = user != null && usi.judgeUserIsExists(user.getAccount());
         if (userIsExists){
             /*用户登录方法*/
+            log.info(user.toString());
             user = usi.selectByUserAccountPwd(user);
             if (user != null){
                 log.info(user.toString());
@@ -63,8 +64,7 @@ public class LoginServlet extends HttpServlet {
                 cookie.setSecure(true);
                 cookie.setHttpOnly(true);
                 resp.addCookie(cookie);
-//                resp.setContentType("text/html");
-                resp.sendRedirect("info-certification");
+                ReqRespMsgUtil.sendMsg(resp,new Result(Code.GET_OK,true,"账号登录成功"));
             }else {
                 ReqRespMsgUtil.sendMsg(resp,new Result(Code.BUSINESS_ERR,false,"账号登录失败"));
             }
@@ -84,6 +84,7 @@ public class LoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         log.info("进入loginGet");
         Cookie[] cookies = req.getCookies();
+        boolean flag = false;
         if (cookies != null){
             log.info("cookies存在");
             for (Cookie cookie : cookies) {
@@ -99,16 +100,25 @@ public class LoginServlet extends HttpServlet {
                             User user = (User) verify.get(User.class.getSimpleName());
                             User datebaseUser = usi.selectByUserAccountPwd(user);
                             if (datebaseUser != null){
-                                log.info("账号自动登录成功");
-                                resp.sendRedirect("info-certification");
-                            }else {
+                                log.info("账号登录成功");
+                                flag = true;
+                                ReqRespMsgUtil.sendMsg(resp,new Result(Code.GET_OK,true,"账号登录成功"));
+                                break;
+                            } else {
                                 log.warn("账号登录失败");
-                                resp.addCookie(new Cookie("token",""));
+                                Cookie newCookie = new Cookie("token", null);
+                                newCookie.setPath("/");
+                                newCookie.setMaxAge(0);
+                                resp.addCookie(newCookie);
                             }
                         }
                     }
+                    break;
                 }
             }
+        }
+        if (!flag) {
+            ReqRespMsgUtil.sendMsg(resp,new Result(Code.GET_ERR, false,"请登录访问"));
         }
     }
 }

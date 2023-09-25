@@ -2,7 +2,6 @@ package com.myhd.dao;
 
 import com.myhd.pojo.SelectLikeInfo;
 import com.myhd.pojo.SupplierBlackList;
-import com.myhd.pojo.SupplierWhiteList;
 import com.myhd.pojo.ThreeTablesQuery;
 import org.apache.ibatis.annotations.*;
 
@@ -18,6 +17,7 @@ import java.util.List;
  */
 @Mapper
 public interface SupplierBlackListDao {
+
     /**
      * @description: 根据模糊查询实体类中根据用户表查询到的企业id查询本企业的黑名单表信息，再根据黑名单表信息中的供应商id查询对应用户表信息和企业表信息，在根据模糊查询条件查询对应数据，将数据存入到三表联查实体类中，并进行模糊查询与分页展示。
      * @param selectLikeInfo
@@ -34,6 +34,7 @@ public interface SupplierBlackListDao {
             "    </where>\n" +
             "</script>")
     List<ThreeTablesQuery> selectBlackInfoByEnterpriseId(SelectLikeInfo selectLikeInfo);
+
     /**
      * @description: 根据添加供应商获取的黑名单信息更新黑名单表。
      * @param supplierBlackList
@@ -44,6 +45,7 @@ public interface SupplierBlackListDao {
     @Insert("insert into supplier_black_list(enterprise_id, supplier_id, reason, update_date) \n" +
             "values (#{enterpriseId}, #{supplierId} , #{reason} , #{updateDate})")
     Integer insertBlack(SupplierBlackList supplierBlackList);
+
     /**
      * @description: 根据本企业id和选择的供应商id确定唯一一条黑名单数据并移除黑名单表
      * @param enterpriseId
@@ -55,4 +57,5 @@ public interface SupplierBlackListDao {
     @Delete("delete from supplier_black_list " +
             "where enterprise_id = #{enterpriseId} and supplier_id = #{supplierId}")
     Integer deleteBlack(@Param("enterpriseId") Integer enterpriseId,@Param("supplierId") Integer supplierId);
+
 }
