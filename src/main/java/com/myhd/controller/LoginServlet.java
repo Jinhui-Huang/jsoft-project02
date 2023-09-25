@@ -121,4 +121,14 @@ public class LoginServlet extends HttpServlet {
             ReqRespMsgUtil.sendMsg(resp,new Result(Code.GET_ERR, false,"请登录访问"));
         }
     }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        log.info("进入loginDelete");
+        Cookie newCookie = new Cookie("token", null);
+        newCookie.setPath("/");
+        newCookie.setMaxAge(0);
+        resp.addCookie(newCookie);
+        ReqRespMsgUtil.sendMsg(resp,new Result(Code.DELETE_OK,true,"账号退出成功"));
+    }
 }

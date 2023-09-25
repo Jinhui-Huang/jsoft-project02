@@ -38,13 +38,35 @@
 <%--ajax处理异步请求--%>
 <script>
     $(document).ready(function (){
+
+        /*进入页面进行用户认证进度校验*/
+        $.ajax({
+            type:"get",
+            url:"enterprise",
+            success:function (data){
+                if(data.data[1] == null ){
+                    alert("未认证")
+                    $("#userAccount").text(data.data[0].account)
+                    $("#userPhone").text(data.data[0].phone)
+                    /*判断企业信息为null，则证明未进行认证，须进行认证再回显数据*/
+                }else {
+                    alert("已认证")
+                    /*已进行认证直接回显数据*/
+                    $(".am-form-group").find("input").prop("readonly",true)
+                    $("#userAccount").text(data.data[0].account)
+                    $("#userPhone").text(data.data[0].phone)
+                    $("[name = 'idcardName']").val(data.data[0].idcardName)
+
+                }
+            }
+        })
         /*点击企业信息认证界面的提交按钮，提交认证信息。接收回显结果并显示*/
         $("button[name='submit']").on("click",function (event) {
             console.log("点击了提交按钮")
             /*阻止超链接的跳转，执行jquery语句*/
             event.preventDefault();
             /*发送put请求，处理企业认证信息*/
-            var enterpriseId = null;
+            var enterpriseId
             var address1 = $("input[name='address']").val()
             var address2 = $("textarea[name='addressDetails']").val()
             /*拼接两个地址信息*/
@@ -54,7 +76,7 @@
                 url: "http://localhost:8080/enterprise",
                 type: "put",
                 dataType: "json",
-                data:{
+                data:JSON.stringify({
                     name: $("input[name='name']").val(),
                     socialUniformCode: $("input[name='socialUniformCode']").val(),
                     email:$("input[name='email']").val(),
@@ -62,10 +84,11 @@
                     address: address,
                     scale:$("input[name='scale']").val(),
                     fax:$("input[name='fax']").val()
-                },
+                }),
                 success:function (result){
                     console.log(result)
                     enterpriseId = result.id
+
                 },
                 error:function (result) {
                     console.log(result)
@@ -73,6 +96,7 @@
             })
 
             /*获取输入的姓名和身份证号*/
+            alert("获取id："+enterpriseId)
             var idcardName = $("input[name='idcardName']").val()
             var idcardNo = $("input[name='idcardNo']").val()
             /*发送post请求，处理用户认证信息*/
@@ -80,14 +104,14 @@
                 url: "http://localhost:8080/enterprise",
                 type: "post",
                 dataType: "json",
-                data:{
+                data:JSON.stringify({
                     /*put请求回显的企业id信息*/
                     id : enterpriseId,
                     /*输入框中的企业姓名信息*/
                     name : $("input[name='name']").val(),
                     idcardName : idcardName,
                     idcardNo : idcardNo
-                },
+                }),
                 success:function (result) {
                     console.log(result)
                 },
@@ -97,6 +121,19 @@
             })
         })
 
+        /*退出登录按钮*/
+        $("#logoutButton").click(function (){
+            $.ajax({
+                type:"delete",
+                url:"login",
+                success:function (data){
+                    if (data.data){
+                        alert(data.msg)
+                        window.location.href="http://localhost:8080"
+                    }
+                }
+            })
+        })
 
 
 
@@ -121,7 +158,7 @@
                         src="assets/img/user01.png"></span>
                 </a>
                 <ul class="am-dropdown-content">
-                    <li><a href="login-page"><span class="am-icon-power-off"></span> 退出</a></li>
+                    <li><a href="login-page" id="logoutButton"><span class="am-icon-power-off"></span> 退出</a></li>
                 </ul>
             </li>
         </ul>
