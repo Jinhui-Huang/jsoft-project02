@@ -121,7 +121,14 @@ public class LoginServlet extends HttpServlet {
             ReqRespMsgUtil.sendMsg(resp,new Result(Code.GET_ERR, false,"请登录访问"));
         }
     }
-
+    /**
+     * @description: TODO 账号退出登录功能
+     * @param req
+     * @param resp
+     * @return: void
+     * @author CYQH
+     * @date: 2023/09/25 18:55
+     */
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         log.info("进入loginDelete");
