@@ -2,14 +2,13 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-/.idea/
 .idea
-.idea/
-/.idea
 out/
 /src/test/
 src/test
-src/main/resources/logback.xml
+logs
+/logs
+logs/
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

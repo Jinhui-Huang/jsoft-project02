@@ -3,7 +3,7 @@
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
 
     <!--定义日志文件的存储地址 勿在LogBack的配置中使用相对路径-->
-    <property name="LOG_HOME" value="/home/huian/logs/jsoft_project02/logs"/>
+    <property name="LOG_HOME" value="C:/logs"/>
     <!-- 定义日志上下文的名称 -->
     <contextName>${LOG_CONTEXT_NAME}</contextName>
 
@@ -12,7 +12,7 @@
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
             <pattern>%yellow(%d{yyyy-MM-dd HH:mm:ss.SSS}) [%thread] %highlight(%-5level) %green(%logger{50}) - %highlight(%msg) %n</pattern>
-            <charset>utf-8</charset>
+            <charset>gbk</charset>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>INFO</level>
