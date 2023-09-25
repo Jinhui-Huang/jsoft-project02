@@ -45,14 +45,23 @@ public class SupplierWhiteListServlet extends   HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         /*设置回复头*/
         resp.setContentType("application/json");
-        /*获取Json数据*/
-        SelectLikeInfo sli = ReqRespMsgUtil.getMsg(req, SelectLikeInfo.class);
-        sli.setPageSize(5);
+        /*获取请求数据*/
+        Integer id = Integer.valueOf(req.getParameter("id"));
+        String enterpriseName = req.getParameter("enterpriseName");
+        String supplierLevel = req.getParameter("supplierLevel");
+        SelectLikeInfo sli = new SelectLikeInfo();
+        log.info("拿到的id是："+id);
+        log.info("拿到的name是:" + enterpriseName);
+        log.info("拿到的level是："+supplierLevel);
+        sli.setId(Integer.valueOf(req.getParameter("id")));
+        sli.setEnterpriseName(enterpriseName);
+        sli.setSupplierLevel( "0".equals(supplierLevel) ? null : supplierLevel );
         /*模糊查询*/
         PageInfo<ThreeTablesQuery> info = impl.selectWhiteInfoByEnterpriseId(sli);
-        List<ThreeTablesQuery> list = info.getList();
         /*返回json数据*/
-        ReqRespMsgUtil.sendMsg(resp, list);
+        log.info(String.valueOf(info.getList()));
+        log.info(String.valueOf(info.getTotal()));
+        ReqRespMsgUtil.sendMsg(resp, info);
     }
 
     /**
