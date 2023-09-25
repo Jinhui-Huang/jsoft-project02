@@ -76,6 +76,7 @@
                 url: "http://localhost:8080/enterprise",
                 type: "put",
                 dataType: "json",
+                async:false,
                 data:JSON.stringify({
                     name: $("input[name='name']").val(),
                     socialUniformCode: $("input[name='socialUniformCode']").val(),
@@ -88,31 +89,30 @@
                 success:function (result){
                     console.log(result)
                     enterpriseId = result.id
-
                     console.log(result)
                     console.log("回显的企业id:"+enterpriseId)
                     /*隐藏域传参，供post请求使用*/
                     $("input[name='hiddenId']").val(enterpriseId)
-                    console.log("隐藏域值：" +$("input[name='hiddenId']").val())
-                    alert("数据提交成功!")
-                    /*回显数据*/
-                    $("input[name='name']").prop("readonly",true)
-                    $("input[name='socialUniformCode']").prop("readonly",true)
-                    $("input[name='email']").prop("readonly",true)
-                    $("input[name='phone']").prop("readonly",true)
-                    /*设置下拉列表只读（转换为Input）*/
-                    let select = $("select[name='scale']")
-                    let input = $("<input>")
-                    input.attr("type","text")
-                    input.val(select.find("option:selected").text())
-                    input.prop("readonly",true)
-                    $("#sel").replaceWith(input)
-                    /*设置其他输入框只读*/
-                    $("input[name='fax']").prop("readonly",true)
-                    $("input[name='address']").prop("readonly",true)
-                    $("textarea[name='addressDetails']").prop("readonly",true)
-                    $("input[name='idcardName']").prop("readonly",true)
-                    $("input[name='idcardNo']").prop("readonly",true)
+                    // console.log("隐藏域值：" +$("input[name='hiddenId']").val())
+                    // alert("数据提交成功!")
+                    // /*回显数据*/
+                    // $("input[name='name']").prop("readonly",true)
+                    // $("input[name='socialUniformCode']").prop("readonly",true)
+                    // $("input[name='email']").prop("readonly",true)
+                    // $("input[name='phone']").prop("readonly",true)
+                    // /*设置下拉列表只读（转换为Input）*/
+                    // let select = $("select[name='scale']")
+                    // let input = $("<input>")
+                    // input.attr("type","text")
+                    // input.val(select.find("option:selected").text())
+                    // input.prop("readonly",true)
+                    // $("#sel").replaceWith(input)
+                    // /*设置其他输入框只读*/
+                    // $("input[name='fax']").prop("readonly",true)
+                    // $("input[name='address']").prop("readonly",true)
+                    // $("textarea[name='addressDetails']").prop("readonly",true)
+                    // $("input[name='idcardName']").prop("readonly",true)
+                    // $("input[name='idcardNo']").prop("readonly",true)
                 },
                 error:function (result) {
                     console.log(result)
@@ -120,7 +120,7 @@
             })
 
             /*获取输入的姓名和身份证号*/
-            alert("获取id："+enterpriseId)
+            alert("获取id："+$("input[name = 'hiddenId']").val())
             var idcardName = $("input[name='idcardName']").val()
             var idcardNo = $("input[name='idcardNo']").val()
             /*发送post请求，处理用户认证信息*/
@@ -130,9 +130,9 @@
                 dataType: "json",
                 data:JSON.stringify({
                     /*put请求回显的企业id信息*/
-                    id : enterpriseId,
+                    enterpriseId : enterpriseId,
                     /*输入框中的企业姓名信息*/
-                    name : $("input[name='name']").val(),
+                    enterpriseName : $("input[name='name']").val(),
                     idcardName : idcardName,
                     idcardNo : idcardNo
                 }),
@@ -158,10 +158,6 @@
                 }
             })
         })
-
-
-
-
 
 
 
@@ -301,6 +297,7 @@
                             <div class="am-form-group">
                                 <label for="user-name" class="am-u-sm-3 am-form-label">企业名称</label>
                                 <div class="am-u-sm-9">
+                                    <input name="hiddenId" type="hidden">
                                     <input type="text" name="name" id="user-name" placeholder="请输入企业名称">
                                 </div>
                             </div>
