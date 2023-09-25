@@ -66,7 +66,7 @@
             /*阻止超链接的跳转，执行jquery语句*/
             event.preventDefault();
             /*发送put请求，处理企业认证信息*/
-            var enterpriseId
+            var enterpriseId = null;
             var address1 = $("input[name='address']").val()
             var address2 = $("textarea[name='addressDetails']").val()
             /*拼接两个地址信息*/
@@ -301,6 +301,7 @@
                             <div class="am-form-group">
                                 <label for="user-name" class="am-u-sm-3 am-form-label">企业名称</label>
                                 <div class="am-u-sm-9">
+                                    <input name="hiddenId" type="hidden">
                                     <input type="text" name="name" id="user-name" placeholder="请输入企业名称">
                                 </div>
                             </div>
