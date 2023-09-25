@@ -76,6 +76,7 @@
                 url: "http://localhost:8080/enterprise",
                 type: "put",
                 dataType: "json",
+                async: false,
                 data:JSON.stringify({
                     name: $("input[name='name']").val(),
                     socialUniformCode: $("input[name='socialUniformCode']").val(),
@@ -91,9 +92,6 @@
 
                     console.log(result)
                     console.log("回显的企业id:"+enterpriseId)
-                    /*隐藏域传参，供post请求使用*/
-                    $("input[name='hiddenId']").val(enterpriseId)
-                    console.log("隐藏域值：" +$("input[name='hiddenId']").val())
                     alert("数据提交成功!")
                     /*回显数据*/
                     $("input[name='name']").prop("readonly",true)
@@ -301,7 +299,6 @@
                             <div class="am-form-group">
                                 <label for="user-name" class="am-u-sm-3 am-form-label">企业名称</label>
                                 <div class="am-u-sm-9">
-                                    <input name="hiddenId" type="hidden">
                                     <input type="text" name="name" id="user-name" placeholder="请输入企业名称">
                                 </div>
                             </div>
