@@ -44,17 +44,16 @@
                 type:"get",
                 url:"enterprise",
                 success:function (result){
+                    $("#userName").text(result.data[0].name)
+                    $("#userAccount").text(result.data[0].account)
+                    $("#userPhone").text(result.data[0].phone)
                     if(result.data[1] == null ){
-                        alert("未认证")
-                        $("#userAccount").text(result.data[0].account)
-                        $("#userPhone").text(result.data[0].phone)
+                        alert("请进行信息认证")
                         /*判断企业信息为null，则证明未进行认证，须进行认证再回显数据*/
                     }else {
                         alert("已认证")
                         /*已进行认证直接回显数据*/
                         $(".am-form-group").find("input").prop("readonly",true)
-                        $("#userAccount").text(result.data[0].account)
-                        $("#userPhone").text(result.data[0].phone)
                         $("[name = 'idcardName']").val(result.data[0].idcardName)
                         $("[name = 'idcardNo']").val(result.data[0].idcardNo)
                         $("[name = 'name']").val(result.data[1].name)
@@ -101,39 +100,42 @@
                     fax:$("input[name='fax']").val()
                 }),
                 success:function (result){
-                    console.log(result)
-                    enterpriseId = result.id
-                    console.log(result)
-                },
-                error:function (result) {
-                    console.log(result)
-                }
-            })
+                    /*企业认证判断成功再进行用户信息认证请求的发送*/
+                    if (result.data[0]){
+                        enterpriseId = result.data[1].id
 
-            /*获取输入的姓名和身份证号*/
-            var idcardName = $("input[name='idcardName']").val()
-            var idcardNo = $("input[name='idcardNo']").val()
-            /*发送post请求，处理用户认证信息*/
-            $.ajax({
-                url: "http://localhost:8080/enterprise",
-                type: "post",
-                dataType: "json",
-                data:JSON.stringify({
-                    /*put请求回显的企业id信息*/
-                    enterpriseId : enterpriseId,
-                    /*输入框中的企业姓名信息*/
-                    enterpriseName : $("input[name='name']").val(),
-                    idcardName : idcardName,
-                    idcardNo : idcardNo
-                }),
-                success:function (result) {
-                    if (result.data){
-                        EchoData();
+                        /*获取输入的姓名和身份证号*/
+                        var idcardName = $("input[name='idcardName']").val()
+                        var idcardNo = $("input[name='idcardNo']").val()
+                        /*发送post请求，处理用户认证信息*/
+                        $.ajax({
+                            url: "http://localhost:8080/enterprise",
+                            type: "post",
+                            dataType: "json",
+                            data:JSON.stringify({
+                                /*put请求回显的企业id信息*/
+                                enterpriseId : enterpriseId,
+                                /*输入框中的企业姓名信息*/
+                                enterpriseName : $("input[name='name']").val(),
+                                idcardName : idcardName,
+                                idcardNo : idcardNo
+                            }),
+                            success:function (result) {
+                                if (result.data){
+                                    EchoData();
+                                }else {
+                                    alert(result.msg)
+                                }
+                            },
+                            error:function (result){
+                                console.log(result)
+                            }
+                        })
                     }else {
-
+                        alert(result.msg)
                     }
                 },
-                error:function (result){
+                error:function (result) {
                     console.log(result)
                 }
             })
@@ -164,7 +166,7 @@
         <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list tpl-header-list">
             <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
                 <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
-                    <span class="tpl-header-list-user-nick">禁言小张</span><span class="tpl-header-list-user-ico"> <img
+                    <span class="tpl-header-list-user-nick" id="userName">禁言小张</span><span class="tpl-header-list-user-ico"> <img
                         src="assets/img/user01.png"></span>
                 </a>
                 <ul class="am-dropdown-content">
