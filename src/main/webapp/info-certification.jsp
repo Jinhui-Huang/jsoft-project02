@@ -54,7 +54,7 @@
                 url: "http://localhost:8080/enterprise",
                 type: "put",
                 dataType: "json",
-                data:{
+                data:JSON.stringify({
                     name: $("input[name='name']").val(),
                     socialUniformCode: $("input[name='socialUniformCode']").val(),
                     email:$("input[name='email']").val(),
@@ -62,13 +62,38 @@
                     address: address,
                     scale:$("input[name='scale']").val(),
                     fax:$("input[name='fax']").val()
-                },
+                }),
                 success:function (result){
-                    console.log(result)
+                    console.log("put请求成功")
                     enterpriseId = result.id
+                    console.log(result)
+                    console.log("回显的企业id:"+enterpriseId)
+                    /*隐藏域传参，供post请求使用*/
+                    $("input[name='hiddenId']").val(enterpriseId)
+                    console.log("隐藏域值：" +$("input[name='hiddenId']").val())
+                    alert("数据提交成功!")
+                    /*回显数据*/
+                    $("input[name='name']").prop("readonly",true)
+                    $("input[name='socialUniformCode']").prop("readonly",true)
+                    $("input[name='email']").prop("readonly",true)
+                    $("input[name='phone']").prop("readonly",true)
+                    /*设置下拉列表只读（转换为Input）*/
+                    let select = $("select[name='scale']")
+                    let input = $("<input>")
+                    input.attr("type","text")
+                    input.val(select.find("option:selected").text())
+                    input.prop("readonly",true)
+                    $("#sel").replaceWith(input)
+                    /*设置其他输入框只读*/
+                    $("input[name='fax']").prop("readonly",true)
+                    $("input[name='address']").prop("readonly",true)
+                    $("textarea[name='addressDetails']").prop("readonly",true)
+                    $("input[name='idcardName']").prop("readonly",true)
+                    $("input[name='idcardNo']").prop("readonly",true)
                 },
                 error:function (result) {
-                    console.log(result)
+                    console.log("put请求失败")
+                    alert("插入值重复!")
                 }
             })
 
@@ -80,19 +105,19 @@
                 url: "http://localhost:8080/enterprise",
                 type: "post",
                 dataType: "json",
-                data:{
+                data:JSON.stringify({
                     /*put请求回显的企业id信息*/
                     id : enterpriseId,
                     /*输入框中的企业姓名信息*/
                     name : $("input[name='name']").val(),
                     idcardName : idcardName,
                     idcardNo : idcardNo
-                },
+                }),
                 success:function (result) {
-                    console.log(result)
+                    console.log("post成功")
                 },
                 error:function (result){
-                    console.log(result)
+                    console.log("post失败")
                 }
             })
         })
@@ -240,6 +265,7 @@
                             <div class="am-form-group">
                                 <label for="user-name" class="am-u-sm-3 am-form-label">企业名称</label>
                                 <div class="am-u-sm-9">
+                                    <input name="hiddenId" type="hidden">
                                     <input type="text" name="name" id="user-name" placeholder="请输入企业名称">
                                 </div>
                             </div>
@@ -252,14 +278,16 @@
                             <div class="am-form-group">
                                 <label for="user-weibo" class="am-u-sm-3 am-form-label">企业规模</label>
                                 <div class="am-u-sm-9">
-                                    <select name="scale" placeholder="请选择企业规模" data-am-selected>
-                                        <option value="4">请选择企业规模</option>
-                                        <option value="a">0-20人</option>
-                                        <option value="b">20-50人</option>
-                                        <option value="d">50-100人</option>
-                                        <option value="e">100-500人</option>
-                                        <option value="f">500以上</option>
-                                    </select>
+                                    <div id="sel">
+                                        <select name="scale" placeholder="请选择企业规模" data-am-selected>
+                                            <option value="4">请选择企业规模</option>
+                                            <option value="a">0-20人</option>
+                                            <option value="b">20-50人</option>
+                                            <option value="d">50-100人</option>
+                                            <option value="e">100-500人</option>
+                                            <option value="f">500以上</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                             <div class="am-form-group">
