@@ -71,8 +71,6 @@ public class EnterpriseServlet extends HttpServlet {
         Integer id = enterprise.getId();
         Enterprise returnInfo = enterpriseImpl.selectByEnterpriseId(id);
         /*Json格式输出(回显)*/
-        ObjectMapper objectMapper = new ObjectMapper();
-        String s = objectMapper.writeValueAsString(returnInfo);
-        resp.getWriter().println(s);
+        ReqRespMsgUtil.sendMsg(resp, returnInfo);
     }
 }
