@@ -6,6 +6,7 @@ import com.myhd.pojo.SelectLikeInfo;
 import com.myhd.pojo.SupplierBlackList;
 import com.myhd.pojo.ThreeTablesQuery;
 import com.myhd.service.Impl.SupplierWhiteListServiceImpl;
+import com.myhd.util.ReqRespMsgUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletException;
@@ -44,29 +45,18 @@ public class SupplierWhiteListServlet extends   HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         /*设置回复头*/
         resp.setContentType("application/json");
-        /*获取参数*/
-        Integer enterpriseId = (Integer) req.getSession().getAttribute("enterpriseId");
-        String enterpriseName = req.getParameter("enterpriseName");
-        String supplierLevel = req.getParameter("supplierLevel");
-        Integer startPage = Integer.valueOf(req.getParameter("startPage"));
-        /*创建模糊查询pojo对象*/
-        SelectLikeInfo sli = new SelectLikeInfo();
-        sli.setId(enterpriseId);
-        sli.setEnterpriseName(enterpriseName);
-        sli.setSupplierLevel(supplierLevel);
-        sli.setStartPage(startPage);
+        /*获取Json数据*/
+        SelectLikeInfo sli = ReqRespMsgUtil.getMsg(req, SelectLikeInfo.class);
         sli.setPageSize(5);
         /*模糊查询*/
         PageInfo<ThreeTablesQuery> info = impl.selectWhiteInfoByEnterpriseId(sli);
         List<ThreeTablesQuery> list = info.getList();
         /*返回json数据*/
-        ObjectMapper objectMapper = new ObjectMapper();
-        String s = objectMapper.writeValueAsString(list);
-        resp.getWriter().println(s);
+        ReqRespMsgUtil.sendMsg(resp, list);
     }
 
     /**
-     * @description 处理‘添加至黑名单’操作,操作完成再次查询
+     * @description 处理'添加至黑名单'操作,操作完成再次查询
      * @author JoneElmo
      * @date 2023-09-24 16:43
      * @param req
@@ -80,14 +70,11 @@ public class SupplierWhiteListServlet extends   HttpServlet {
         Integer enterpriseId = Integer.valueOf(req.getParameter("enterpriseId"));
         Integer supplierId = Integer.valueOf(req.getParameter("supplierId"));
         String reason = req.getParameter("reason");
+        /*获取Json数据*/
+        SupplierBlackList sbl = ReqRespMsgUtil.getMsg(req, SupplierBlackList.class);
         /*获取当前日期*/
         Date date = Date.valueOf(LocalDate.now());
-        /*生成黑名单pojo对象*/
-        SupplierBlackList sbl = new SupplierBlackList();
-        sbl.setId(id);
-        sbl.setEnterpriseId(enterpriseId);
-        sbl.setSupplierId(supplierId);
-        sbl.setReason(reason);
+        /*设置日期*/
         sbl.setUpdateDate(date);
         /*移除白名单并添加至黑名单*/
         try {
