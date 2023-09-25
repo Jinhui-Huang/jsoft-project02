@@ -1,6 +1,5 @@
 package com.myhd.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageInfo;
 import com.myhd.pojo.SelectLikeInfo;
 import com.myhd.pojo.SupplierBlackList;
@@ -15,6 +14,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -69,6 +70,31 @@ public class SupplierBlackListServlet extends HttpServlet {
             impl.removeBlack(sbl.getEnterpriseId(),sbl.getSupplierId());
         } catch (Exception e) {
             log.error(e.getMessage(), "解除黑名单失败");
+        }finally {
+            doGet(req, resp);
+        }
+    }
+
+    /** 
+     * @description: 添加供应商到黑名单
+     * @param: req,resp
+     * @return: void
+     * @author DY252
+     * @date: 2023/9/25 14:26
+     */ 
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        /*获取Json数据*/
+        SupplierBlackList sbl = ReqRespMsgUtil.getMsg(req, SupplierBlackList.class);
+        /*获取当前日期*/
+        Date date = Date.valueOf(LocalDate.now());
+        /*设置日期*/
+        sbl.setUpdateDate(date);
+        /*移除白名单并添加至黑名单*/
+        try {
+            impl.addBlack(sbl);
+        } catch (Exception e) {
+            log.error(e.getMessage(), "移除白名单或加入黑名单失败");
         }finally {
             doGet(req, resp);
         }
