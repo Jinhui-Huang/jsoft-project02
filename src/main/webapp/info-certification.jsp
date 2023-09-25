@@ -38,28 +38,42 @@
 <%--ajax处理异步请求--%>
 <script>
     $(document).ready(function (){
-
         /*进入页面进行用户认证进度校验*/
-        $.ajax({
-            type:"get",
-            url:"enterprise",
-            success:function (data){
-                if(data.data[1] == null ){
-                    alert("未认证")
-                    $("#userAccount").text(data.data[0].account)
-                    $("#userPhone").text(data.data[0].phone)
-                    /*判断企业信息为null，则证明未进行认证，须进行认证再回显数据*/
-                }else {
-                    alert("已认证")
-                    /*已进行认证直接回显数据*/
-                    $(".am-form-group").find("input").prop("readonly",true)
-                    $("#userAccount").text(data.data[0].account)
-                    $("#userPhone").text(data.data[0].phone)
-                    $("[name = 'idcardName']").val(data.data[0].idcardName)
-
+        function EchoData() {
+            $.ajax({
+                type:"get",
+                url:"enterprise",
+                success:function (result){
+                    if(result.data[1] == null ){
+                        alert("未认证")
+                        $("#userAccount").text(result.data[0].account)
+                        $("#userPhone").text(result.data[0].phone)
+                        /*判断企业信息为null，则证明未进行认证，须进行认证再回显数据*/
+                    }else {
+                        alert("已认证")
+                        /*已进行认证直接回显数据*/
+                        $(".am-form-group").find("input").prop("readonly",true)
+                        $("#userAccount").text(result.data[0].account)
+                        $("#userPhone").text(result.data[0].phone)
+                        $("[name = 'idcardName']").val(result.data[0].idcardName)
+                        $("[name = 'idcardNo']").val(result.data[0].idcardNo)
+                        $("[name = 'name']").val(result.data[1].name)
+                        $("[name = 'socialUniformCode']").val(result.data[1].socialUniformCode)
+                        $("[name = 'email']").val(result.data[1].email)
+                        $("[name = 'phone']").val(result.data[1].phone)
+                        $("[name = 'fax']").val(result.data[1].fax)
+                        $("[name = 'address']").val(result.data[1].address.split("#")[0])
+                        $("textarea[name='addressDetails']").prop("readonly",true)
+                        $("[name = 'addressDetails']").val(result.data[1].address.split("#")[1])
+                        var scale =  $("option[value = "+result.data[1].scale+"]").text()
+                        $("#sel").replaceWith($("<input type='text' value='"+scale+"' readonly>"))
+                        $("button[name='submit']").prop("disabled",true)
+                    }
                 }
-            }
-        })
+            });
+        }
+        EchoData();
+
         /*点击企业信息认证界面的提交按钮，提交认证信息。接收回显结果并显示*/
         $("button[name='submit']").on("click",function (event) {
             console.log("点击了提交按钮")
@@ -83,36 +97,13 @@
                     email:$("input[name='email']").val(),
                     phone:$("input[name='phone']").val(),
                     address: address,
-                    scale:$("input[name='scale']").val(),
+                    scale:$("select[name='scale']").val(),
                     fax:$("input[name='fax']").val()
                 }),
                 success:function (result){
                     console.log(result)
                     enterpriseId = result.id
                     console.log(result)
-                    console.log("回显的企业id:"+enterpriseId)
-                    /*隐藏域传参，供post请求使用*/
-                    $("input[name='hiddenId']").val(enterpriseId)
-                    // console.log("隐藏域值：" +$("input[name='hiddenId']").val())
-                    // alert("数据提交成功!")
-                    // /*回显数据*/
-                    // $("input[name='name']").prop("readonly",true)
-                    // $("input[name='socialUniformCode']").prop("readonly",true)
-                    // $("input[name='email']").prop("readonly",true)
-                    // $("input[name='phone']").prop("readonly",true)
-                    // /*设置下拉列表只读（转换为Input）*/
-                    // let select = $("select[name='scale']")
-                    // let input = $("<input>")
-                    // input.attr("type","text")
-                    // input.val(select.find("option:selected").text())
-                    // input.prop("readonly",true)
-                    // $("#sel").replaceWith(input)
-                    // /*设置其他输入框只读*/
-                    // $("input[name='fax']").prop("readonly",true)
-                    // $("input[name='address']").prop("readonly",true)
-                    // $("textarea[name='addressDetails']").prop("readonly",true)
-                    // $("input[name='idcardName']").prop("readonly",true)
-                    // $("input[name='idcardNo']").prop("readonly",true)
                 },
                 error:function (result) {
                     console.log(result)
@@ -120,7 +111,6 @@
             })
 
             /*获取输入的姓名和身份证号*/
-            alert("获取id："+$("input[name = 'hiddenId']").val())
             var idcardName = $("input[name='idcardName']").val()
             var idcardNo = $("input[name='idcardNo']").val()
             /*发送post请求，处理用户认证信息*/
@@ -137,7 +127,11 @@
                     idcardNo : idcardNo
                 }),
                 success:function (result) {
-                    console.log(result)
+                    if (result.data){
+                        EchoData();
+                    }else {
+
+                    }
                 },
                 error:function (result){
                     console.log(result)
@@ -158,10 +152,6 @@
                 }
             })
         })
-
-
-
-
     })
 </script>
 
@@ -313,11 +303,12 @@
                                     <div id="sel">
                                         <select name="scale" placeholder="请选择企业规模" data-am-selected>
                                             <option value="4">请选择企业规模</option>
-                                            <option value="a">0-20人</option>
-                                            <option value="b">20-50人</option>
-                                            <option value="d">50-100人</option>
-                                            <option value="e">100-500人</option>
-                                            <option value="f">500以上</option>
+                                            <option value="A">1-19人</option>
+                                            <option value="B">20-50人</option>
+                                            <option value="C">51-100人</option>
+                                            <option value="D">101-200人</option>
+                                            <option value="E">201-500人</option>
+                                            <option value="F">500以上</option>
                                         </select>
                                     </div>
                                 </div>
