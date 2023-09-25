@@ -1,6 +1,6 @@
 <!doctype html>
 <html>
-
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -18,16 +18,21 @@
     <link rel="stylesheet" href="assets/css/app.css">
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.js"></script>
     <script type="text/javascript" >
+        $.ajax({
+            type: "get",
+            url: "login",
+            async: false,
+            success: function (data){
+                if (data.data) {
+                    window.location.href="http://localhost:8080/info-certification"
+                } else {
+                    alert(data.msg)
+                }
+            }
+        })
+
         $(document).ready(function (){
             /*发送请求进行异步验证*/
-            $.ajax({
-                type: "get",
-                url: "login",
-                async: true,
-                success: function (data){
-
-                }
-            })
 
             $("#loginButton").click(function (){
                 $.ajax({
@@ -41,7 +46,11 @@
                     }),
                     async: true,
                     success: function (data){
-                      alert(data.msg)
+                        if (data.data) {
+                            window.location.href="http://localhost:8080/info-certification"
+                        } else {
+                            alert(data.msg)
+                        }
                     }
                 })
             })
