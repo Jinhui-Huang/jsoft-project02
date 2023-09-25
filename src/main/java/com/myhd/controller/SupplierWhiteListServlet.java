@@ -65,11 +65,6 @@ public class SupplierWhiteListServlet extends   HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        /*获取参数*/
-        Integer id = Integer.valueOf(req.getParameter("id"));
-        Integer enterpriseId = Integer.valueOf(req.getParameter("enterpriseId"));
-        Integer supplierId = Integer.valueOf(req.getParameter("supplierId"));
-        String reason = req.getParameter("reason");
         /*获取Json数据*/
         SupplierBlackList sbl = ReqRespMsgUtil.getMsg(req, SupplierBlackList.class);
         /*获取当前日期*/
