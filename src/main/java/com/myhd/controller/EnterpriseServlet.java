@@ -7,13 +7,16 @@ import com.myhd.service.Impl.EnterpriseServiceImpl;
 import com.myhd.service.Impl.UserServiceImpl;
 import com.myhd.util.ReqRespMsgUtil;
 import com.myhd.util.ReqRespMsgUtil;
+import com.myhd.util.Result;
 import com.myhd.util.TokenUtil;
+import com.myhd.util.code.Code;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -30,6 +33,18 @@ public class EnterpriseServlet extends HttpServlet {
     private EnterpriseServiceImpl enterpriseImpl = new EnterpriseServiceImpl();
     private UserServiceImpl userImpl = new UserServiceImpl();
 
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        log.info("进入enterPriseGet");
+        User tokenUser = (User)TokenUtil.SERVER_LOCAL.get();
+        Object[] objects = new Object[2];
+        objects[0]=tokenUser;
+        Enterprise returnInfo = enterpriseImpl.selectByEnterpriseId(tokenUser.getEnterpriseId());
+        objects[1]=returnInfo;
+        log.info(Arrays.toString(objects));
+        ReqRespMsgUtil.sendMsg(resp,new Result(Code.UPDATE_OK,objects,"用户信息回显"));
+    }
+
     /**
      * @description 个人信息认证
      * @author CYQH
@@ -43,21 +58,18 @@ public class EnterpriseServlet extends HttpServlet {
         log.info("进入enterprisePost");
         User user = ReqRespMsgUtil.getMsg(req, User.class);
         log.info("请求中的数据:"+user);
-        User user1 = (User)TokenUtil.SERVER_LOCAL.get();
-        log.info(user1.toString());
-        /*获取参数*/
-        Cookie[] cookies = req.getCookies();
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")){
-                    String token = cookie.getValue();
-                    /*解析token*/
-                    Map<String, Object> verify = TokenUtil.verify(token, User.class);
-                    user.setId(((User) verify.get(User.class.getSimpleName())).getId());
-                    log.info("完整的数据:"+user);
-                }
-            }
-        Boolean aBoolean = userImpl.updateUserById(user);
-        ReqRespMsgUtil.sendMsg(resp,aBoolean);
+        /*从token中获取当前用户id*/
+        User tokenUser = (User)TokenUtil.SERVER_LOCAL.get();
+        log.info("TokenUtil.SERVER_LOCAL里的数据"+tokenUser.toString());
+        user.setId(tokenUser.getId());
+        if (userImpl.updateUserById(user)){
+            log.info("重新生成TokenUtil.SERVER_LOCAL");
+            TokenUtil.SERVER_LOCAL.set(user);
+            ReqRespMsgUtil.sendMsg(resp,new Result(Code.UPDATE_OK,true,"用户信息认证成功"));
+        }else {
+            ReqRespMsgUtil.sendMsg(resp,new Result(Code.UPDATE_ERR,false,"用户信息认证失败"));
+        }
+
     }
 
     /**
@@ -74,8 +86,6 @@ public class EnterpriseServlet extends HttpServlet {
         resp.setContentType("application/json");
         /*获取前端json数据*/
         Enterprise enterprise = ReqRespMsgUtil.getMsg(req, Enterprise.class);
-        log.info("test");
-        log.info(String.valueOf(enterprise));
         /*添加企业信息*/
         try {
             enterpriseImpl.addEnterprise(enterprise);
@@ -83,9 +93,6 @@ public class EnterpriseServlet extends HttpServlet {
             log.error(e.getMessage(), "更新企业信息失败");
         }
         /*回显数据*/
-        Integer id = enterprise.getId();
-        log.info("返回的企业id:"+ id);
-        /*Json格式输出(回显)*/
-        ReqRespMsgUtil.sendMsg(resp, enterprise);
+        ReqRespMsgUtil.sendMsg(resp,enterprise);
     }
 }
