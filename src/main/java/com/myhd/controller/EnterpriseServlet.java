@@ -43,6 +43,8 @@ public class EnterpriseServlet extends HttpServlet {
         log.info("进入enterprisePost");
         User user = ReqRespMsgUtil.getMsg(req, User.class);
         log.info("请求中的数据:"+user);
+        User user1 = (User)TokenUtil.SERVER_LOCAL.get();
+        log.info(user1.toString());
         /*获取参数*/
         Cookie[] cookies = req.getCookies();
             for (Cookie cookie : cookies) {

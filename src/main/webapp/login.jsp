@@ -16,6 +16,38 @@
     <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
     <link rel="stylesheet" href="assets/css/admin.css">
     <link rel="stylesheet" href="assets/css/app.css">
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.js"></script>
+    <script type="text/javascript" >
+        $(document).ready(function (){
+            /*发送请求进行异步验证*/
+            $.ajax({
+                type: "get",
+                url: "login",
+                async: true,
+                success: function (data){
+
+                }
+            })
+
+            $("#loginButton").click(function (){
+                $.ajax({
+                    type: "POST",
+                    url: "login",
+                    dataType: "json",
+                    contentType:"application/json",
+                    data:JSON.stringify({
+                        "account":$("#doc-ipt-email-1").val(),
+                        "password":$("#doc-ipt-pwd-1").val(),
+                    }),
+                    async: true,
+                    success: function (data){
+                      alert(data.msg)
+                    }
+                })
+            })
+
+        });
+    </script>
 </head>
 
 <body data-type="login">
@@ -36,7 +68,7 @@
                     <div class="am-form-group">
                         <input type="password" class="" id="doc-ipt-pwd-1" placeholder="请输入密码">
                     </div>
-                    <a href="info-certification" style="margin-top: 20px;color:#fff;font-size:18px">
+                    <a <%--href="info-certification"--%> style="margin-top: 20px;color:#fff;font-size:18px" id="loginButton">
                         <div style="    width: 100%;height: 40px;text-align: center;
 						border-radius: 6px;
 						background: #53d192;
