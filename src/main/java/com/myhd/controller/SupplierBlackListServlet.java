@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.myhd.pojo.SelectLikeInfo;
 import com.myhd.pojo.ThreeTablesQuery;
 import com.myhd.service.Impl.SupplierBlackListServiceImpl;
+import com.myhd.util.ReqRespMsgUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletException;
@@ -39,25 +40,16 @@ public class SupplierBlackListServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        /*设置回复头*/
         resp.setContentType("application/json");
-        Integer enterpriseId = (Integer) req.getSession().getAttribute("enterpriseId");
-        String enterpriseName = req.getParameter("enterpriseName");
-        String supplierLevel = req.getParameter("supplierLevel");
-        Integer startPage = Integer.valueOf(req.getParameter("startPage"));
-        /*创建模糊查询pojo对象*/
-        SelectLikeInfo sli = new SelectLikeInfo();
-        sli.setId(enterpriseId);
-        sli.setEnterpriseName(enterpriseName);
-        sli.setSupplierLevel(supplierLevel);
-        sli.setStartPage(startPage);
+        /*获取Json数据*/
+        SelectLikeInfo sli = ReqRespMsgUtil.getMsg(req, SelectLikeInfo.class);
         sli.setPageSize(5);
         /*模糊查询*/
         PageInfo<ThreeTablesQuery> info = impl.selectBlackInfoByEnterpriseId(sli);
         List<ThreeTablesQuery> list = info.getList();
         /*返回json数据*/
-        ObjectMapper objectMapper = new ObjectMapper();
-        String s = objectMapper.writeValueAsString(list);
-        resp.getWriter().println(s);
+        ReqRespMsgUtil.sendMsg(resp, list);
     }
 
     /**
