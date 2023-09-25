@@ -26,7 +26,6 @@ public interface SupplierBlackListService {
      * @date: 2023/09/23 8:29
      */
     PageInfo<ThreeTablesQuery> selectBlackInfoByEnterpriseId(SelectLikeInfo selectLikeInfo);
-
     /**
      * @description: 根据本企业id和选择的供应商id确定唯一一条黑名单数据并移除黑名单表
      * @param enterpriseId
@@ -44,6 +43,4 @@ public interface SupplierBlackListService {
      * @date: 2023/09/23 8:36
      */
     Boolean addBlack(SupplierBlackList supplierBlackList);
-
-
 }
