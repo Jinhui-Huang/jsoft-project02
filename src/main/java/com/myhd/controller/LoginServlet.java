@@ -36,9 +36,10 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         log.info("进入loginPost");
-        ObjectMapper jackson = new ObjectMapper();
+//        resp.sendRedirect("info-certification");
         /*获取login页面请求传输来的账号和密码*/
         User user = ReqRespMsgUtil.getMsg(req, User.class);
+        log.info(user.toString());
         /*判断用户是否存在*/
         boolean userIsExists = user != null && usi.judgeUserIsExists(user.getAccount());
         if (userIsExists){
@@ -56,7 +57,7 @@ public class LoginServlet extends HttpServlet {
                 cookie.setSecure(true);
                 cookie.setHttpOnly(true);
                 resp.addCookie(cookie);
-                resp.sendRedirect("info-certification");
+                req.getRequestDispatcher("/info-certification").forward(req, resp);
             }else {
                 ReqRespMsgUtil.sendMsg(resp,new Result(Code.BUSINESS_ERR,false,"账号登录失败"));
             }
@@ -84,10 +85,11 @@ public class LoginServlet extends HttpServlet {
                             User user = (User) verify.get(User.class.getSimpleName());
                             User datebaseUser = usi.selectByUserAccountPwd(user);
                             if (datebaseUser != null){
-                                resp.sendRedirect("info-certification");
+                                log.info("账号登录成功");
+                                req.getRequestDispatcher("/info-certification").forward(req, resp);
                             }else {
+                                log.warn("账号登录失败");
                                 resp.addCookie(new Cookie("token",""));
-                                resp.sendRedirect("http://localhost:8080");
                             }
                         }
                     }
