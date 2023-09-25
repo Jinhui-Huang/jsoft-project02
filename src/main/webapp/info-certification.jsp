@@ -83,7 +83,7 @@
                     email:$("input[name='email']").val(),
                     phone:$("input[name='phone']").val(),
                     address: address,
-                    scale:$("input[name='scale']").val(),
+                    scale:$("select[name='scale']").val(),
                     fax:$("input[name='fax']").val()
                 }),
                 success:function (result){
