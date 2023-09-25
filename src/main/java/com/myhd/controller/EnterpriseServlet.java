@@ -42,6 +42,7 @@ public class EnterpriseServlet extends HttpServlet {
         Enterprise returnInfo = enterpriseImpl.selectByEnterpriseId(tokenUser.getEnterpriseId());
         objects[1]=returnInfo;
         log.info(Arrays.toString(objects));
+        req.getSession().setAttribute("enterpriseId", tokenUser.getEnterpriseId());
         ReqRespMsgUtil.sendMsg(resp,new Result(Code.UPDATE_OK,objects,"用户信息回显"));
     }
 
