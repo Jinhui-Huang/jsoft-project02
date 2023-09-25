@@ -33,13 +33,19 @@ import java.util.Map;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
     private UserServiceImpl usi = new UserServiceImpl();
+    /**
+     * @description: TODO 点击登录按钮进行登录认证
+     * @param req
+     * @param resp
+     * @return: void
+     * @author CYQH
+     * @date: 2023/09/25 11:56
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         log.info("进入loginPost");
-//        resp.sendRedirect("info-certification");
         /*获取login页面请求传输来的账号和密码*/
         User user = ReqRespMsgUtil.getMsg(req, User.class);
-        log.info(user.toString());
         /*判断用户是否存在*/
         boolean userIsExists = user != null && usi.judgeUserIsExists(user.getAccount());
         if (userIsExists){
@@ -57,7 +63,8 @@ public class LoginServlet extends HttpServlet {
                 cookie.setSecure(true);
                 cookie.setHttpOnly(true);
                 resp.addCookie(cookie);
-                req.getRequestDispatcher("/info-certification").forward(req, resp);
+//                resp.setContentType("text/html");
+                resp.sendRedirect("info-certification");
             }else {
                 ReqRespMsgUtil.sendMsg(resp,new Result(Code.BUSINESS_ERR,false,"账号登录失败"));
             }
@@ -65,7 +72,14 @@ public class LoginServlet extends HttpServlet {
             ReqRespMsgUtil.sendMsg(resp,new Result(Code.BUSINESS_ERR,false,"该账户不存在"));
         }
     }
-
+    /**
+     * @description: TODO 自动进行令牌验证请求的发送
+     * @param req
+     * @param resp
+     * @return: void
+     * @author CYQH
+     * @date: 2023/09/25 11:57
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         log.info("进入loginGet");
@@ -85,8 +99,8 @@ public class LoginServlet extends HttpServlet {
                             User user = (User) verify.get(User.class.getSimpleName());
                             User datebaseUser = usi.selectByUserAccountPwd(user);
                             if (datebaseUser != null){
-                                log.info("账号登录成功");
-                                req.getRequestDispatcher("/info-certification").forward(req, resp);
+                                log.info("账号自动登录成功");
+                                resp.sendRedirect("info-certification");
                             }else {
                                 log.warn("账号登录失败");
                                 resp.addCookie(new Cookie("token",""));

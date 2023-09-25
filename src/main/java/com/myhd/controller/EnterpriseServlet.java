@@ -29,6 +29,12 @@ public class EnterpriseServlet extends HttpServlet {
     private EnterpriseServiceImpl enterpriseImpl = new EnterpriseServiceImpl();
     private UserServiceImpl userImpl = new UserServiceImpl();
 
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        log.info("进入enterPriseGet");
+
+    }
+
     /**
      * @description 个人信息认证
      * @author CYQH
