@@ -74,6 +74,8 @@ public class EnterpriseServlet extends HttpServlet {
         resp.setContentType("application/json");
         /*获取前端json数据*/
         Enterprise enterprise = ReqRespMsgUtil.getMsg(req, Enterprise.class);
+        log.info("test");
+        log.info(String.valueOf(enterprise));
         /*添加企业信息*/
         try {
             enterpriseImpl.addEnterprise(enterprise);
@@ -82,8 +84,8 @@ public class EnterpriseServlet extends HttpServlet {
         }
         /*回显数据*/
         Integer id = enterprise.getId();
-        Enterprise returnInfo = enterpriseImpl.selectByEnterpriseId(id);
+        log.info("返回的企业id:"+ id);
         /*Json格式输出(回显)*/
-        ReqRespMsgUtil.sendMsg(resp, returnInfo);
+        ReqRespMsgUtil.sendMsg(resp, enterprise);
     }
 }
