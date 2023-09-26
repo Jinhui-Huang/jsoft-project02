@@ -34,8 +34,9 @@ public class WebFilter implements Filter {
 
         paths.add("login");/*LoginServlet映射的地址*/
         paths.add("whiteList"); /*SupplierWhiteListServlet映射的地址*/
-        paths.add("enterprise"); /*EnterpriseServlet映射的地址*/
         paths.add("blackList"); /*SupplierWhiteListServlet映射的地址*/
+        paths.add("enterprise"); /*EnterpriseServlet映射的地址*/
+
     }
 
     @Override
