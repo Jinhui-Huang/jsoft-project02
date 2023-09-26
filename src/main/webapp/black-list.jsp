@@ -262,12 +262,7 @@
                                            style="font-size: 15px;">企业名称</label>
                                     <div class="am-u-sm-6">
                                         <select id="doc-select-1" required>
-                                            <option value="">请选择企业</option>
-                                            <option value="a">腾讯科技</option>
-                                            <option value="b">京东集团</option>
-                                            <option value="c">搜狐</option>
-                                            <option value="d">阿里巴巴</option>
-                                            <option value="e">小米</option>
+                                            <option value="0">请选择企业</option>
                                         </select>
                                     </div>
                                     <span class="am-form-caret"></span>
@@ -276,7 +271,7 @@
                                     <label for="doc-select-2" class="am-u-sm-4 am-form-label"
                                            style="font-size: 15px;">统一社会信用代码</label>
                                     <div class="am-u-sm-6" style=" text-align: left;margin-top: 6px;">
-                                        <span>23456787657645343124567</span>
+                                        <span id="socialUniformCode"></span>
                                     </div>
                                     <span class="am-form-caret"></span>
                                 </div>
@@ -388,16 +383,85 @@
         });
     // 添加供应商
     $(function () {
+
+        let selectSupplierId;
+
         $('#doc-prompt-toggle').on('click', function () {
+            /*点击添加供应商按钮，查询下拉列表信息*/
+            $.ajax({
+                url: "http://localhost:8080/enterprise",
+                type: "get",
+                async: false,
+                data: {
+                    id: ${sessionScope.enterpriseId},
+                    op: "3"
+                },
+                success: function (result) {
+                    console.log("获取到的list信息:" + result)
+                    let id;
+                    let name;
+                    let socialUniformCode;
+                    for (let i = 0; i < result.length; i++) {
+                        id = result[i].id;
+                        name = result[i].name;
+                        socialUniformCode = result[i].socialUniformCode;
+                        /*将信用代码作为选项的value*/
+                        $("<option id='" + id + "' value='" + socialUniformCode + "'>" + name + "</option>").appendTo($("#doc-select-1"))
+                        /*设置选项点击事件*/
+                        $("#doc-select-1").on("change", function () {
+                            selectSupplierId = $("#doc-select-1").find("option:selected").attr("id");
+                            console.log("点击了信息" + $("#doc-select-1").find("option:selected").val())
+                            $("#socialUniformCode").text($("#doc-select-1").find("option:selected").val())
+                        })
+                    }
+                }
+            })
+            /*输入添加供应商信息的弹出框*/
             $('#my-prompt').modal({
                 relatedTarget: this,
                 onConfirm: function (options) {
-                    //点击确认调用函数
-                    alert("点击了确认");
+                    //点击确认，插入供应商信息
+                    let reason = $("textarea[id='user-intro']").val()
+                    console.info("选中的企业id是：" + selectSupplierId)
+                    if (reason === "") {
+                        alert("请输入原因!")
+                    } else {
+                        $.ajax({
+                            url: "http://localhost:8080/blackList",
+                            type: "post",
+                            contentType: "json",
+                            data: JSON.stringify({
+                                enterpriseId: ${sessionScope.enterpriseId},
+                                supplierId: selectSupplierId,
+                                reason: reason
+                            }),
+                            success: function (result) {
+                                if (result === true) {
+                                    alert("添加供应商信息成功！")
+                                    $.ajax({
+                                        url: "http://localhost:8080/whiteList",
+                                        type: "get",
+                                        async: false,
+                                        data: {
+                                            id: ${sessionScope.enterpriseId},
+                                        },
+                                        success: function (result) {
+                                            console.log(result.list)
+                                            replaceInfo(result)
+                                        }
+                                    })
+
+                                } else {
+                                    alert("添加供应商信息失败！")
+                                }
+                            }
+                        })
+                    }
+
                 },
                 onCancel: function (e) {
                     //点击取消调用函数
-                    alert("点击了取消")
+                    console.log("关闭添加供应商弹出框")
                 }
             });
         });

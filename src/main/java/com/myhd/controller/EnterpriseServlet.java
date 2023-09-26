@@ -70,6 +70,16 @@ public class EnterpriseServlet extends HttpServlet {
     }
 
 
+    protected void getBlackInfo(HttpServletRequest req, HttpServletResponse resp){
+        resp.setContentType("application/json");
+        Integer enterpriseId = Integer.valueOf(req.getParameter("id"));
+        log.info(String.valueOf(enterpriseId));
+        List<Enterprise> list = enterpriseImpl.selectEnterpriseExceptBlack(enterpriseId);
+        /*将list以json格式返给前端*/
+        log.info("list信息"+String.valueOf(list));
+        ReqRespMsgUtil.sendMsg(resp, list);
+    }
+
     /**
      * @description: TODO 从数据库获取数据进行认证页面数据的回显,每次信息认证页面加载都会发送get请求，将用户信息和企业信息分别放在objects[0]和objects[1]上，用户第一次登录时，因为没有认证所以无法查询到对应的企业信息，根据objects[1]是否为null判断该用户是否进行了认证，并且是否进行数据回显。
      * @param req
@@ -86,8 +96,10 @@ public class EnterpriseServlet extends HttpServlet {
         }else if (req.getParameter("op")!=null && req.getParameter("op").equals("2")){
             log.info("准备进入getSupplierInfo方法");
             getSupplierInfo(req,resp);
-        }
-        else {
+        }else if(req.getParameter("op")!=null && req.getParameter("op").equals("3") ){
+            log.info("黑名单添加供应商");
+            getBlackInfo(req,resp);
+        } else {
             log.info("进入enterPriseGet");
             User tokenUser = (User)TokenUtil.SERVER_LOCAL.get();
             Object[] objects = new Object[2];
