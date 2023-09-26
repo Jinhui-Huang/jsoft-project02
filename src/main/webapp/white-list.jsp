@@ -315,7 +315,6 @@
 
         })
 
-
         /*遍历展示信息方法*/
         function replaceInfo(pageInfo) {
             /*总数据量*/
@@ -438,7 +437,6 @@
             })
         }
 
-
         /*添加至黑名单*/
         let supplierId
         $(function () {
@@ -493,28 +491,44 @@
                             url: "http://localhost:8080/whiteList",
                             type: "post",
                             dataType: "json",
-                            async: false,
+                            async: true,
                             data: JSON.stringify({
                                 enterpriseId: ${sessionScope.enterpriseId},
                                 supplierId: supplierId,
                                 reason: $("textarea[name='bb-reason']").val(),
                             }),
-                            success: function () {
-                                alert("移除成功！")
+                            success: function (result) {
+                                console.log(result)
+                                if (result==true){
+                                    alert("移除成功！")
+                                    $.ajax({
+                                        url: "http://localhost:8080/whiteList",
+                                        type: "get",
+                                        data: {
+                                            id: ${sessionScope.enterpriseId},
+                                            startPage: clickedPage
+                                        },
+                                        success: function (result) {
+                                            console.log(result.list)
+                                            replaceInfo(result)
+                                        }
+                                    })
+                                }
 
+                            },
+                            error: function (){
                                 $.ajax({
                                     url: "http://localhost:8080/whiteList",
                                     type: "get",
-                                    async: false,
                                     data: {
                                         id: ${sessionScope.enterpriseId},
+                                        startPage: clickedPage
                                     },
                                     success: function (result) {
                                         console.log(result.list)
                                         replaceInfo(result)
                                     }
                                 })
-
                             }
                         })
 
@@ -530,9 +544,7 @@
 
         // 添加供应商
         $(function () {
-
             let selectSupplierId;
-
             $('#doc-prompt-toggle').on('click', function () {
                 $("#doc-select-1").empty();
                 $("<option value=''>"+"请选择企业"+"</option>").appendTo("#doc-select-1")
@@ -583,13 +595,12 @@
                                 success: function (result) {
                                     if (result == true) {
                                         alert("添加供应商信息成功！")
-                                        window.location.href="http://localhost:8080/white-list"
                                         $.ajax({
                                             url: "http://localhost:8080/whiteList",
                                             type: "get",
-                                            async: true,
                                             data: {
                                                 id: ${sessionScope.enterpriseId},
+                                                startPage: clickedPage
                                             },
                                             success: function (result) {
                                                 console.log(result.list)
