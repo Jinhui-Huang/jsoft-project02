@@ -372,8 +372,6 @@
                             }
                         }
                     })
-
-
                 },
                 onCancel: function (e) {
                     //点击取消调用函数
@@ -401,12 +399,13 @@
                     let id;
                     let name;
                     let socialUniformCode;
+                    $("option[name='forRemove']").remove()
                     for (let i = 0; i < result.length; i++) {
                         id = result[i].id;
                         name = result[i].name;
                         socialUniformCode = result[i].socialUniformCode;
                         /*将信用代码作为选项的value*/
-                        $("<option id='" + id + "' value='" + socialUniformCode + "'>" + name + "</option>").appendTo($("#doc-select-1"))
+                        $("<option name='forRemove'  id='" + id + "' value='" + socialUniformCode + "'>" + name + "</option>").appendTo($("#doc-select-1"))
                         /*设置选项点击事件*/
                         $("#doc-select-1").on("change", function () {
                             selectSupplierId = $("#doc-select-1").find("option:selected").attr("id");
@@ -447,7 +446,6 @@
                                         },
                                         success: function (result) {
                                             console.log(result.list)
-                                            replaceInfo(result)
                                         }
                                     })
 
