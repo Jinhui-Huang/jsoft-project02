@@ -25,6 +25,15 @@
         .am-selected {
             width: 100%;
         }
+        .am-span{
+            color: red;
+            position: absolute;
+            margin: 0;
+            padding: 0;
+            left: 100%;
+            top: 50%;
+            display: inline-block;
+        }
     </style>
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.js"></script>
 </head>
@@ -71,7 +80,53 @@
                 }
             });
         }
+        /*自动进行认证判断并进行数据回显*/
         EchoData();
+
+        /*三个文本框失去焦点是分别发送请求进行数据重复校验*/
+        $("input[name = 'name']").blur(function (){
+            alert("失去焦点")
+            $.ajax({
+                type:"delete",
+                url:"enterprise",
+                dataType: "json",
+                contentType:"application/json",
+                data:JSON.stringify({
+                    name:$("input[name='name']").val()
+                }),
+                success:function (result){
+                    /*如果为true则数据重复*/
+                     if (result.data){
+                         alert(result.data)
+                        $("[name='nameSpan']").text("企业名称重复")
+                     }else {
+                         alert(result.msg)
+                         $("[name='nameSpan']").html("")
+                     }
+                }
+            })
+        })
+        $("[name = 'socialUniformCode']").blur(function (){
+            alert("失去焦点")
+            $.ajax({
+                url:"enterprise",
+                type:"delete",
+                dataType: "json",
+                data:JSON.stringify({
+                    socialUniformCode:$("input[name='socialUniformCode']").val()
+                })
+            })
+        })
+        $("[name = 'email']").blur(function (){
+            $.ajax({
+                url:"enterprise",
+                type:"delete",
+                dataType: "json",
+                data:JSON.stringify({
+                    email:$("input[name='email']").val()
+                })
+            })
+        })
 
         /*点击企业信息认证界面的提交按钮，提交认证信息。接收回显结果并显示*/
         $("button[name='submit']").on("click",function (event) {
@@ -291,6 +346,7 @@
                                 <div class="am-u-sm-9">
                                     <input name="hiddenId" type="hidden">
                                     <input type="text" name="name" id="user-name" placeholder="请输入企业名称">
+                                    <span class="am-span" name="nameSpan"></span>
                                 </div>
                             </div>
                             <div class="am-form-group">
