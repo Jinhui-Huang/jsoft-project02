@@ -136,6 +136,7 @@ public class LoginServlet extends HttpServlet {
         newCookie.setPath("/");
         newCookie.setMaxAge(0);
         resp.addCookie(newCookie);
+        TokenUtil.SERVER_LOCAL.remove();
         ReqRespMsgUtil.sendMsg(resp,new Result(Code.DELETE_OK,true,"账号退出成功"));
     }
 }

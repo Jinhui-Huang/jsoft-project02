@@ -16,8 +16,17 @@
     <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
     <link rel="stylesheet" href="assets/css/admin.css">
     <link rel="stylesheet" href="assets/css/app.css">
-    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.js"></script>
+    <script src="assets/js/jquery.min.js"></script>
+    <link rel="stylesheet" href="assets/css/message.min.css">
+    <script src="assets/js/message.min.js"></script>
     <script type="text/javascript" >
+        window.QMSG_GLOBALS = {
+            DEFAULTS: {
+                showClose: true,
+                timeout: 1000
+            }
+        };
+
         $.ajax({
             type: "get",
             url: "login",
@@ -32,8 +41,7 @@
         })
 
         $(document).ready(function (){
-            /*发送请求进行异步验证*/
-            $("#loginButton").click(function (){
+            function login(){
                 $.ajax({
                     type: "POST",
                     url: "login",
@@ -52,7 +60,18 @@
                         }
                     }
                 })
+            }
+            /*发送请求进行异步验证*/
+            $("#loginButton").click(function (){
+                login()
             })
+            $("input[type = 'password']").keypress(function(event) {
+                // 检查按下的键是否是回车键（keyCode 13）
+                if (event.which === 13) {
+                    // 执行登录操作
+                    login();
+                }
+            });
 
         });
     </script>

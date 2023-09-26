@@ -6,6 +6,8 @@ import com.myhd.pojo.SupplierBlackList;
 import com.myhd.pojo.ThreeTablesQuery;
 import com.myhd.service.Impl.SupplierBlackListServiceImpl;
 import com.myhd.util.ReqRespMsgUtil;
+import com.myhd.util.Result;
+import com.myhd.util.code.Code;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletException;
@@ -45,13 +47,18 @@ public class SupplierBlackListServlet extends HttpServlet {
         /*设置回复头*/
         resp.setContentType("application/json");
         /*获取Json数据*/
-        SelectLikeInfo sli = ReqRespMsgUtil.getMsg(req, SelectLikeInfo.class);
-        sli.setPageSize(5);
+//        SelectLikeInfo sli = ReqRespMsgUtil.getMsg(req, SelectLikeInfo.class);
+        Integer id = Integer.valueOf(req.getParameter("id"));
+        String enterpriseName = req.getParameter("enterpriseName");
+        log.info("拿到的id是："+id);
+        log.info("拿到的name是:" + enterpriseName);
+        SelectLikeInfo sli = new SelectLikeInfo();
+        sli.setId(id);
+        sli.setEnterpriseName(enterpriseName);
         /*模糊查询*/
         PageInfo<ThreeTablesQuery> info = impl.selectBlackInfoByEnterpriseId(sli);
-        List<ThreeTablesQuery> list = info.getList();
         /*返回json数据*/
-        ReqRespMsgUtil.sendMsg(resp, list);
+        ReqRespMsgUtil.sendMsg(resp, info);
     }
 
     /**
@@ -65,13 +72,18 @@ public class SupplierBlackListServlet extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         /*获取Json数据*/
         SupplierBlackList sbl = ReqRespMsgUtil.getMsg(req, SupplierBlackList.class);
+        log.info("企业id"+sbl.getEnterpriseId().toString());
+        log.info("供应商id"+sbl.getSupplierId().toString());
         /*移除黑名单*/
         try {
-            impl.removeBlack(sbl.getEnterpriseId(),sbl.getSupplierId());
+            Boolean removeBlack = impl.removeBlack(sbl.getEnterpriseId(), sbl.getSupplierId());
+            if (removeBlack){
+                ReqRespMsgUtil.sendMsg(resp,new Result(Code.DELETE_OK,true,"移除黑名单成功"));
+            }else {
+                ReqRespMsgUtil.sendMsg(resp,new Result(Code.DELETE_ERR,false,"移除黑名单失败"));
+            }
         } catch (Exception e) {
-            log.error(e.getMessage(), "解除黑名单失败");
-        }finally {
-            doGet(req, resp);
+            ReqRespMsgUtil.sendMsg(resp,new Result(Code.DELETE_ERR,false,"移除黑名单失败"));
         }
     }
 
