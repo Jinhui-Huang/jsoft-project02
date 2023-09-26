@@ -38,11 +38,11 @@
         <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list tpl-header-list">
             <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
                 <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
-                    <span class="tpl-header-list-user-nick">禁言小张</span><span class="tpl-header-list-user-ico"> <img
+                    <span class="tpl-header-list-user-nick">${sessionScope.userName}</span><span class="tpl-header-list-user-ico"> <img
                         src="assets/img/user01.png"></span>
                 </a>
                 <ul class="am-dropdown-content">
-                    <li><a href="login-page"><span class="am-icon-power-off"></span> 退出</a></li>
+                    <li><a href="login-page" id="logoutButton"><span class="am-icon-power-off"></span> 退出</a></li>
                 </ul>
             </li>
         </ul>
@@ -245,8 +245,19 @@
 
 
 
-
-
+                                        /*退出登录按钮*/
+                                        $("#logoutButton").click(function (){
+                                            $.ajax({
+                                                type:"delete",
+                                                url:"login",
+                                                success:function (data){
+                                                    if (data.data){
+                                                        alert(data.msg)
+                                                        window.location.href="http://localhost:8080"
+                                                    }
+                                                }
+                                            })
+                                        })
                                     })
 
                                 </script>
@@ -455,6 +466,7 @@
             });
         });
     });
+
 </script>
 </body>
 
