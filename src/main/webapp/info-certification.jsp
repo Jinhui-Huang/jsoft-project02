@@ -30,6 +30,7 @@
             margin: 0;
             padding: 0;
             left: 100%;
+            top: 0;
             width: 200px;
             display: inline-block;
         }
@@ -84,7 +85,6 @@
 
         /*三个文本框失去焦点是分别发送请求进行数据重复校验*/
         $("input[name = 'name']").blur(function (){
-            alert("失去焦点")
             $.ajax({
                 type:"delete",
                 url:"enterprise",
@@ -96,24 +96,31 @@
                 success:function (result){
                     /*如果为true则数据重复*/
                      if (result.data){
-                         alert(result.data)
                         $("[name='nameSpan']").text("企业名称重复")
+                         $("button[name='submit']").prop("disabled",true)
                      }else {
-                         alert(result.msg)
                          $("[name='nameSpan']").html("")
                      }
                 }
             })
         })
         $("[name = 'socialUniformCode']").blur(function (){
-            alert("失去焦点")
             $.ajax({
                 url:"enterprise",
                 type:"delete",
                 dataType: "json",
                 data:JSON.stringify({
                     socialUniformCode:$("input[name='socialUniformCode']").val()
-                })
+                }),
+                success:function (result){
+                    /*如果为true则数据重复*/
+                    if (result.data){
+                        $("[name='socialUniformCodeSpan']").text("企业统一信用代码重复")
+                        $("button[name='submit']").prop("disabled",true)
+                    }else {
+                        $("[name='socialUniformCodeSpan']").text("")
+                    }
+                }
             })
         })
         $("[name = 'email']").blur(function (){
@@ -123,7 +130,16 @@
                 dataType: "json",
                 data:JSON.stringify({
                     email:$("input[name='email']").val()
-                })
+                }),
+                success:function (result){
+                    /*如果为true则数据重复*/
+                    if (result.data){
+                        $("[name='emailSpan']").text("企业邮箱重复")
+                        $("button[name='submit']").prop("disabled",true)
+                    }else {
+                        $("[name='emailSpan']").text("")
+                    }
+                }
             })
         })
 
@@ -352,6 +368,7 @@
                                 <label for="user-weibo" class="am-u-sm-3 am-form-label">统一社会信用代码</label>
                                 <div class="am-u-sm-9">
                                     <input type="text" name="socialUniformCode" id="user-weibo" placeholder="请输入统一社会信用代码">
+                                    <span class="am-span" name="socialUniformCodeSpan"></span>
                                 </div>
                             </div>
                             <div class="am-form-group">
@@ -374,6 +391,7 @@
                                 <label for="user-email" class="am-u-sm-3 am-form-label">企业邮箱</label>
                                 <div class="am-u-sm-9">
                                     <input type="email" name="email" id="user-email" placeholder="请输入企业邮箱">
+                                    <span class="am-span" name="emailSpan"></span>
                                 </div>
                             </div>
                             <div class="am-form-group">
