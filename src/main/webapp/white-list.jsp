@@ -275,6 +275,7 @@
 * @date: 2023-9-25 18:59
 * @email: mhangggggg@outlook.com
 * */
+     var clickedPage = 1
     $(document).ready(function () {
         /*进入页面时 通过一次get请求获取列表信息*/
         $.ajax({
@@ -283,6 +284,7 @@
             async: false,
             data: {
                 id: ${sessionScope.enterpriseId},
+                startPage: clickedPage
             },
             success: function (result) {
                 console.log(result.list)
@@ -300,7 +302,8 @@
                 data: {
                     id: ${sessionScope.enterpriseId},
                     enterpriseName: name,
-                    supplierLevel: lv
+                    supplierLevel: lv,
+                    startPage : clickedPage
                 },
                 success: function (result) {
                     console.log(result.list)
@@ -325,6 +328,9 @@
             let nextPage = pageInfo.nextPage
             /*上一页*/
             let prePage = pageInfo.prePage
+            /*总页数*/
+            let pages = pageInfo.pages
+
             /*白名单列表信息*/
             let list = pageInfo.list
             /*遍历展示,追加*/
@@ -350,10 +356,10 @@
                     "</td>" +
                     "</tr>)").appendTo($("#doc-modal-list"))
             }
-            console.log("pageCount:"+  (total%pageSize)+1 )
-            console.log("pageNum:" +pageNum)
+            console.log("pageCount:"+  pages )
+            console.log("pageNum:" + pageNum)
             $("li[name='forRemove2']").remove()
-            for (let i = 1; i <= (total%pageSize)+1 ; i++) {
+            for (let i = 1; i <= pages ; i++) {
                 let pageItem = $("<li name='forRemove2'><a id='"+i+"' href='#'>"+i+"</a><li>")
                 $(".am-pagination").find("li:last").before(pageItem)
             }
@@ -369,7 +375,7 @@
             // 给页码按钮绑定点击事件
             $(".am-pagination li a").on("click", function(e) {
                 // 获取被点击的页码按钮的id属性
-                let clickedPage = $(this).attr("id");
+                clickedPage = $(this).attr("id");
                 console.log("点击的页码是: "+clickedPage)
                 // 发送异步请求，请求对应页码的数据
                 $.ajax({
@@ -450,6 +456,7 @@
                         url: "http://localhost:8080/whiteList",
                         type: "post",
                         dataType: "json",
+                        async: false,
                         data: JSON.stringify({
                             enterpriseId: ${sessionScope.enterpriseId}  ,
                             supplierId: supplierId ,
