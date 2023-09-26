@@ -145,7 +145,7 @@
                 contentType:"application/json",
                 async:false,
                 data:JSON.stringify({
-                    name:$("input[name='name']").val()
+                    name:$("input[name='name']").val().trim()
                 }),
                 success:function (result){
                     /*如果为true则数据重复*/
@@ -172,7 +172,7 @@
                 contentType:"application/json",
                 async:false,
                 data:JSON.stringify({
-                    socialUniformCode:$("input[name='socialUniformCode']").val()
+                    socialUniformCode:$("input[name='socialUniformCode']").val().trim()
                 }),
                 success:function (result){
                     /*如果为true则数据重复*/
@@ -331,7 +331,7 @@
         <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list tpl-header-list">
             <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
                 <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
-                    <span class="tpl-header-list-user-nick" id="userName">禁言小张</span><span class="tpl-header-list-user-ico"> <img
+                    <span class="tpl-header-list-user-nick" id="userName"></span><span class="tpl-header-list-user-ico"> <img
                         src="assets/img/user01.png"></span>
                 </a>
                 <ul class="am-dropdown-content">
