@@ -16,12 +16,23 @@
     <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
     <link rel="stylesheet" href="assets/css/admin.css">
     <link rel="stylesheet" href="assets/css/app.css">
-    <script src="assets/js/jquery.min.js"></script>
     <link rel="stylesheet" href="assets/css/message.min.css">
+    <script src="assets/js/jquery.min.js"></script>
+    <script>
+        $.ajax({
+            type: "get",
+            url: "login",
+            async: false,
+            success: function (data){
+                if (data.data) {
+                    window.location.href="http://localhost:8080/info-certification"
+                }
+            }
+        })
+    </script>
 </head>
 
 <body data-type="login">
-
 <div class="am-g myapp-login">
     <div class="myapp-login-logo-block  tpl-login-max">
         <div class="myapp-login-logo-text">
@@ -53,8 +64,7 @@
         </div>
     </div>
 </div>
-
-<script src="assets/js/jquery.min.js"></script>
+</body>
 <script src="assets/js/amazeui.min.js"></script>
 <script src="assets/js/app.js"></script>
 <script src="assets/js/message.min.js"></script>
@@ -65,20 +75,7 @@
             timeout: 1000
         }
     };
-
-    $.ajax({
-        type: "get",
-        url: "login",
-        async: false,
-        success: function (data){
-            if (data.data) {
-                window.location.href="http://localhost:8080/info-certification"
-            } else {
-                Qmsg.warning(data.msg)
-            }
-        }
-    })
-
+    Qmsg.warning("请登陆访问")
     $(document).ready(function (){
         function login(){
             $.ajax({
@@ -117,6 +114,4 @@
 
     });
 </script>
-</body>
-
 </html>
