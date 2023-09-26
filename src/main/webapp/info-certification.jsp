@@ -21,7 +21,6 @@
             font-size: 13px;
             color: #999;
         }
-
         .am-selected {
             width: 100%;
         }
@@ -31,7 +30,7 @@
             margin: 0;
             padding: 0;
             left: 100%;
-            top: 50%;
+            width: 200px;
             display: inline-block;
         }
     </style>
