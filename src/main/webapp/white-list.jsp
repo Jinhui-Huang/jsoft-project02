@@ -548,12 +548,12 @@
                         let id;
                         let name;
                         let socialUniformCode;
+                        $("option[name='forRe']").remove()
                         for (let i = 0; i < result.length; i++) {
                             id = result[i].id;
                             name = result[i].name;
                             socialUniformCode = result[i].socialUniformCode;
                             /*将信用代码作为选项的value*/
-                            $("option[name='forRe']").remove()
                             $("<option name='forRe' id='" + id + "' value='" + socialUniformCode + "'>" + name + "</option>").appendTo($("#doc-select-1"))
                             /*设置选项点击事件*/
                             $("#doc-select-1").on("change", function () {
