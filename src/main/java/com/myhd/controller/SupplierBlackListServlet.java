@@ -50,11 +50,15 @@ public class SupplierBlackListServlet extends HttpServlet {
 //        SelectLikeInfo sli = ReqRespMsgUtil.getMsg(req, SelectLikeInfo.class);
         Integer id = Integer.valueOf(req.getParameter("id"));
         String enterpriseName = req.getParameter("enterpriseName");
+        Integer startPage = Integer.valueOf(req.getParameter("startPage"));
         log.info("拿到的id是："+id);
         log.info("拿到的name是:" + enterpriseName);
+        log.info("拿到的startPage是:" + startPage);
         SelectLikeInfo sli = new SelectLikeInfo();
         sli.setId(id);
         sli.setEnterpriseName(enterpriseName);
+        sli.setStartPage(startPage);
+        sli.setPageSize(2);
         /*模糊查询*/
         PageInfo<ThreeTablesQuery> info = impl.selectBlackInfoByEnterpriseId(sli);
         /*返回json数据*/
