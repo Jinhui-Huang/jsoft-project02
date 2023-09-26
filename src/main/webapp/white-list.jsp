@@ -155,6 +155,7 @@
                                     * @date: 2023-9-25 18:59
                                     * @email: mhangggggg@outlook.com
                                     * */
+                                    //todo 待完成: 分页查询功能  添加供应商功能
                                     $(document).ready(function () {
                                         /*进入页面时 通过一次get请求获取列表信息*/
                                         $.ajax({
@@ -293,11 +294,7 @@
                                         <div class="am-u-sm-6">
                                             <select id="doc-select-1" required>
                                                 <option value="">请选择企业</option>
-                                                <option value="a">腾讯科技</option>
-                                                <option value="b">京东集团</option>
-                                                <option value="c">搜狐</option>
-                                                <option value="d">阿里巴巴</option>
-                                                <option value="e">小米</option>
+                                                <%--在此动态拼接--%>
                                             </select>
                                         </div>
                                         <span class="am-form-caret"></span>
@@ -306,7 +303,7 @@
                                         <label for="doc-select-2" class="am-u-sm-4 am-form-label"
                                                style="font-size: 15px;">统一社会信用代码</label>
                                         <div class="am-u-sm-6" style=" text-align: left;margin-top: 6px;">
-                                            <span>23456787657645343124567</span>
+                                            <span id="socialUniformCode"></span>
                                         </div>
                                         <span class="am-form-caret"></span>
                                     </div>
@@ -315,10 +312,10 @@
                                                style="font-size: 15px;">企业评级</label>
                                         <div class="am-u-sm-6">
                                             <select id="doc-select-2" required>
-                                                <option value="">请选择企业评级</option>
-                                                <option value="a">1级</option>
-                                                <option value="b">2级</option>
-                                                <option value="c">3级</option>
+                                                <option value="0">请选择企业评级</option>
+                                                <option value="A">A级</option>
+                                                <option value="B">B级</option>
+                                                <option value="C">C级</option>
                                             </select>
                                         </div>
                                         <span class="am-form-caret"></span>
@@ -415,6 +412,36 @@
     // 添加供应商
     $(function () {
         $('#doc-prompt-toggle').on('click', function () {
+            /*点击添加供应商按钮，查询下拉列表信息*/
+            $.ajax({
+                url: "http://localhost:8080/enterprise",
+                type: "get",
+                async: false,
+                data: {
+                    id: ${sessionScope.enterpriseId},
+                    op: "1"
+                },
+                success: function (result) {
+                    console.log("获取到的list信息:"+result)
+                    let id;
+                    let name;
+                    let socialUniformCode;
+                    for (let i = 0; i < result.length; i++) {
+                        id = result[i].id;
+                        name = result[i].name;
+                        socialUniformCode = result[i].socialUniformCode;
+                        /*将信用代码作为选项的value*/
+                        $("<option value='"+socialUniformCode+"'>"+name+"</option>").appendTo( $("#doc-select-1") )
+                        /*设置选项点击之间*/
+                        $("#doc-select-1").on("change",function () {
+                            console.log( "点击了信息"+$("#doc-select-1").find("option:selected").val() )
+                            $("#socialUniformCode").text( $("#doc-select-1").find("option:selected").val() )
+                        })
+                    }
+                }
+            })
+
+
             $('#my-prompt').modal({
                 relatedTarget: this,
                 onConfirm: function (options) {
@@ -423,7 +450,7 @@
                 },
                 onCancel: function (e) {
                     //点击取消调用函数
-                    alert("点击了取消")
+                    console.log("关闭添加供应商弹出框")
                 }
             });
         });
