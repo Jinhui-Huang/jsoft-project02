@@ -23,5 +23,5 @@ public class SelectLikeInfo {
     private String enterpriseName;/*模糊查询时输入的企业名字或包含的字段*/
     private String supplierLevel;/*白名单模糊查询时的企业评级，黑名单时不需要*/
     private Integer startPage = 1;/*查询的某一页的页数*/
-    private Integer pageSize = 5;/*每页展示多少条数据*/
+    private Integer pageSize = 6;/*每页展示多少条数据*/
 }
