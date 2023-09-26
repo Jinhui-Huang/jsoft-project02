@@ -73,7 +73,6 @@ public class EnterpriseServlet extends HttpServlet {
         }else {
             ReqRespMsgUtil.sendMsg(resp,new Result(Code.UPDATE_ERR,false,"用户信息认证失败"));
         }
-
     }
 
     /**
@@ -90,17 +89,24 @@ public class EnterpriseServlet extends HttpServlet {
         resp.setContentType("application/json");
         /*获取前端json数据*/
         Enterprise enterprise = ReqRespMsgUtil.getMsg(req, Enterprise.class);
-        /*添加企业信息*/
-        boolean flag = false;
-        try {
-             if (enterpriseImpl.addEnterprise(enterprise)){
-                 flag = true;
-             }
-        } catch (Exception e) {
-            log.error(e.getMessage(), "更新企业信息失败");
+        String scale = enterprise.getScale();
+        if (scale == null){
+            Boolean isExists = enterpriseImpl.judgeEnterpriseInfoIsExists(enterprise);
+
+        }else {
+            /*添加企业信息*/
+            boolean flag = false;
+            try {
+                if (enterpriseImpl.addEnterprise(enterprise)){
+                    flag = true;
+                }
+            } catch (Exception e) {
+                log.error(e.getMessage(), "更新企业信息失败");
+            }
+            Object[] objects = {flag,enterprise};
+            /*回显数据*/
+            ReqRespMsgUtil.sendMsg(resp,new Result(Code.UPDATE_ERR,objects,"企业信息认证失败"));
         }
-        Object[] objects = {flag,enterprise};
-        /*回显数据*/
-        ReqRespMsgUtil.sendMsg(resp,new Result(Code.UPDATE_ERR,objects,"企业信息认证失败"));
+
     }
 }
