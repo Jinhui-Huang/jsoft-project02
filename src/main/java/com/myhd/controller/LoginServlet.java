@@ -34,7 +34,7 @@ import java.util.Map;
 public class LoginServlet extends HttpServlet {
     private UserServiceImpl usi = new UserServiceImpl();
     /**
-     * @description: TODO 点击登录按钮进行登录认证
+     * @description: TODO 点击登录按钮进行登录认证，登录成功后将用户账号密码存入token中进行后续的令牌校验。
      * @param req
      * @param resp
      * @return: void
@@ -73,7 +73,7 @@ public class LoginServlet extends HttpServlet {
         }
     }
     /**
-     * @description: TODO 自动进行令牌验证请求的发送
+     * @description: TODO 每次进入Login-page页面时都会发送一个get请求，用以判断token是否存在，如果存在并且校验正确则进行自动登录，如果不存在或过期就提示请登录访问。
      * @param req
      * @param resp
      * @return: void
@@ -121,7 +121,14 @@ public class LoginServlet extends HttpServlet {
             ReqRespMsgUtil.sendMsg(resp,new Result(Code.GET_ERR, false,"请登录访问"));
         }
     }
-
+    /**
+     * @description: TODO 账号退出登录功能
+     * @param req
+     * @param resp
+     * @return: void
+     * @author CYQH
+     * @date: 2023/09/25 18:55
+     */
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         log.info("进入loginDelete");

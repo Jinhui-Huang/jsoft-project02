@@ -109,7 +109,7 @@ public class WebFilter implements Filter {
                                     User datebaseUser = usi.selectByUserAccountPwd(user);
                                     if (datebaseUser != null){
                                         log.info("token用户信息为："+user);
-                                        TokenUtil.SERVER_LOCAL.set(user);
+                                        TokenUtil.SERVER_LOCAL.set(datebaseUser);
                                         chain.doFilter(request,response);
                                         TokenUtil.SERVER_LOCAL.remove();
                                         return;

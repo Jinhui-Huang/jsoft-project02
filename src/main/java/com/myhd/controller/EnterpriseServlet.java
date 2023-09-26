@@ -52,6 +52,14 @@ public class EnterpriseServlet extends HttpServlet {
         ReqRespMsgUtil.sendMsg(resp, list);
     }
 
+    /**
+     * @description: TODO 从数据库获取数据进行认证页面数据的回显,每次信息认证页面加载都会发送get请求，将用户信息和企业信息分别放在objects[0]和objects[1]上，用户第一次登录时，因为没有认证所以无法查询到对应的企业信息，根据objects[1]是否为null判断该用户是否进行了认证，并且是否进行数据回显。
+     * @param req
+     * @param resp
+     * @return: void
+     * @author CYQH
+     * @date: 2023/09/25 18:55
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (req.getParameter("op")!=null && req.getParameter("op").equals("1")){
@@ -82,14 +90,11 @@ public class EnterpriseServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         log.info("进入enterprisePost");
         User user = ReqRespMsgUtil.getMsg(req, User.class);
-        log.info("请求中的数据:"+user);
-        /*从token中获取当前用户id*/
+        /*将请求信息中的user属性赋值给tokenUser*/
         User tokenUser = (User)TokenUtil.SERVER_LOCAL.get();
-        log.info("TokenUtil.SERVER_LOCAL里的数据"+tokenUser.toString());
         user.setId(tokenUser.getId());
+        /*更新用户的信息*/
         if (userImpl.updateUserById(user)){
-            log.info("重新生成TokenUtil.SERVER_LOCAL");
-            TokenUtil.SERVER_LOCAL.set(user);
             ReqRespMsgUtil.sendMsg(resp,new Result(Code.UPDATE_OK,true,"用户信息认证成功"));
         }else {
             ReqRespMsgUtil.sendMsg(resp,new Result(Code.UPDATE_ERR,false,"用户信息认证失败"));
@@ -112,12 +117,16 @@ public class EnterpriseServlet extends HttpServlet {
         /*获取前端json数据*/
         Enterprise enterprise = ReqRespMsgUtil.getMsg(req, Enterprise.class);
         /*添加企业信息*/
+        boolean flag = false;
         try {
-            enterpriseImpl.addEnterprise(enterprise);
+             if (enterpriseImpl.addEnterprise(enterprise)){
+                 flag = true;
+             }
         } catch (Exception e) {
             log.error(e.getMessage(), "更新企业信息失败");
         }
+        Object[] objects = {flag,enterprise};
         /*回显数据*/
-        ReqRespMsgUtil.sendMsg(resp,enterprise);
+        ReqRespMsgUtil.sendMsg(resp,new Result(Code.UPDATE_ERR,objects,"企业信息认证失败"));
     }
 }

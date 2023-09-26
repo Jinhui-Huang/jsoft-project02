@@ -33,7 +33,6 @@
 
         $(document).ready(function (){
             /*发送请求进行异步验证*/
-
             $("#loginButton").click(function (){
                 $.ajax({
                     type: "POST",
