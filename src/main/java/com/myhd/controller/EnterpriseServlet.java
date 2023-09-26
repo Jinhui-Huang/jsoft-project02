@@ -17,6 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,17 +34,40 @@ public class EnterpriseServlet extends HttpServlet {
     private EnterpriseServiceImpl enterpriseImpl = new EnterpriseServiceImpl();
     private UserServiceImpl userImpl = new UserServiceImpl();
 
+    /**
+     * @description 获取添加供应商下拉列表信息的方法. 获取到的list集合包含三个值： id name socialUniformCode
+     * @author JoneElmo
+     * @date 2023-09-26 08:45
+     * @param req
+     * @param resp
+     * @return void
+     */
+    protected void getInfo(HttpServletRequest req, HttpServletResponse resp){
+        resp.setContentType("application/json");
+        Integer enterpriseId = Integer.valueOf(req.getParameter("id"));
+        log.info(String.valueOf(enterpriseId));
+        List<Enterprise> list = enterpriseImpl.selectEnterpriseExceptWhiteAndBlack(enterpriseId);
+        /*将list以json格式返给前端*/
+        log.info("list信息"+String.valueOf(list));
+        ReqRespMsgUtil.sendMsg(resp, list);
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        log.info("进入enterPriseGet");
-        User tokenUser = (User)TokenUtil.SERVER_LOCAL.get();
-        Object[] objects = new Object[2];
-        objects[0]=tokenUser;
-        Enterprise returnInfo = enterpriseImpl.selectByEnterpriseId(tokenUser.getEnterpriseId());
-        objects[1]=returnInfo;
-        log.info(Arrays.toString(objects));
-        req.getSession().setAttribute("enterpriseId", tokenUser.getEnterpriseId());
-        ReqRespMsgUtil.sendMsg(resp,new Result(Code.UPDATE_OK,objects,"用户信息回显"));
+        if (req.getParameter("op")!=null && req.getParameter("op").equals("1")){
+            log.info("准备进入getInfo方法");
+            getInfo(req, resp);
+        }else {
+            log.info("进入enterPriseGet");
+            User tokenUser = (User)TokenUtil.SERVER_LOCAL.get();
+            Object[] objects = new Object[2];
+            objects[0]=tokenUser;
+            Enterprise returnInfo = enterpriseImpl.selectByEnterpriseId(tokenUser.getEnterpriseId());
+            objects[1]=returnInfo;
+            log.info(Arrays.toString(objects));
+            req.getSession().setAttribute("enterpriseId", tokenUser.getEnterpriseId());
+            ReqRespMsgUtil.sendMsg(resp,new Result(Code.UPDATE_OK,objects,"用户信息回显"));
+        }
     }
 
     /**
