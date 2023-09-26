@@ -99,7 +99,6 @@ public class EnterpriseServlet extends HttpServlet {
         }else {
             ReqRespMsgUtil.sendMsg(resp,new Result(Code.UPDATE_ERR,false,"用户信息认证失败"));
         }
-
     }
 
     /**
@@ -116,17 +115,40 @@ public class EnterpriseServlet extends HttpServlet {
         resp.setContentType("application/json");
         /*获取前端json数据*/
         Enterprise enterprise = ReqRespMsgUtil.getMsg(req, Enterprise.class);
-        /*添加企业信息*/
-        boolean flag = false;
-        try {
-             if (enterpriseImpl.addEnterprise(enterprise)){
-                 flag = true;
-             }
-        } catch (Exception e) {
-            log.error(e.getMessage(), "更新企业信息失败");
+            /*添加企业信息*/
+            boolean flag = false;
+            try {
+                if (enterpriseImpl.addEnterprise(enterprise)){
+                    flag = true;
+                }
+            } catch (Exception e) {
+                log.error(e.getMessage(), "更新企业信息失败");
+            }
+            Object[] objects = {flag,enterprise};
+            /*回显数据*/
+            ReqRespMsgUtil.sendMsg(resp,new Result(Code.UPDATE_ERR,objects,"企业信息认证失败"));
+    }
+
+    /**
+     * @description: 进行企业信息是否重复的判断，如果重复则返回true，不重复返回false
+     * @param req
+     * @param resp
+     * @return: void
+     * @author CYQH
+     * @date: 2023/09/26 9:13
+     */
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp)  {
+        Enterprise enterprise = ReqRespMsgUtil.getMsg(req, Enterprise.class);
+        /*判断企业信息是否重复*/
+        Boolean isExists = enterpriseImpl.judgeEnterpriseInfoIsExists(enterprise);
+        if (isExists){
+            /*如果企业名称或企业邮箱或信用代码存在则返回一个true*/
+            log.info("企业信息重复");
+            ReqRespMsgUtil.sendMsg(resp,new Result(Code.SAVE_ERR,true,"企业信息重复"));
+        }else {
+            log.info("企业信息无重复");
+            ReqRespMsgUtil.sendMsg(resp,new Result(Code.SAVE_OK,false,"企业信息无重复"));
         }
-        Object[] objects = {flag,enterprise};
-        /*回显数据*/
-        ReqRespMsgUtil.sendMsg(resp,new Result(Code.UPDATE_ERR,objects,"企业信息认证失败"));
     }
 }

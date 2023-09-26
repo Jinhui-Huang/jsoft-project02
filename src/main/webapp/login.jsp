@@ -32,8 +32,7 @@
         })
 
         $(document).ready(function (){
-            /*发送请求进行异步验证*/
-            $("#loginButton").click(function (){
+            function login(){
                 $.ajax({
                     type: "POST",
                     url: "login",
@@ -52,7 +51,18 @@
                         }
                     }
                 })
+            }
+            /*发送请求进行异步验证*/
+            $("#loginButton").click(function (){
+                login()
             })
+            $("input[type = 'password']").keypress(function(event) {
+                // 检查按下的键是否是回车键（keyCode 13）
+                if (event.which === 13) {
+                    // 执行登录操作
+                    login();
+                }
+            });
 
         });
     </script>

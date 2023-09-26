@@ -1,6 +1,8 @@
 package com.myhd.dao;
 
 import com.myhd.pojo.Enterprise;
+import com.myhd.pojo.SelectLikeInfo;
+import com.myhd.pojo.ThreeTablesQuery;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -71,6 +73,29 @@ public interface EnterpriseDao {
             "(SELECT swl.supplier_id FROM supplier_black_list AS swl " +
             "WHERE swl.enterprise_id = #{enterpriseId})")
     List<Enterprise> selectEnterpriseExceptBlack(Integer enterpriseId);
+
+    /**
+     * @description: 根据mybatis动态sql分别判断企业名称，信用代码，邮箱是否重复
+     * @param enterprise
+     * @return: java.lang.Integer
+     * @author CYQH
+     * @date: 2023/09/26 8:40
+     */
+    @Select("<script>\n" +
+            "    select COUNT(id) FROM enterprise\n" +
+            "    <where>\n" +
+            "        <if test=\"name != null\">\n" +
+            "            or name = #{name}\n" +
+            "        </if>\n" +
+            "        <if test=\"socialUniformCode != null\">\n" +
+            "            or social_uniform_code = #{socialUniformCode}\n" +
+            "        </if>\n" +
+            "        <if test=\"email != null\">\n" +
+            "            or email = #{email}\n" +
+            "        </if>\n" +
+            "    </where>\n" +
+            "</script>")
+    Integer countEnterpriseInfo(Enterprise enterprise);
 
 
 }
