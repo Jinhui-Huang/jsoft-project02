@@ -17,6 +17,149 @@
     <link rel="stylesheet" href="assets/css/admin.css">
     <link rel="stylesheet" href="assets/css/app.css">
     <script src="assets/js/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var clickedPage = 1;
+            var nextPage = 1;
+            var prePage = 1;
+            var Pages = 0;
+            var pageNum = 1;
+
+            showInfo()
+
+            /*进入页面时 通过一次get请求获取列表信息*/
+            function showInfo(){
+                let name = "%"+$("input[name='enterpriseName']").val().trim()+"%"
+                $.ajax({
+                    url: "http://localhost:8080/blackList",
+                    type: "get",
+                    data: {
+                        id: ${sessionScope.enterpriseId},
+                        enterpriseName: name,
+                        startPage:clickedPage
+                    },
+                    success: function (result) {
+                        console.log(result.list)
+                        replaceInfo(result)
+                    }
+                })
+            }
+
+            /*模糊查询*/
+            $("#btn_query").on("click",function () {
+                clickedPage = 1;
+                showInfo()
+            });
+
+            /*遍历展示信息方法*/
+            function replaceInfo(pageInfo) {
+                /*总数据量*/
+                let total = pageInfo.total
+                /*当前页*/
+                pageNum = pageInfo.pageNum
+                /*页数量*/
+                let pageSize = pageInfo.pageSize
+                /*下一页*/
+                nextPage = pageInfo.nextPage
+                /*上一页*/
+                prePage = pageInfo.prePage
+                /*总页数*/
+                Pages = pageInfo.pages
+                /*白名单列表信息*/
+                let list = pageInfo.list
+                /*遍历展示,追加*/
+                $("tr[name='forRemove']").remove()
+
+                for (let i = 0; i < list.length ; i++) {
+                    $("<tr name='forRemove' data-id='2'>"+
+                        "<td>"+ (i+1) +"</td>"+
+                        "<td class='am-hide-sm-only'><a href='#'>"+ list[i].enterpriseName +"</a></td>"+
+                        "<td class='am-hide-sm-only'>"+ list[i].idcardName +"</td>"+
+                        "<td class='am-hide-sm-only'>"+ list[i].phone +"</td>"+
+                        "<td class='am-hide-sm-only'>"+ list[i].email +"</td>"+
+                        "<td class='am-hide-sm-only'>"+ list[i].variableInfo +"</td>"+
+                        "<td class='am-hide-sm-only'>"+ list[i].updateDate +"</td>"+
+                        "<td>"+
+                        "<div class='am-btn-toolbar'>"+
+                        "<div class='am-btn-group am-btn-group-xs'>"+
+                        "<span class='am-text-secondary am-icon'"+
+                        "style='margin-left: 20px;cursor:pointer' name='解除黑名单' id='"+list[i].supplierId+"'>"+
+                        " 解除黑名单"+"</span>"+
+                        " </div>"+
+                        "</div>"+
+                        "</td>"+
+                        "</tr>)").appendTo( $("#doc-modal-list") )
+                }
+                init()
+            }
+
+            function init() {
+                $("#button_body").empty()
+                let pageItem = "<li id='prePage'><a id='-1'>«</a></li>"
+
+                for (let i = 1; i <= Pages ; i++) {
+                    pageItem += "<li name='forRemove2'><a id='"+i+"'>"+i+"</a><li>"
+                }
+                pageItem += "<li id='nextPage'><a id='-1'>»</a></li>"
+
+                $(pageItem).appendTo( $("#button_body") )
+
+                // 找到当前页码对应的按钮，并添加高亮状态
+                $(".am-pagination li a").each(function() {
+                    if ($(this).attr("id") === clickedPage.toString() && $(this).attr("id") != -1) {
+                        $(this).parent().addClass("am-active");
+                    }
+                });
+
+                $(".am-pagination li a").on("click", function(e) {
+                    // 获取被点击的页码按钮的id属性
+                    if ($(this).attr("id") != -1) {
+                        clickedPage = $(this).attr("id");
+                        console.log("点击的页码是: "+clickedPage)
+                        // 发送异步请求，请求对应页码的数据
+                        showInfo()
+                    }
+                });
+
+                /*上一页下一页*/
+                $("#nextPage").on("click", function() {
+                    if (nextPage === 0) {
+                        nextPage = 1;
+                    }
+                    // 获取被点击的页码按钮的id属性
+                    clickedPage = nextPage;
+                    console.log("点击的页码是: "+clickedPage)
+                    // 发送异步请求，请求对应页码的数据
+                    showInfo()
+                });
+
+                $("#prePage").on("click", function() {
+                    if (prePage === 0) {
+                        prePage = Pages;
+                    }
+                    // 获取被点击的页码按钮的id属性
+                    clickedPage = prePage;
+                    console.log("点击的页码是: "+clickedPage)
+                    // 发送异步请求，请求对应页码的数据
+                    showInfo()
+                });
+            }
+
+            /*退出登录按钮*/
+            $("#logoutButton").click(function (){
+                $.ajax({
+                    type:"delete",
+                    url:"login",
+                    success:function (data){
+                        if (data.data){
+                            alert(data.msg)
+                            window.location.href="http://localhost:8080"
+                        }
+                    }
+                })
+            })
+        })
+    </script>
 </head>
 
 <body data-type="generalComponents">
@@ -170,103 +313,7 @@
                                 </tr>
                                 </thead>
                                 <tbody id="doc-modal-list">
-                                <script>
-                                    $(document).ready(function () {
-                                        /*进入页面时 通过一次get请求获取列表信息*/
-                                        function showInfo(){
-                                            let name = "%"+$("input[name='enterpriseName']").val()+"%"
-                                            $.ajax({
-                                                url: "http://localhost:8080/blackList",
-                                                type: "get",
-                                                async: false,
-                                                data: {
-                                                    id: ${sessionScope.enterpriseId},
-                                                    enterpriseName: name,
-                                                },
-                                                success: function (result) {
-                                                    console.log(result.list)
-                                                    replaceInfo(result)
-                                                }
-                                            })
-                                        }
-                                        showInfo()
 
-                                        /*模糊查询*/
-                                        $("#btn_query").on("click",function () {
-                                            let name = "%"+$("input[name='enterpriseName']").val()+"%"
-                                            $.ajax({
-                                                url: "http://localhost:8080/blackList",
-                                                type: "get",
-                                                async: false,
-                                                data: {
-                                                    id: ${sessionScope.enterpriseId},
-                                                    enterpriseName: name,
-                                                },
-                                                success: function (result){
-                                                    console.log(result.list)
-                                                    replaceInfo(result)
-                                                }
-                                            })
-                                        })
-                                        /*遍历展示信息方法*/
-                                        function replaceInfo(pageInfo) {
-                                            /*总数据量*/
-                                            let total = pageInfo.total
-                                            /*当前页*/
-                                            let pageNum = pageInfo.pageNum
-                                            /*页数量*/
-                                            let pageSize = pageInfo.pageSize
-                                            /*下一页*/
-                                            let nextPage = pageInfo.nextPage
-                                            /*上一页*/
-                                            let prePage = pageInfo.prePage
-                                            /*总页数*/
-                                            let Pages = pageInfo.pages
-                                            /*白名单列表信息*/
-                                            let list = pageInfo.list
-                                            /*遍历展示,追加*/
-                                            $("tr[name='forRemove']").remove()
-                                            for (let i = 0; i < list.length ; i++) {
-                                                $("<tr name='forRemove' data-id='2'>"+
-                                                    "<td>"+ (i+1) +"</td>"+
-                                                    "<td class='am-hide-sm-only'><a href='#'>"+ list[i].enterpriseName +"</a></td>"+
-                                                    "<td class='am-hide-sm-only'>"+ list[i].idcardName +"</td>"+
-                                                    "<td class='am-hide-sm-only'>"+ list[i].phone +"</td>"+
-                                                    "<td class='am-hide-sm-only'>"+ list[i].email +"</td>"+
-                                                    "<td class='am-hide-sm-only'>"+ list[i].variableInfo +"</td>"+
-                                                    "<td class='am-hide-sm-only'>"+ list[i].updateDate +"</td>"+
-                                                    "<td>"+
-                                                    "<div class='am-btn-toolbar'>"+
-                                                    "<div class='am-btn-group am-btn-group-xs'>"+
-                                                    "<span class='am-text-secondary am-icon'"+
-                                                    "style='margin-left: 20px;cursor:pointer' name='解除黑名单' id='"+list[i].supplierId+"'>"+
-                                                    " 解除黑名单"+"</span>"+
-                                                    " </div>"+
-                                                    "</div>"+
-                                                    "</td>"+
-                                                    "</tr>)").appendTo( $("#doc-modal-list") )
-                                            }
-                                            // $("tr[name='forRemove']").remove()
-                                            // for (let i = 0; i < list.length ; i++) {
-                                            //     $("<tr name='forRemove' data-id='2'>"
-                                            //
-                                            // }
-                                        }
-                                        /*退出登录按钮*/
-                                        $("#logoutButton").click(function (){
-                                            $.ajax({
-                                                type:"delete",
-                                                url:"login",
-                                                success:function (data){
-                                                    if (data.data){
-                                                        alert(data.msg)
-                                                        window.location.href="http://localhost:8080"
-                                                    }
-                                                }
-                                            })
-                                        })
-                                    })
-                                </script>
                                 <div class="am-modal am-modal-confirm" tabindex="-1" id="my-confirm">
                                     <div class="am-modal-dialog" style="font-size: 16px;">
                                         <div class="am-modal-hd">提示</div>
@@ -284,14 +331,8 @@
                             <div class="am-cf">
 
                                 <div class="am-fr">
-                                    <ul class="am-pagination tpl-pagination">
-                                        <li class="am-disabled"><a href="#">«</a></li>
-                                        <li class="am-active"><a href="#">1</a></li>
-                                        <li><a href="#">2</a></li>
-                                        <li><a href="#">3</a></li>
-                                        <li><a href="#">4</a></li>
-                                        <li><a href="#">5</a></li>
-                                        <li><a href="#">»</a></li>
+                                    <ul class="am-pagination tpl-pagination" id="button_body">
+
                                     </ul>
                                 </div>
                             </div>
