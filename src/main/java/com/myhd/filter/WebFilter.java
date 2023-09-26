@@ -1,6 +1,10 @@
 package com.myhd.filter;
 
+import com.myhd.exception.SystemException;
+import com.myhd.pojo.User;
+import com.myhd.service.Impl.UserServiceImpl;
 import com.myhd.util.ReqRespMsgUtil;
+import com.myhd.util.TokenUtil;
 import com.myhd.util.code.Code;
 import com.myhd.util.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -11,12 +15,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
 @Slf4j
 @javax.servlet.annotation.WebFilter("*")
 public class WebFilter implements Filter {
-    /*过滤路径*/
+    /*过滤放行路径*/
     public static final ArrayList<String> paths = new ArrayList<>();
+    private UserServiceImpl usi = new UserServiceImpl();
 
     static {
         paths.add("/");
@@ -26,6 +32,9 @@ public class WebFilter implements Filter {
         paths.add("black-list");
         paths.add("assets");
 
+        paths.add("login");/*LoginServlet映射的地址*/
+        paths.add("whiteList"); /*SupplierWhiteListServlet映射的地址*/
+        paths.add("enterprise"); /*EnterpriseServlet映射的地址*/
     }
 
     @Override
@@ -62,7 +71,7 @@ public class WebFilter implements Filter {
         }
         /*非/进入, /数量要求少于20*/
         if (countChar(requestURI, '/') >= 20) {
-            ReqRespMsgUtil.sendMsg(response, new Result(Code.BUSINESS_ERR, false, "路径不允许过多的/"));
+            response.sendError(404);
             return;
         }
 
@@ -71,26 +80,57 @@ public class WebFilter implements Filter {
         if (split.length > 1 && paths.contains(split[1])) {
             log.info("过滤路径：" + split[1]);
             request.setCharacterEncoding("UTF-8");
-            if (split[1].equals("login-page")) {
+            if (requestURI.equals("/login-page") || requestURI.equals("/login") || split[1].equals("assets")) {
                 chain.doFilter(request, response);
             } else {
                 verifyToken(request, response, chain);
             }
         } else {
-            response.sendRedirect("login-page");
+            response.sendRedirect("http://localhost:8080");
         }
-
     }
 
     /*进行令牌验证*/
     private void verifyToken(HttpServletRequest request, HttpServletResponse response, FilterChain chain) {
+        log.info("令牌验证");
         try {
-            chain.doFilter(request, response);
-        } catch (IOException | ServletException e) {
-            throw new RuntimeException(e);
+            if (paths.contains(request.getRequestURI().substring(1))) {
+                Cookie[] cookies = request.getCookies();
+                if (cookies != null){
+                    for (Cookie cookie : cookies) {
+                        if (cookie.getName().equals("token")){
+                            String token = cookie.getValue();
+                            if (token != null){
+                                Map<String, Object> verify = TokenUtil.verify(token, User.class);
+                                Boolean status = (Boolean) verify.get("status");
+                                log.info("验证状态为"+status);
+                                if (status){
+                                    User user = (User) verify.get(User.class.getSimpleName());
+                                    User datebaseUser = usi.selectByUserAccountPwd(user);
+                                    if (datebaseUser != null){
+                                        log.info("token用户信息为："+user);
+                                        TokenUtil.SERVER_LOCAL.set(datebaseUser);
+                                        chain.doFilter(request,response);
+                                        TokenUtil.SERVER_LOCAL.remove();
+                                        return;
+                                    }else {
+                                        response.addCookie(new Cookie("token",""));
+                                        response.sendRedirect("http://localhost:8080");
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                }
+                response.sendRedirect("http://localhost:8080");
+            } else {
+                response.sendRedirect("http://localhost:8080");
+            }
+        } catch (IOException | ServletException | RuntimeException e) {
+            throw new SystemException(Code.SYSTEM_ERR, "系统未知异常", e);
         }
     }
-
 
     private long countChar(String text, char targetChar) {
         return text.chars().filter(ch -> ch == targetChar).count();

@@ -5,6 +5,9 @@ import com.myhd.dao.EnterpriseDao;
 import com.myhd.pojo.Enterprise;
 import com.myhd.service.EnterpriseService;
 import com.myhd.util.MyBatisUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.exceptions.PersistenceException;
+import org.apache.ibatis.jdbc.Null;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.List;
@@ -20,6 +23,7 @@ import java.util.List;
  * @package com.myhd.service.Impl
  * @class EnterpriseServiceImpl
  */
+@Slf4j
 public class EnterpriseServiceImpl implements EnterpriseService {
     private static final SqlSession session = MyBatisUtil.openSession(true);
     private EnterpriseDao dao = session.getMapper(EnterpriseDao.class);
@@ -33,7 +37,16 @@ public class EnterpriseServiceImpl implements EnterpriseService {
      */
     @Override
     public Boolean addEnterprise(Enterprise enterprise) {
-        return dao.insertEnterprise(enterprise) == 1;
+        try {
+            Integer i = dao.insertEnterprise(enterprise);
+            return true;
+        } catch (PersistenceException e) {
+            log.error("插入数据重复");
+            return false;
+        }catch (NullPointerException e){
+            log.error("存在字段为空,请检查字段值");
+            return false;
+        }
     }
 
     /**
@@ -70,6 +83,18 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     @Override
     public List<Enterprise> selectEnterpriseExceptBlack(Integer enterpriseId) {
         return dao.selectEnterpriseExceptBlack(enterpriseId);
+    }
+
+    /**
+     * @description: 判断企业等名称，信用代码，企业邮箱是否重复,如果返回值为true则认为数据重复
+     * @param enterprise
+     * @return: java.lang.Boolean
+     * @author CYQH
+     * @date: 2023/09/26 8:45
+     */
+    @Override
+    public Boolean judgeEnterpriseInfoIsExists(Enterprise enterprise) {
+        return dao.countEnterpriseInfo(enterprise) == 1;
     }
 
 }

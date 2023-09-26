@@ -1,6 +1,6 @@
 <!doctype html>
 <html>
-
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -21,13 +21,198 @@
             font-size: 13px;
             color: #999;
         }
-
         .am-selected {
             width: 100%;
         }
+        .am-span{
+            color: red;
+            position: absolute;
+            margin: 0;
+            padding: 0;
+            left: 100%;
+            width: 200px;
+            display: inline-block;
+        }
     </style>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.js"></script>
 </head>
 <body data-type="generalComponents">
+
+<%--
+    @author: JoneElmo
+    @date: 2023-9-24 21:45
+--%>
+
+<%--ajax处理异步请求--%>
+<script>
+    $(document).ready(function (){
+        /*进入页面进行用户认证进度校验*/
+        function EchoData() {
+            $.ajax({
+                type:"get",
+                url:"enterprise",
+                success:function (result){
+                    $("#userName").text(result.data[0].name)
+                    $("#userAccount").text(result.data[0].account)
+                    $("#userPhone").text(result.data[0].phone)
+                    if(result.data[1] == null ){
+                        alert("请进行信息认证")
+                        /*判断企业信息为null，则证明未进行认证，须进行认证再回显数据*/
+                    }else {
+                        alert("已认证")
+                        /*已进行认证直接回显数据*/
+                        $(".am-form-group").find("input").prop("readonly",true)
+                        $("[name = 'idcardName']").val(result.data[0].idcardName)
+                        $("[name = 'idcardNo']").val(result.data[0].idcardNo)
+                        $("[name = 'name']").val(result.data[1].name)
+                        $("[name = 'socialUniformCode']").val(result.data[1].socialUniformCode)
+                        $("[name = 'email']").val(result.data[1].email)
+                        $("[name = 'phone']").val(result.data[1].phone)
+                        $("[name = 'fax']").val(result.data[1].fax)
+                        $("[name = 'address']").val(result.data[1].address.split("#")[0])
+                        $("textarea[name='addressDetails']").prop("readonly",true)
+                        $("[name = 'addressDetails']").val(result.data[1].address.split("#")[1])
+                        var scale =  $("option[value = "+result.data[1].scale+"]").text()
+                        $("#sel").replaceWith($("<input type='text' value='"+scale+"' readonly>"))
+                        $("button[name='submit']").prop("disabled",true)
+                    }
+                }
+            });
+        }
+        /*自动进行认证判断并进行数据回显*/
+        EchoData();
+
+        /*三个文本框失去焦点是分别发送请求进行数据重复校验*/
+        $("input[name = 'name']").blur(function (){
+            alert("失去焦点")
+            $.ajax({
+                type:"delete",
+                url:"enterprise",
+                dataType: "json",
+                contentType:"application/json",
+                data:JSON.stringify({
+                    name:$("input[name='name']").val()
+                }),
+                success:function (result){
+                    /*如果为true则数据重复*/
+                     if (result.data){
+                         alert(result.data)
+                        $("[name='nameSpan']").text("企业名称重复")
+                     }else {
+                         alert(result.msg)
+                         $("[name='nameSpan']").html("")
+                     }
+                }
+            })
+        })
+        $("[name = 'socialUniformCode']").blur(function (){
+            alert("失去焦点")
+            $.ajax({
+                url:"enterprise",
+                type:"delete",
+                dataType: "json",
+                data:JSON.stringify({
+                    socialUniformCode:$("input[name='socialUniformCode']").val()
+                })
+            })
+        })
+        $("[name = 'email']").blur(function (){
+            $.ajax({
+                url:"enterprise",
+                type:"delete",
+                dataType: "json",
+                data:JSON.stringify({
+                    email:$("input[name='email']").val()
+                })
+            })
+        })
+
+        /*点击企业信息认证界面的提交按钮，提交认证信息。接收回显结果并显示*/
+        $("button[name='submit']").on("click",function (event) {
+            console.log("点击了提交按钮")
+            /*阻止超链接的跳转，执行jquery语句*/
+            event.preventDefault();
+            /*发送put请求，处理企业认证信息*/
+            var enterpriseId = null;
+            var address1 = $("input[name='address']").val()
+            var address2 = $("textarea[name='addressDetails']").val()
+            /*拼接两个地址信息*/
+            var address = address1 + "#" + address2
+            console.log(address)
+            $.ajax({
+                url: "http://localhost:8080/enterprise",
+                type: "put",
+                dataType: "json",
+                async:false,
+                data:JSON.stringify({
+                    name: $("input[name='name']").val(),
+                    socialUniformCode: $("input[name='socialUniformCode']").val(),
+                    email:$("input[name='email']").val(),
+                    phone:$("input[name='phone']").val(),
+                    address: address,
+                    scale:$("select[name='scale']").val(),
+                    fax:$("input[name='fax']").val()
+                }),
+                success:function (result){
+                    /*企业认证判断成功再进行用户信息认证请求的发送*/
+                    if (result.data[0]){
+                        enterpriseId = result.data[1].id
+
+            /*获取输入的姓名和身份证号*/
+                        /*获取输入的姓名和身份证号*/
+                        var idcardName = $("input[name='idcardName']").val()
+                        var idcardNo = $("input[name='idcardNo']").val()
+                        /*发送post请求，处理用户认证信息*/
+                        $.ajax({
+                            url: "http://localhost:8080/enterprise",
+                            type: "post",
+                            dataType: "json",
+                            data:JSON.stringify({
+                                /*put请求回显的企业id信息*/
+                                enterpriseId : enterpriseId,
+                                /*输入框中的企业姓名信息*/
+                                enterpriseName : $("input[name='name']").val(),
+                                idcardName : idcardName,
+                                idcardNo : idcardNo
+                            }),
+                            success:function (result) {
+                                if (result.data){
+                                    EchoData();
+                                }else {
+                                    alert(result.msg)
+                                }
+                            },
+                            error:function (result){
+                                console.log(result)
+                            }
+                        })
+                    }else {
+                        alert(result.msg)
+                    }
+                },
+                error:function (result) {
+                    console.log(result)
+                }
+            })
+        })
+
+        /*退出登录按钮*/
+        $("#logoutButton").click(function (){
+            $.ajax({
+                type:"delete",
+                url:"login",
+                success:function (data){
+                    if (data.data){
+                        alert(data.msg)
+                        window.location.href="http://localhost:8080"
+                    }
+                }
+            })
+        })
+    })
+</script>
+
+
 <header class="am-topbar am-topbar-inverse admin-header">
     <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only"
             data-am-collapse="{target: '#topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span
@@ -36,11 +221,11 @@
         <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list tpl-header-list">
             <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
                 <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
-                    <span class="tpl-header-list-user-nick">禁言小张</span><span class="tpl-header-list-user-ico"> <img
+                    <span class="tpl-header-list-user-nick" id="userName">禁言小张</span><span class="tpl-header-list-user-ico"> <img
                         src="assets/img/user01.png"></span>
                 </a>
                 <ul class="am-dropdown-content">
-                    <li><a href="login-page"><span class="am-icon-power-off"></span> 退出</a></li>
+                    <li><a href="login-page" id="logoutButton"><span class="am-icon-power-off"></span> 退出</a></li>
                 </ul>
             </li>
         </ul>
@@ -58,7 +243,7 @@
                     </a>
                     <ul class="tpl-left-nav-sub-menu" style="display: block;">
                         <li>
-                            <a href="info-certification" class="active">
+                            <a id="enterpriseInfoVeri" href="#" class="active">
                                 <i class="am-icon-angle-right"></i>
                                 <span>企业信息认证</span>
                             </a>
@@ -114,25 +299,25 @@
                             <div class="am-form-group">
                                 <label for="user-name" class="am-u-sm-3 am-form-label">登录账号</label>
                                 <div class="am-u-sm-9">
-                                    usernameTest01
+                                    <span id="userAccount">test</span>
                                 </div>
                             </div>
                             <div class="am-form-group">
                                 <label for="user-email" class="am-u-sm-3 am-form-label">管理员手机号码</label>
                                 <div class="am-u-sm-9">
-                                    18133686868
+                                    <span id="userPhone">test</span>
                                 </div>
                             </div>
                             <div class="am-form-group">
                                 <label for="user-phone" class="am-u-sm-3 am-form-label">管理员姓名</label>
                                 <div class="am-u-sm-9">
-                                    <input type="text" placeholder="请输入管理员姓名">
+                                    <input type="text" name="idcardName" placeholder="请输入管理员姓名">
                                 </div>
                             </div>
                             <div class="am-form-group">
                                 <label for="user-QQ" class="am-u-sm-3 am-form-label">管理员身份证号</label>
                                 <div class="am-u-sm-9">
-                                    <input type="text" placeholder="请入管理员身份证号">
+                                    <input type="text" name="idcardNo" placeholder="请入管理员身份证号">
                                 </div>
                             </div>
                         </form>
@@ -159,62 +344,66 @@
                             <div class="am-form-group">
                                 <label for="user-name" class="am-u-sm-3 am-form-label">企业名称</label>
                                 <div class="am-u-sm-9">
-                                    <input type="text" id="user-name" placeholder="请输入企业名称">
+                                    <input type="text" name="name" id="user-name" placeholder="请输入企业名称">
+                                    <span class="am-span" name="nameSpan"></span>
                                 </div>
                             </div>
                             <div class="am-form-group">
                                 <label for="user-weibo" class="am-u-sm-3 am-form-label">统一社会信用代码</label>
                                 <div class="am-u-sm-9">
-                                    <input type="text" id="user-weibo" placeholder="请输入统一社会信用代码">
+                                    <input type="text" name="socialUniformCode" id="user-weibo" placeholder="请输入统一社会信用代码">
                                 </div>
                             </div>
                             <div class="am-form-group">
                                 <label for="user-weibo" class="am-u-sm-3 am-form-label">企业规模</label>
                                 <div class="am-u-sm-9">
-                                    <select placeholder="请选择企业规模" data-am-selected>
-                                        <option value="4">请选择企业规模</option>
-                                        <option value="a">0-20人</option>
-                                        <option value="b">20-50人</option>
-                                        <option value="d">50-100人</option>
-                                        <option value="e">100-500人</option>
-                                        <option value="f">500以上</option>
-                                    </select>
+                                    <div id="sel">
+                                        <select name="scale" placeholder="请选择企业规模" data-am-selected>
+                                            <option value="4">请选择企业规模</option>
+                                            <option value="A">1-19人</option>
+                                            <option value="B">20-50人</option>
+                                            <option value="C">51-100人</option>
+                                            <option value="D">101-200人</option>
+                                            <option value="E">201-500人</option>
+                                            <option value="F">500以上</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                             <div class="am-form-group">
                                 <label for="user-email" class="am-u-sm-3 am-form-label">企业邮箱</label>
                                 <div class="am-u-sm-9">
-                                    <input type="email" id="user-email" placeholder="请输入企业邮箱">
+                                    <input type="email" name="email" id="user-email" placeholder="请输入企业邮箱">
                                 </div>
                             </div>
                             <div class="am-form-group">
                                 <label for="user-phone" class="am-u-sm-3 am-form-label">企业电话</label>
                                 <div class="am-u-sm-9">
-                                    <input type="tel" id="user-phone" placeholder="请输入企业电话">
+                                    <input type="tel" name="phone" id="user-phone" placeholder="请输入企业电话">
                                 </div>
                             </div>
                             <div class="am-form-group">
                                 <label for="user-QQ" class="am-u-sm-3 am-form-label">传真</label>
                                 <div class="am-u-sm-9">
-                                    <input type="number" pattern="[0-9]*" id="user-QQ" placeholder="请输入传真">
+                                    <input type="number" name="fax" pattern="[0-9]*" id="user-QQ" placeholder="请输入传真">
                                 </div>
                             </div>
                             <div class="am-form-group">
                                 <label for="user-weibo" class="am-u-sm-3 am-form-label">企业注册地</label>
                                 <div class="am-u-sm-9">
-                                    <input type="text" id="user-weibo" placeholder="请企业注册地">
+                                    <input type="text" name="address" id="user-weibo" placeholder="请企业注册地">
                                 </div>
                             </div>
                             <div class="am-form-group">
                                 <label for="user-intro" class="am-u-sm-3 am-form-label">企业注册详细地址</label>
                                 <div class="am-u-sm-9">
-                                    <textarea class="" rows="5" id="user-intro" placeholder="请输入企业注册详细地址"></textarea>
+                                    <textarea class="" name="addressDetails" rows="5" id="user-intro" placeholder="请输入企业注册详细地址"></textarea>
                                     <small>250字以内...</small>
                                 </div>
                             </div>
                             <div class="am-form-group">
                                 <div class="am-u-sm-9 am-u-sm-push-3">
-                                    <button type="button" class="am-btn am-btn-primary">提 交</button>
+                                    <button name="submit" type="button" class="am-btn am-btn-primary">提 交</button>
                                 </div>
                             </div>
                         </form>
