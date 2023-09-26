@@ -71,12 +71,13 @@ public class EnterpriseServlet extends HttpServlet {
 
 
     protected void getBlackInfo(HttpServletRequest req, HttpServletResponse resp){
+        log.info("查询黑名单列表");
         resp.setContentType("application/json");
         Integer enterpriseId = Integer.valueOf(req.getParameter("id"));
         log.info(String.valueOf(enterpriseId));
         List<Enterprise> list = enterpriseImpl.selectEnterpriseExceptBlack(enterpriseId);
         /*将list以json格式返给前端*/
-        log.info("list信息"+String.valueOf(list));
+        log.info(list.toString());
         ReqRespMsgUtil.sendMsg(resp, list);
     }
 

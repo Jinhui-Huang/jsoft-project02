@@ -26,7 +26,7 @@ import java.util.List;
  */
 @Slf4j
 public class SupplierBlackListServiceImpl implements SupplierBlackListService {
-    private static final SqlSession session =  MyBatisUtil.openSession(true);
+    public static final  SqlSession session =  MyBatisUtil.singleSession(true);
     public SupplierBlackListDao sbd =  session.getMapper(SupplierBlackListDao.class);
     public SupplierWhiteListDao swl =  session.getMapper(SupplierWhiteListDao.class);
 

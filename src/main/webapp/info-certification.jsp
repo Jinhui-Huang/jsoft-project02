@@ -47,6 +47,29 @@
 <%--ajax处理异步请求--%>
 <script>
     $(document).ready(function (){
+        $("#white-list").on("click",function (){
+            that = this;
+            checkApprove()
+        })
+        $("#black-list").on("click",function (){
+            that = this;
+            checkApprove()
+        })
+        /*检测认证跳转*/
+        function checkApprove(){
+            $.ajax({
+                type:"get",
+                url:"enterprise",
+                success:function (result){
+                    if (result.data[1] == null){
+                        alert("请先认证信息")
+                    }else {
+                        let href = "http://localhost:8080/"+that.id
+                        window.location.href = href;
+                    }
+                }
+            })
+        }
         /*进入页面进行用户认证进度校验*/
         function EchoData() {
             $.ajax({
@@ -368,11 +391,11 @@
                     </a>
                     <ul class="tpl-left-nav-sub-menu">
                         <li>
-                            <a href="white-list">
+                            <a  id="white-list">
                                 <i class="am-icon-angle-right"></i>
                                 <span>供应商白名单</span>
                             </a>
-                            <a href="black-list">
+                            <a  id="black-list">
                                 <i class="am-icon-angle-right"></i>
                                 <span>供应商黑名单</span>
                             </a>
