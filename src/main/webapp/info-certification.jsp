@@ -35,7 +35,7 @@
             display: inline-block;
         }
     </style>
-    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.js"></script>
+    <script src="assets/js/jquery.min.js"></script>
 </head>
 <body data-type="generalComponents">
 

@@ -16,8 +16,8 @@
     <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
     <link rel="stylesheet" href="assets/css/admin.css">
     <link rel="stylesheet" href="assets/css/app.css">
+    <script src="assets/js/jquery.min.js"></script>
     <link rel="stylesheet" href="assets/css/message.min.css">
-    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.js"></script>
     <script src="assets/js/message.min.js"></script>
     <script type="text/javascript" >
         window.QMSG_GLOBALS = {
