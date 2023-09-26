@@ -108,11 +108,14 @@ public class SupplierBlackListServlet extends HttpServlet {
         sbl.setUpdateDate(date);
         /*移除白名单并添加至黑名单*/
         try {
-            impl.addBlack(sbl);
+            Boolean removeBlack = impl.addBlack(sbl);;
+            if (removeBlack){
+                ReqRespMsgUtil.sendMsg(resp,new Result(Code.DELETE_OK,true,"添加供应商成功"));
+            }else {
+                ReqRespMsgUtil.sendMsg(resp,new Result(Code.DELETE_ERR,false,"添加供应商失败"));
+            }
         } catch (Exception e) {
-            log.error(e.getMessage(), "移除白名单或加入黑名单失败");
-        }finally {
-            doGet(req, resp);
+            ReqRespMsgUtil.sendMsg(resp,new Result(Code.DELETE_ERR,false,"添加供应商失败"));
         }
     }
 

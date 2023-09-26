@@ -30,7 +30,7 @@ import java.util.List;
  */
 @Slf4j
 public class SupplierWhiteListServiceImpl implements SupplierWhiteListService {
-    private static final SqlSession session = MyBatisUtil.openSession(true);
+    public static final  SqlSession session =  MyBatisUtil.singleSession(true);
     private SupplierWhiteListDao wDao  = session.getMapper(SupplierWhiteListDao.class);
     private SupplierBlackListDao bDao = session.getMapper(SupplierBlackListDao.class);
 

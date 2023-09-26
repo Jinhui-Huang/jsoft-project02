@@ -617,6 +617,19 @@
                 $("#socialUniformCode").text($("#doc-select-1").find("option:selected").val())
             })
         });
+        /*退出登录按钮*/
+        $("#logoutButton").click(function (){
+            $.ajax({
+                type:"delete",
+                url:"login",
+                success:function (data){
+                    if (data.data){
+                        alert(data.msg)
+                        window.location.href="http://localhost:8080"
+                    }
+                }
+            })
+        })
     })
 
 </script>

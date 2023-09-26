@@ -21,7 +21,7 @@ import org.apache.ibatis.session.SqlSession;
  */
 @Slf4j
 public class UserServiceImpl implements UserService {
-     private static final  SqlSession session =  MyBatisUtil.openSession(true);
+    public static final  SqlSession session =  MyBatisUtil.singleSession(true);
      private UserDao userDaoImpl =  session.getMapper(UserDao.class);
 
     @Override

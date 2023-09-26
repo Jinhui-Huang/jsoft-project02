@@ -25,7 +25,7 @@ import java.util.List;
  */
 @Slf4j
 public class EnterpriseServiceImpl implements EnterpriseService {
-    private static final SqlSession session = MyBatisUtil.openSession(true);
+    public static final  SqlSession session =  MyBatisUtil.singleSession(true);
     private EnterpriseDao dao = session.getMapper(EnterpriseDao.class);
 
     /**
