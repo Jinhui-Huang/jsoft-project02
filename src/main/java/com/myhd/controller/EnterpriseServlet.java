@@ -96,6 +96,7 @@ public class EnterpriseServlet extends HttpServlet {
             objects[1]=returnInfo;
             log.info(Arrays.toString(objects));
             req.getSession().setAttribute("enterpriseId", tokenUser.getEnterpriseId());
+            req.getSession().setAttribute("userName", tokenUser.getName());
             ReqRespMsgUtil.sendMsg(resp,new Result(Code.UPDATE_OK,objects,"用户信息回显"));
         }
     }

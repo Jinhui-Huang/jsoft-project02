@@ -40,11 +40,11 @@
         <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list tpl-header-list">
             <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
                 <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
-                    <span class="tpl-header-list-user-nick">禁言小张</span><span class="tpl-header-list-user-ico"> <img
+                    <span class="tpl-header-list-user-nick">${sessionScope.userName}</span><span class="tpl-header-list-user-ico"> <img
                         src="assets/img/user01.png"></span>
                 </a>
                 <ul class="am-dropdown-content">
-                    <li><a href="login-page"><span class="am-icon-power-off"></span> 退出</a></li>
+                    <li><a href="login-page" id="logoutButton"><span class="am-icon-power-off"></span> 退出</a></li>
                 </ul>
             </li>
         </ul>
@@ -151,6 +151,121 @@
                                 </tr>
                                 </thead>
                                 <tbody id="doc-modal-list">
+                                <script>
+                                    /*
+                                    * @author: JoneElmo
+                                    * @date: 2023-9-25 18:59
+                                    * @email: mhangggggg@outlook.com
+                                    * */
+                                    //todo 待完成: 分页查询功能  添加供应商功能
+                                    $(document).ready(function () {
+                                        /*进入页面时 通过一次get请求获取列表信息*/
+                                        $.ajax({
+                                            url: "http://localhost:8080/whiteList",
+                                            type: "get",
+                                            async: false,
+                                            data: {
+                                                id: ${sessionScope.enterpriseId},
+                                            },
+                                            success: function (result) {
+                                                console.log(result.list)
+                                                replaceInfo(result)
+                                            }
+                                        })
+
+                                        $("#btn_query").on("click",function () {
+                                            let name = "%"+$("input[name='enterpriseName']").val()+"%"
+                                            let lv = $("select[name='supplierLevel']").val()
+                                            $.ajax({
+                                                url: "http://localhost:8080/whiteList",
+                                                type: "get",
+                                                async: false,
+                                                data: {
+                                                    id: ${sessionScope.enterpriseId},
+                                                    enterpriseName: name,
+                                                    supplierLevel: lv
+                                                },
+                                                success: function (result){
+                                                    console.log(result.list)
+                                                    replaceInfo(result)
+                                                }
+
+
+
+                                            })
+
+
+
+
+
+                                        })
+
+
+
+
+                                        /*遍历展示信息方法*/
+                                        function replaceInfo(pageInfo) {
+                                            /*总数据量*/
+                                            let total = pageInfo.total
+                                            /*当前页*/
+                                            let pageNum = pageInfo.pageNum
+                                            /*页数量*/
+                                            let pageSize = pageInfo.pageSize
+                                            /*下一页*/
+                                            let nextPage = pageInfo.nextPage
+                                            /*上一页*/
+                                            let prePage = pageInfo.prePage
+                                            /*白名单列表信息*/
+                                            let list = pageInfo.list
+                                            /*遍历展示,追加*/
+                                            $("tr[name='forRemove']").remove()
+                                            for (let i = 0; i < list.length ; i++) {
+                                                $("<tr name='forRemove' data-id='2'>"+
+                                                    "<td>"+ (i+1) +"</td>"+
+                                                    "<td class='am-hide-sm-only'><a href='#'>"+ list[i].enterpriseName +"</a></td>"+
+                                                    "<td class='am-hide-sm-only'>"+ list[i].idcardName +"</td>"+
+                                                    "<td class='am-hide-sm-only'>"+ list[i].phone +"</td>"+
+                                                    "<td class='am-hide-sm-only'>"+ list[i].email +"</td>"+
+                                                    "<td class='am-hide-sm-only'>"+ list[i].variableInfo +"</td>"+
+                                                    "<td class='am-hide-sm-only'>"+ list[i].updateDate +"</td>"+
+                                                    "<td>"+
+                                                        "<div class='am-btn-toolbar'>"+
+                                                            "<div class='am-btn-group am-btn-group-xs'>"+
+                                                "<span class='am-text-secondary am-icon'"+
+                                                      "style='margin-left: 20px;cursor:pointer'><span></span>"+
+                                                           " 添加至黑名单"+"</span>"+
+                                                           " </div>"+
+                                                        "</div>"+
+                                                    "</td>"+
+                                                "</tr>)").appendTo( $("#doc-modal-list") )
+                                            }
+                                        }
+
+
+
+
+
+
+
+                                        /*退出登录按钮*/
+                                        $("#logoutButton").click(function (){
+                                            $.ajax({
+                                                type:"delete",
+                                                url:"login",
+                                                success:function (data){
+                                                    if (data.data){
+                                                        alert(data.msg)
+                                                        window.location.href="http://localhost:8080"
+                                                    }
+                                                }
+                                            })
+                                        })
+                                    })
+
+                                </script>
+
+
+
 
 
                                 <div class="am-modal am-modal-confirm" tabindex="-1" id="my-confirm">
@@ -570,6 +685,7 @@
         });
     });
 })
+
 </script>
 <input name="hiddenSupplierId" type="hidden">
 </body>
