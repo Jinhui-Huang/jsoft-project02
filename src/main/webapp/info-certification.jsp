@@ -35,7 +35,7 @@
             display: inline-block;
         }
     </style>
-    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.js"></script>
+    <script src="assets/js/jquery.min.js"></script>
 </head>
 <body data-type="generalComponents">
 
@@ -47,6 +47,29 @@
 <%--ajax处理异步请求--%>
 <script>
     $(document).ready(function (){
+        $("#white-list").on("click",function (){
+            that = this;
+            checkApprove()
+        })
+        $("#black-list").on("click",function (){
+            that = this;
+            checkApprove()
+        })
+        /*检测认证跳转*/
+        function checkApprove(){
+            $.ajax({
+                type:"get",
+                url:"enterprise",
+                success:function (result){
+                    if (result.data[1] == null){
+                        alert("请先认证信息")
+                    }else {
+                        let href = "http://localhost:8080/"+that.id
+                        window.location.href = href;
+                    }
+                }
+            })
+        }
         /*进入页面进行用户认证进度校验*/
         function EchoData() {
             $.ajax({
@@ -82,35 +105,97 @@
         }
         /*自动进行认证判断并进行数据回显*/
         EchoData();
-
-        /*三个文本框失去焦点是分别发送请求进行数据重复校验*/
-        $("input[name = 'name']").blur(function (){
+        /*表单校验区*/
+        /*校验身份证名字不超过五个*/
+        function checkIdcardName() {
+            // 获取输入框的内容
+            var inputValue = $("input[name = 'idcardName']").val();
+            // 定义你的正则表达式
+            var chineseRegex = /^[\u4e00-\u9fa5]{1,5}$/;
+            // 使用正则表达式进行校验
+            if (chineseRegex.test(inputValue)) {
+                // 符合规则，显示校验通过的消息
+                $("[name='idcardNameSpan']").text("");
+                $("button[name='submit']").prop("disabled",false)
+            } else {
+                // 不符合规则，显示校验失败的消息
+                $("[name='idcardNameSpan']").text("请输入不超过五位的汉字");
+                $("button[name='submit']").prop("disabled",true)
+            }
+            return ($("[name='idcardNameSpan']").text() === "");
+        }
+        $("input[name = 'idcardName']").blur(function (){
+            checkIdcardName()
+        })
+        /*校验身份证号*/
+        function checkIdcardNo(){
+            var inputValue = $("input[name = 'idcardNo']").val();
+            var Regex = /^\d{17}[\dX]$/;
+            if (Regex.test(inputValue)) {
+                $("[name='idcardNoSpan']").text("");
+                $("button[name='submit']").prop("disabled",false)
+            } else {
+                $("[name='idcardNoSpan']").text("身份证号码格式不正确");
+                $("button[name='submit']").prop("disabled",true)
+            }
+            return ($("[name='idcardNoSpan']").text() === "");
+        }
+        $("input[name = 'idcardNo']").blur(function (){
+            checkIdcardNo()
+        })
+        /*校验企业电话*/
+        function checkPhone() {
+            var inputValue = $("input[name = 'phone']").val();
+            var Regex = /^(0\d{2,3}-\d{7,8}(-\d{1,6})?|[1-9]\d{6,7}(-\d{1,6})?|1[3-9]\d{9})$/;
+            if (Regex.test(inputValue)) {
+                $("[name='phoneSpan']").text("");
+                $("button[name='submit']").prop("disabled",false)
+            } else {
+                $("[name='phoneSpan']").text("号码格式不正确");
+                $("button[name='submit']").prop("disabled",true)
+            }
+            return ($("[name='phoneSpan']").text() === "");
+        }
+        $("input[name = 'phone']").blur(function (){
+            checkPhone()
+        })
+        /*企业名称重复校验*/
+        function checkName() {
             $.ajax({
                 type:"delete",
                 url:"enterprise",
                 dataType: "json",
                 contentType:"application/json",
+                async:false,
                 data:JSON.stringify({
-                    name:$("input[name='name']").val()
+                    name:$("input[name='name']").val().trim()
                 }),
                 success:function (result){
                     /*如果为true则数据重复*/
-                     if (result.data){
+                    if (result.data){
                         $("[name='nameSpan']").text("企业名称重复")
-                         $("button[name='submit']").prop("disabled",true)
-                     }else {
-                         $("[name='nameSpan']").html("")
-                     }
+                        $("button[name='submit']").prop("disabled",true)
+                    }else {
+                        $("[name='nameSpan']").text("")
+                        $("button[name='submit']").prop("disabled",false)
+                    }
                 }
             })
+            return ($("[name='nameSpan']").text() === "");
+        }
+        $("input[name = 'name']").blur(function (){
+            checkName()
         })
-        $("[name = 'socialUniformCode']").blur(function (){
+        /*校验统一信用代码是否重复*/
+        function checkSocialUniformCode() {
             $.ajax({
                 url:"enterprise",
                 type:"delete",
                 dataType: "json",
+                contentType:"application/json",
+                async:false,
                 data:JSON.stringify({
-                    socialUniformCode:$("input[name='socialUniformCode']").val()
+                    socialUniformCode:$("input[name='socialUniformCode']").val().trim()
                 }),
                 success:function (result){
                     /*如果为true则数据重复*/
@@ -119,33 +204,67 @@
                         $("button[name='submit']").prop("disabled",true)
                     }else {
                         $("[name='socialUniformCodeSpan']").text("")
+                        $("button[name='submit']").prop("disabled",false)
                     }
                 }
             })
+            return ($("[name='socialUniformCodeSpan']").text() === "");
+        }
+        $("[name = 'socialUniformCode']").blur(function (){
+            checkSocialUniformCode()
         })
+        /*邮箱重复和格式校验*/
+        function checkEmail() {
+            var inputValue = $("input[name = 'email']").val();
+            var Regex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.(com|cn)$/;
+            if (Regex.test(inputValue)) {
+                $("[name='emailSpan']").text("");
+                /*格式正确再进行重复校验*/
+                $.ajax({
+                    url:"enterprise",
+                    type:"delete",
+                    contentType:"application/json",
+                    async:false,
+                    data:JSON.stringify({
+                        email:$("input[name='email']").val()
+                    }),
+                    success:function (result){
+                        /*如果为true则数据重复*/
+                        if (result.data){
+                            $("[name='emailSpan']").text("企业邮箱重复")
+                            $("button[name='submit']").prop("disabled",true)
+                        }else {
+                            $("[name='emailSpan']").text("")
+                            $("button[name='submit']").prop("disabled",false)
+                        }
+                    }
+                })
+            } else {
+                $("[name='emailSpan']").text("邮箱格式不正确，请以com/cn结尾");
+                $("button[name='submit']").prop("disabled",true)
+            }
+            return ($("[name='emailSpan']").text() === "");
+        }
         $("[name = 'email']").blur(function (){
-            $.ajax({
-                url:"enterprise",
-                type:"delete",
-                dataType: "json",
-                data:JSON.stringify({
-                    email:$("input[name='email']").val()
-                }),
-                success:function (result){
-                    /*如果为true则数据重复*/
-                    if (result.data){
-                        $("[name='emailSpan']").text("企业邮箱重复")
-                        $("button[name='submit']").prop("disabled",true)
-                    }else {
-                        $("[name='emailSpan']").text("")
-                    }
-                }
-            })
+            checkEmail()
         })
+
 
         /*点击企业信息认证界面的提交按钮，提交认证信息。接收回显结果并显示*/
         $("button[name='submit']").on("click",function (event) {
             console.log("点击了提交按钮")
+            if (checkSocialUniformCode() &&
+                checkEmail() &&
+                checkName() &&
+                checkIdcardName() &&
+                checkIdcardNo() &&
+                checkPhone())
+            {
+                $("button[name='submit']").prop("disabled",false)
+            }else {
+                $("button[name='submit']").prop("disabled",true)
+                return;
+            }
             /*阻止超链接的跳转，执行jquery语句*/
             event.preventDefault();
             /*发送put请求，处理企业认证信息*/
@@ -173,8 +292,6 @@
                     /*企业认证判断成功再进行用户信息认证请求的发送*/
                     if (result.data[0]){
                         enterpriseId = result.data[1].id
-
-            /*获取输入的姓名和身份证号*/
                         /*获取输入的姓名和身份证号*/
                         var idcardName = $("input[name='idcardName']").val()
                         var idcardNo = $("input[name='idcardNo']").val()
@@ -237,7 +354,7 @@
         <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list tpl-header-list">
             <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
                 <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
-                    <span class="tpl-header-list-user-nick" id="userName">禁言小张</span><span class="tpl-header-list-user-ico"> <img
+                    <span class="tpl-header-list-user-nick" id="userName"></span><span class="tpl-header-list-user-ico"> <img
                         src="assets/img/user01.png"></span>
                 </a>
                 <ul class="am-dropdown-content">
@@ -274,11 +391,11 @@
                     </a>
                     <ul class="tpl-left-nav-sub-menu">
                         <li>
-                            <a href="white-list">
+                            <a  id="white-list">
                                 <i class="am-icon-angle-right"></i>
                                 <span>供应商白名单</span>
                             </a>
-                            <a href="black-list">
+                            <a  id="black-list">
                                 <i class="am-icon-angle-right"></i>
                                 <span>供应商黑名单</span>
                             </a>
@@ -328,12 +445,14 @@
                                 <label for="user-phone" class="am-u-sm-3 am-form-label">管理员姓名</label>
                                 <div class="am-u-sm-9">
                                     <input type="text" name="idcardName" placeholder="请输入管理员姓名">
+                                    <span class="am-span" name="idcardNameSpan"></span>
                                 </div>
                             </div>
                             <div class="am-form-group">
                                 <label for="user-QQ" class="am-u-sm-3 am-form-label">管理员身份证号</label>
                                 <div class="am-u-sm-9">
                                     <input type="text" name="idcardNo" placeholder="请入管理员身份证号">
+                                    <span class="am-span" name="idcardNoSpan"></span>
                                 </div>
                             </div>
                         </form>
@@ -398,6 +517,7 @@
                                 <label for="user-phone" class="am-u-sm-3 am-form-label">企业电话</label>
                                 <div class="am-u-sm-9">
                                     <input type="tel" name="phone" id="user-phone" placeholder="请输入企业电话">
+                                    <span class="am-span" name="phoneSpan"></span>
                                 </div>
                             </div>
                             <div class="am-form-group">

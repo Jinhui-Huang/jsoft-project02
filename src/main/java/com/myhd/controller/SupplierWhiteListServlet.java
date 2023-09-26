@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageInfo;
 import com.myhd.pojo.SelectLikeInfo;
 import com.myhd.pojo.SupplierBlackList;
+import com.myhd.pojo.SupplierWhiteList;
 import com.myhd.pojo.ThreeTablesQuery;
 import com.myhd.service.Impl.SupplierWhiteListServiceImpl;
 import com.myhd.util.ReqRespMsgUtil;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +51,7 @@ public class SupplierWhiteListServlet extends   HttpServlet {
         Integer id = Integer.valueOf(req.getParameter("id"));
         String enterpriseName = req.getParameter("enterpriseName");
         String supplierLevel = req.getParameter("supplierLevel");
+        Integer startPage = Integer.valueOf(req.getParameter("startPage"));
         SelectLikeInfo sli = new SelectLikeInfo();
         log.info("拿到的id是："+id);
         log.info("拿到的name是:" + enterpriseName);
@@ -56,6 +59,7 @@ public class SupplierWhiteListServlet extends   HttpServlet {
         sli.setId(Integer.valueOf(req.getParameter("id")));
         sli.setEnterpriseName(enterpriseName);
         sli.setSupplierLevel( "0".equals(supplierLevel) ? null : supplierLevel );
+        sli.setStartPage(startPage);
         /*模糊查询*/
         PageInfo<ThreeTablesQuery> info = impl.selectWhiteInfoByEnterpriseId(sli);
         /*返回json数据*/
@@ -88,5 +92,24 @@ public class SupplierWhiteListServlet extends   HttpServlet {
         }
         /*查询新的数据*/
         doGet(req, resp);
+    }
+
+    /**
+     * @description 处理前端的‘添加供应商’请求
+     * @author JoneElmo
+     * @date 2023-09-26 10:35
+     * @param req
+     * @param resp
+     * @return void
+     */
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("application/json");
+        SupplierWhiteList whiteList = ReqRespMsgUtil.getMsg(req, SupplierWhiteList.class);
+        Date date = Date.valueOf(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        whiteList.setUpdateDate(date);
+        Boolean aBoolean = impl.addWhite(whiteList);
+        /*返回值*/
+        ReqRespMsgUtil.sendMsg(resp, aBoolean);
     }
 }
