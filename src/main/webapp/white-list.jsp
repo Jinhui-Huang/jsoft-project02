@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
     <link rel="stylesheet" href="assets/css/admin.css">
     <link rel="stylesheet" href="assets/css/app.css">
-    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.js"></script>
+    <script src="assets/js/jquery.min.js"></script>
     <style>
         .border {
             border: 0px solid red;
@@ -151,93 +151,6 @@
                                 </tr>
                                 </thead>
                                 <tbody id="doc-modal-list">
-                                <script>
-                                    /*
-                                    * @author: JoneElmo
-                                    * @date: 2023-9-25 18:59
-                                    * @email: mhangggggg@outlook.com
-                                    * */
-                                    $(document).ready(function () {
-                                        /*进入页面时 通过一次get请求获取列表信息*/
-                                        $.ajax({
-                                            url: "http://localhost:8080/whiteList",
-                                            type: "get",
-                                            async: false,
-                                            data: {
-                                                id: ${sessionScope.enterpriseId},
-                                            },
-                                            success: function (result) {
-                                                console.log(result.list)
-                                                replaceInfo(result)
-                                            }
-                                        })
-
-                                        $("#btn_query").on("click", function () {
-                                            let name = "%" + $("input[name='enterpriseName']").val() + "%"
-                                            let lv = $("select[name='supplierLevel']").val()
-                                            $.ajax({
-                                                url: "http://localhost:8080/whiteList",
-                                                type: "get",
-                                                async: false,
-                                                data: {
-                                                    id: ${sessionScope.enterpriseId},
-                                                    enterpriseName: name,
-                                                    supplierLevel: lv
-                                                },
-                                                success: function (result) {
-                                                    console.log(result.list)
-                                                    replaceInfo(result)
-                                                }
-
-
-                                            })
-
-
-                                        })
-
-
-                                        /*遍历展示信息方法*/
-                                        function replaceInfo(pageInfo) {
-                                            /*总数据量*/
-                                            let total = pageInfo.total
-                                            /*当前页*/
-                                            let pageNum = pageInfo.pageNum
-                                            /*页数量*/
-                                            let pageSize = pageInfo.pageSize
-                                            /*下一页*/
-                                            let nextPage = pageInfo.nextPage
-                                            /*上一页*/
-                                            let prePage = pageInfo.prePage
-                                            /*白名单列表信息*/
-                                            let list = pageInfo.list
-                                            /*遍历展示,追加*/
-                                            $("tr[name='forRemove']").remove()
-                                            for (let i = 0; i < list.length; i++) {
-                                                $("<tr name='forRemove' data-id='2'>" +
-                                                    "<td>" + (i + 1) + "</td>" +
-                                                    "<input name='h-supplierId-" + (i + 1) + "' type='hidden' value='" + list[i].supplierId + "'>" +
-                                                    "<td class='am-hide-sm-only'><a href='#'>" + list[i].enterpriseName + "</a></td>" +
-                                                    "<td class='am-hide-sm-only'>" + list[i].idcardName + "</td>" +
-                                                    "<td class='am-hide-sm-only'>" + list[i].phone + "</td>" +
-                                                    "<td class='am-hide-sm-only'>" + list[i].email + "</td>" +
-                                                    "<td class='am-hide-sm-only'>" + list[i].variableInfo + "</td>" +
-                                                    "<td class='am-hide-sm-only'>" + list[i].updateDate + "</td>" +
-                                                    "<td>" +
-                                                    "<div class='am-btn-toolbar'>" +
-                                                    "<div name='addToBlackList' class='am-btn-group am-btn-group-xs'>" +
-                                                    "<span class='am-text-secondary am-icon'" +
-                                                    "style='margin-left: 20px;cursor:pointer'>" +
-                                                    " 添加至黑名单" + "</span>" +
-                                                    " </div>" +
-                                                    "</div>" +
-                                                    "</td>" +
-                                                    "</tr>)").appendTo($("#doc-modal-list"))
-                                            }
-                                        }
-
-                                    })
-
-                                </script>
 
 
                                 <div class="am-modal am-modal-confirm" tabindex="-1" id="my-confirm">
@@ -257,11 +170,7 @@
                                 <div class="am-fr">
                                     <ul class="am-pagination tpl-pagination">
                                         <li class="am-disabled"><a href="#">«</a></li>
-                                        <li class="am-active"><a href="#">1</a></li>
-                                        <li><a href="#">2</a></li>
-                                        <li><a href="#">3</a></li>
-                                        <li><a href="#">4</a></li>
-                                        <li><a href="#">5</a></li>
+                                        <%--在此动态生成页码--%>
                                         <li><a href="#">»</a></li>
                                     </ul>
                                 </div>
@@ -361,10 +270,131 @@
 <script src="assets/js/amazeui.min.js"></script>
 <script src="assets/js/app.js"></script>
 <script>
-    /*添加黑名单二次确认*/
-    $(function () {
+/*
+* @author: JoneElmo
+* @date: 2023-9-25 18:59
+* @email: mhangggggg@outlook.com
+* */
+    $(document).ready(function () {
+        /*进入页面时 通过一次get请求获取列表信息*/
+        $.ajax({
+            url: "http://localhost:8080/whiteList",
+            type: "get",
+            async: false,
+            data: {
+                id: ${sessionScope.enterpriseId},
+            },
+            success: function (result) {
+                console.log(result.list)
+                replaceInfo(result)
+            }
+        })
 
-    });
+        $("#btn_query").on("click", function () {
+            let name = "%" + $("input[name='enterpriseName']").val() + "%"
+            let lv = $("select[name='supplierLevel']").val()
+            $.ajax({
+                url: "http://localhost:8080/whiteList",
+                type: "get",
+                async: false,
+                data: {
+                    id: ${sessionScope.enterpriseId},
+                    enterpriseName: name,
+                    supplierLevel: lv
+                },
+                success: function (result) {
+                    console.log(result.list)
+                    replaceInfo(result)
+                }
+
+
+            })
+
+
+        })
+
+        /*遍历展示信息方法*/
+        function replaceInfo(pageInfo) {
+            /*总数据量*/
+            let total = pageInfo.total
+            /*当前页*/
+            let pageNum = pageInfo.pageNum
+            /*每页大小*/
+            let pageSize = pageInfo.pageSize
+            /*下一页*/
+            let nextPage = pageInfo.nextPage
+            /*上一页*/
+            let prePage = pageInfo.prePage
+            /*白名单列表信息*/
+            let list = pageInfo.list
+            /*遍历展示,追加*/
+            $("tr[name='forRemove']").remove()
+            for (let i = 0; i < list.length; i++) {
+                $("<tr name='forRemove' data-id='2'>" +
+                    "<td>" + (i+1) + "</td>" +
+                    "<input name='h-supplierId-" + i + "' type='hidden' value='" + list[i].supplierId + "'>" +
+                    "<td class='am-hide-sm-only'><a href='#'>" + list[i].enterpriseName + "</a></td>" +
+                    "<td class='am-hide-sm-only'>" + list[i].idcardName + "</td>" +
+                    "<td class='am-hide-sm-only'>" + list[i].phone + "</td>" +
+                    "<td class='am-hide-sm-only'>" + list[i].email + "</td>" +
+                    "<td class='am-hide-sm-only'>" + list[i].variableInfo + "</td>" +
+                    "<td class='am-hide-sm-only'>" + list[i].updateDate + "</td>" +
+                    "<td>" +
+                    "<div class='am-btn-toolbar'>" +
+                    "<div name='addToBlackList' class='am-btn-group am-btn-group-xs'>" +
+                    "<span class='am-text-secondary am-icon'" +
+                    "style='margin-left: 20px;cursor:pointer'>" +
+                    " 添加至黑名单" + "</span>" +
+                    " </div>" +
+                    "</div>" +
+                    "</td>" +
+                    "</tr>)").appendTo($("#doc-modal-list"))
+            }
+            console.log("pageCount:"+  (total%pageSize)+1 )
+            console.log("pageNum:" +pageNum)
+            $("li[name='forRemove2']").remove()
+            for (let i = 1; i <= (total%pageSize)+1 ; i++) {
+                let pageItem = $("<li name='forRemove2'><a id='"+i+"' href='#'>"+i+"</a><li>")
+                $(".am-pagination").find("li:last").before(pageItem)
+            }
+            // 清除所有页码按钮的高亮状态
+            $(".am-pagination li").removeClass("am-active");
+            // 找到当前页码对应的按钮，并添加高亮状态
+            let currentPage = pageNum; // 获取当前页码
+            $(".am-pagination li a").each(function() {
+                if ($(this).attr("id") === currentPage.toString()) {
+                    $(this).parent().addClass("am-active");
+                }
+            });
+            // 给页码按钮绑定点击事件
+            $(".am-pagination li a").on("click", function(e) {
+                // 获取被点击的页码按钮的id属性
+                let clickedPage = $(this).attr("id");
+                console.log("点击的页码是: "+clickedPage)
+                // 发送异步请求，请求对应页码的数据
+                $.ajax({
+                    url: "http://localhost:8080/whiteList",
+                    type: "get",
+                    data: {
+                        id: ${sessionScope.enterpriseId},
+                        startPage: clickedPage  // 传递当前点击的页码
+                    },
+                    success: function(result) {
+                        // 在成功回调中处理分页数据
+                        // 这里可以更新页面中的数据或重新渲染列表等操作
+                        console.log("Received data for page " + clickedPage);
+                        replaceInfo(result)
+                        // 处理响应数据，更新页面内容
+                    },
+                    error: function(error) {
+                        console.error("Error: " + error);
+                    }
+                });
+            });
+
+
+        }
+
 
     /*添加至黑名单*/
     let supplierId
@@ -397,7 +427,6 @@
 
             $('#my-prompt1').modal({
                 relatedTarget: this,
-
                 onConfirm: function (options) {
                     console.log("添加至黑名单，点击了确认")
                 },
@@ -428,6 +457,20 @@
                         }),
                         success: function () {
                             alert("移除成功！")
+
+                            $.ajax({
+                                url: "http://localhost:8080/whiteList",
+                                type: "get",
+                                async: false,
+                                data: {
+                                    id: ${sessionScope.enterpriseId},
+                                },
+                                success: function (result) {
+                                    console.log(result.list)
+                                    replaceInfo(result)
+                                }
+                            })
+
                         }
                     })
 
@@ -498,6 +541,19 @@
                             success: function (result) {
                                 if (result == true) {
                                     alert("添加供应商信息成功！")
+                                    $.ajax({
+                                        url: "http://localhost:8080/whiteList",
+                                        type: "get",
+                                        async: false,
+                                        data: {
+                                            id: ${sessionScope.enterpriseId},
+                                        },
+                                        success: function (result) {
+                                            console.log(result.list)
+                                            replaceInfo(result)
+                                        }
+                                    })
+
                                 } else {
                                     alert("添加供应商信息失败！")
                                 }
@@ -513,6 +569,7 @@
             });
         });
     });
+})
 </script>
 <input name="hiddenSupplierId" type="hidden">
 </body>
