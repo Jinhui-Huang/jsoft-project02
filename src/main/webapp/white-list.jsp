@@ -454,7 +454,7 @@
                 $.ajax({
                     url: "http://localhost:8080/enterprise",
                     type: "get",
-                    async: false,
+                    async: true,
                     data: {
                         id: supplierId,
                         op: "2"
@@ -534,6 +534,8 @@
             let selectSupplierId;
 
             $('#doc-prompt-toggle').on('click', function () {
+                $("#doc-select-1").empty();
+                $("<option value=''>"+"请选择企业"+"</option>").appendTo("#doc-select-1")
                 /*点击添加供应商按钮，查询下拉列表信息*/
                 $.ajax({
                     url: "http://localhost:8080/enterprise",
@@ -548,19 +550,14 @@
                         let id;
                         let name;
                         let socialUniformCode;
+                        $("option[name='forRe']").remove()
                         for (let i = 0; i < result.length; i++) {
                             id = result[i].id;
                             name = result[i].name;
                             socialUniformCode = result[i].socialUniformCode;
                             /*将信用代码作为选项的value*/
-                            $("option[name='forRe']").remove()
                             $("<option name='forRe' id='" + id + "' value='" + socialUniformCode + "'>" + name + "</option>").appendTo($("#doc-select-1"))
-                            /*设置选项点击事件*/
-                            $("#doc-select-1").on("change", function () {
-                                selectSupplierId = $("#doc-select-1").find("option:selected").attr("id");
-                                console.log("点击了信息" + $("#doc-select-1").find("option:selected").val())
-                                $("#socialUniformCode").text($("#doc-select-1").find("option:selected").val())
-                            })
+
                         }
                     }
                 })
@@ -586,10 +583,11 @@
                                 success: function (result) {
                                     if (result == true) {
                                         alert("添加供应商信息成功！")
+                                        window.location.href="http://localhost:8080/white-list"
                                         $.ajax({
                                             url: "http://localhost:8080/whiteList",
                                             type: "get",
-                                            async: false,
+                                            async: true,
                                             data: {
                                                 id: ${sessionScope.enterpriseId},
                                             },
@@ -598,7 +596,6 @@
                                                 replaceInfo(result)
                                             }
                                         })
-
                                     } else {
                                         alert("添加供应商信息失败！")
                                     }
@@ -613,7 +610,26 @@
                     }
                 });
             });
+            /*设置选项点击事件*/
+            $("#doc-select-1").on("change", function () {
+                selectSupplierId = $("#doc-select-1").find("option:selected").attr("id");
+                console.log("点击了信息" + $("#doc-select-1").find("option:selected").val())
+                $("#socialUniformCode").text($("#doc-select-1").find("option:selected").val())
+            })
         });
+        /*退出登录按钮*/
+        $("#logoutButton").click(function (){
+            $.ajax({
+                type:"delete",
+                url:"login",
+                success:function (data){
+                    if (data.data){
+                        alert(data.msg)
+                        window.location.href="http://localhost:8080"
+                    }
+                }
+            })
+        })
     })
 
 </script>
