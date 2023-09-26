@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
     <link rel="stylesheet" href="assets/css/admin.css">
     <link rel="stylesheet" href="assets/css/app.css">
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.js"></script>
 </head>
 
 <body data-type="generalComponents">
@@ -24,11 +25,11 @@
         <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list tpl-header-list">
             <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
                 <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
-                    <span class="tpl-header-list-user-nick">禁言小张</span><span class="tpl-header-list-user-ico"> <img
+                    <span class="tpl-header-list-user-nick">${sessionScope.userName}</span><span class="tpl-header-list-user-ico"> <img
                         src="assets/img/user01.png"></span>
                 </a>
                 <ul class="am-dropdown-content">
-                    <li><a href="login-page"><span class="am-icon-power-off"></span> 退出</a></li>
+                    <li><a href="login-page" id="logoutButton"><span class="am-icon-power-off"></span> 退出</a></li>
                 </ul>
             </li>
         </ul>
@@ -91,8 +92,15 @@
                                 <span class="am-input-group-btn">
                                     <span style="font-size: 14px;margin-right: 8px;margin-left: 8px">企业名称</span>
                                 </span>
-                            <input type="text" class="am-form-field" placeholder="&nbsp;&nbsp;请输入企业名称"
+                            <input name="enterpriseName" type="text" class="am-form-field" placeholder="&nbsp;&nbsp;请输入企业名称"
                                    style="border: 1px solid #c2cad8;border-radius: 3px;">
+                        </div>
+                    </div>
+                    <div class="am-u-sm-6 am-u-md-3">
+                        <div class="am-form-group border row-flex">
+                            <div id="btn_query">
+                                <button type="button" class="am-btn am-btn-primary am-btn-sm">搜索</button>
+                            </div>
                         </div>
                     </div>
                     <div style="float:right">
@@ -162,28 +170,103 @@
                                 </tr>
                                 </thead>
                                 <tbody id="doc-modal-list">
-                                <tr data-id="2">
-                                    <td>1</td>
-                                    <td class="am-hide-sm-only"><a href="#">腾讯科技</a></td>
-                                    <td class="am-hide-sm-only">马化腾</td>
-                                    <td class="am-hide-sm-only">18556658588</td>
-                                    <td class="am-hide-sm-only">18556658588@163.com</td>
-                                    <td class="am-hide-sm-only">
-                                        <div class="">
-                                            不予考虑
-                                        </div>
-                                    </td>
-                                    <td class="am-hide-sm-only">2021-12-31</td>
-                                    <td>
-                                        <div class="am-btn-toolbar">
-                                            <div class="am-btn-group am-btn-group-xs">
-                                                        <span class="am-text-secondary am-icon"
-                                                              style="cursor:pointer"><span></span>
-                                                            解除黑名单</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                <script>
+                                    $(document).ready(function () {
+                                        /*进入页面时 通过一次get请求获取列表信息*/
+                                        function showInfo(){
+                                            let name = "%"+$("input[name='enterpriseName']").val()+"%"
+                                            $.ajax({
+                                                url: "http://localhost:8080/blackList",
+                                                type: "get",
+                                                async: false,
+                                                data: {
+                                                    id: ${sessionScope.enterpriseId},
+                                                    enterpriseName: name,
+                                                },
+                                                success: function (result) {
+                                                    console.log(result.list)
+                                                    replaceInfo(result)
+                                                }
+                                            })
+                                        }
+                                        showInfo()
+
+                                        /*模糊查询*/
+                                        $("#btn_query").on("click",function () {
+                                            let name = "%"+$("input[name='enterpriseName']").val()+"%"
+                                            $.ajax({
+                                                url: "http://localhost:8080/blackList",
+                                                type: "get",
+                                                async: false,
+                                                data: {
+                                                    id: ${sessionScope.enterpriseId},
+                                                    enterpriseName: name,
+                                                },
+                                                success: function (result){
+                                                    console.log(result.list)
+                                                    replaceInfo(result)
+                                                }
+                                            })
+                                        })
+                                        /*遍历展示信息方法*/
+                                        function replaceInfo(pageInfo) {
+                                            /*总数据量*/
+                                            let total = pageInfo.total
+                                            /*当前页*/
+                                            let pageNum = pageInfo.pageNum
+                                            /*页数量*/
+                                            let pageSize = pageInfo.pageSize
+                                            /*下一页*/
+                                            let nextPage = pageInfo.nextPage
+                                            /*上一页*/
+                                            let prePage = pageInfo.prePage
+                                            /*总页数*/
+                                            let Pages = pageInfo.pages
+                                            /*白名单列表信息*/
+                                            let list = pageInfo.list
+                                            /*遍历展示,追加*/
+                                            $("tr[name='forRemove']").remove()
+                                            for (let i = 0; i < list.length ; i++) {
+                                                $("<tr name='forRemove' data-id='2'>"+
+                                                    "<td>"+ (i+1) +"</td>"+
+                                                    "<td class='am-hide-sm-only'><a href='#'>"+ list[i].enterpriseName +"</a></td>"+
+                                                    "<td class='am-hide-sm-only'>"+ list[i].idcardName +"</td>"+
+                                                    "<td class='am-hide-sm-only'>"+ list[i].phone +"</td>"+
+                                                    "<td class='am-hide-sm-only'>"+ list[i].email +"</td>"+
+                                                    "<td class='am-hide-sm-only'>"+ list[i].variableInfo +"</td>"+
+                                                    "<td class='am-hide-sm-only'>"+ list[i].updateDate +"</td>"+
+                                                    "<td>"+
+                                                    "<div class='am-btn-toolbar'>"+
+                                                    "<div class='am-btn-group am-btn-group-xs'>"+
+                                                    "<span class='am-text-secondary am-icon'"+
+                                                    "style='margin-left: 20px;cursor:pointer' name='解除黑名单' id='"+list[i].supplierId+"'>"+
+                                                    " 解除黑名单"+"</span>"+
+                                                    " </div>"+
+                                                    "</div>"+
+                                                    "</td>"+
+                                                    "</tr>)").appendTo( $("#doc-modal-list") )
+                                            }
+                                            // $("tr[name='forRemove']").remove()
+                                            // for (let i = 0; i < list.length ; i++) {
+                                            //     $("<tr name='forRemove' data-id='2'>"
+                                            //
+                                            // }
+                                        }
+                                        /*退出登录按钮*/
+                                        $("#logoutButton").click(function (){
+                                            $.ajax({
+                                                type:"delete",
+                                                url:"login",
+                                                success:function (data){
+                                                    if (data.data){
+                                                        alert(data.msg)
+                                                        window.location.href="http://localhost:8080"
+                                                    }
+                                                }
+                                            })
+                                        })
+                                    })
+                                </script>
                                 <div class="am-modal am-modal-confirm" tabindex="-1" id="my-confirm">
                                     <div class="am-modal-dialog" style="font-size: 16px;">
                                         <div class="am-modal-hd">提示</div>
@@ -196,94 +279,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <tr>
-                                    <td>1</td>
-                                    <td><a href="#">京东集团</a></td>
-                                    <td>刘强东</td>
-                                    <td class="am-hide-sm-only">18556658588</td>
-                                    <td class="am-hide-sm-only">18556658588@163.com</td>
-                                    <td class="am-hide-sm-only">
-                                        <div class="">
-                                            /
-                                        </div>
-                                    </td>
-                                    <td class="am-hide-sm-only">2021-12-31</td>
-                                    <td>
-                                        <div class="am-btn-toolbar">
-                                            <div class="am-btn-group am-btn-group-xs">
-                                                        <span class="am-text-secondary am-icon"
-                                                              style="cursor:pointer"><span></span>
-                                                            解除黑名单</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td><a href="#">搜狐</a></td>
-                                    <td>张朝阳</td>
-                                    <td class="am-hide-sm-only">18556658588</td>
-                                    <td class="am-hide-sm-only">18556658588@163.com</td>
-                                    <td class="am-hide-sm-only">
-                                        <div class="">
-                                            考察不通过
-                                        </div>
-                                    </td>
-                                    <td class="am-hide-sm-only">2021-12-31</td>
-                                    <td>
-                                        <div class="am-btn-toolbar">
-                                            <div class="am-btn-group am-btn-group-xs">
-                                                        <span class="am-text-secondary am-icon"
-                                                              style="cursor:pointer"><span></span>
-                                                            解除黑名单</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td><a href="#">阿里巴巴</a></td>
-                                    <td>马云</td>
-                                    <td class="am-hide-sm-only">18556658588</td>
-                                    <td class="am-hide-sm-only">18556658588@163.com</td>
-                                    <td class="am-hide-sm-only">
-                                        <div class="">
-                                            不符合相关条件
-                                        </div>
-                                    </td>
-                                    <td class="am-hide-sm-only">2021-12-31</td>
-                                    <td>
-                                        <div class="am-btn-toolbar">
-                                            <div class="am-btn-group am-btn-group-xs">
-                                                        <span class="am-text-secondary am-icon"
-                                                              style="cursor:pointer"><span></span>
-                                                            解除黑名单</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td><a href="#">小米</a></td>
-                                    <td>雷军</td>
-                                    <td class="am-hide-sm-only">18556658588</td>
-                                    <td class="am-hide-sm-only">18556658588@163.com</td>
-                                    <td class="am-hide-sm-only">
-                                        <div class="">
-                                            /
-                                        </div>
-                                    </td>
-                                    <td class="am-hide-sm-only">2021-12-31</td>
-                                    <td>
-                                        <div class="am-btn-toolbar">
-                                            <div class="am-btn-group am-btn-group-xs">
-                                                        <span class="am-text-secondary am-icon"
-                                                              style="cursor:pointer"><span></span>
-                                                            解除黑名单</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
                                 </tbody>
                             </table>
                             <div class="am-cf">
@@ -315,13 +310,34 @@
 <script src="assets/js/app.js"></script>
 <script>
     // 添加至黑名单
-    $(function () {
-        $('#doc-modal-list').find('.am-icon').add('#doc-confirm-toggle').on('click', function () {
+    $(document).on(
+        "click",
+        "span[name = '解除黑名单']",
+        function(){
+            that = this
             $('#my-confirm').modal({
                 relatedTarget: this,
                 onConfirm: function (options) {
-                    //点击确认调用函数
                     alert("点击了确认");
+                    $.ajax({
+                        type: "delete",
+                        url: "blackList",
+                        dataType: "json",
+                        contentType:"application/json",
+                        data:JSON.stringify({
+                            enterpriseId:${sessionScope.enterpriseId},
+                            supplierId:that.id
+                        }),
+                        success:function (result){
+                            if (result.data){
+                                alert(result.msg)
+                            }else {
+                                alert(result.msg)
+                            }
+                        }
+                    })
+
+
                 },
                 onCancel: function (e) {
                     //点击取消调用函数
@@ -329,7 +345,6 @@
                 }
             });
         });
-    });
     // 添加供应商
     $(function () {
         $('#doc-prompt-toggle').on('click', function () {
@@ -346,6 +361,7 @@
             });
         });
     });
+
 </script>
 </body>
 
