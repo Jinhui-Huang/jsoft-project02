@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
     <link rel="stylesheet" href="assets/css/admin.css">
     <link rel="stylesheet" href="assets/css/app.css">
+    <link rel="stylesheet" href="assets/css/message.min.css">
     <style>
         .am-selected-status {
             font-size: 13px;
@@ -35,9 +36,215 @@
             display: inline-block;
         }
     </style>
-    <script src="assets/js/jquery.min.js"></script>
 </head>
 <body data-type="generalComponents">
+<header class="am-topbar am-topbar-inverse admin-header">
+    <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only"
+            data-am-collapse="{target: '#topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span
+            class="am-icon-bars"></span></button>
+    <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
+        <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list tpl-header-list">
+            <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
+                <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
+                    <span class="tpl-header-list-user-nick" id="userName"></span><span class="tpl-header-list-user-ico"> <img
+                        src="assets/img/user01.png"></span>
+                </a>
+                <ul class="am-dropdown-content">
+                    <li><a href="login-page" id="logoutButton"><span class="am-icon-power-off"></span> 退出</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</header>
+<div class="tpl-page-container tpl-page-header-fixed">
+    <div class="tpl-left-nav tpl-left-nav-hover">
+        <div class="tpl-left-nav-list">
+            <ul class="tpl-left-nav-menu">
+                <li class="tpl-left-nav-item">
+                    <a href="javascript:;" class="nav-link tpl-left-nav-link-list active">
+                        <i class="am-icon-wpforms"></i>
+                        <span>企业管理</span>
+                        <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right tpl-left-nav-more-ico-rotate"></i>
+                    </a>
+                    <ul class="tpl-left-nav-sub-menu" style="display: block;">
+                        <li>
+                            <a id="enterpriseInfoVeri" href="#" class="active">
+                                <i class="am-icon-angle-right"></i>
+                                <span>企业信息认证</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="tpl-left-nav-item">
+                    <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
+                        <i class="am-icon-table"></i>
+                        <span>供应商管理</span>
+                        <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
+                    </a>
+                    <ul class="tpl-left-nav-sub-menu">
+                        <li>
+                            <a  id="white-list">
+                                <i class="am-icon-angle-right"></i>
+                                <span>供应商白名单</span>
+                            </a>
+                            <a  id="black-list">
+                                <i class="am-icon-angle-right"></i>
+                                <span>供应商黑名单</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="tpl-content-wrapper">
+        <div class="tpl-content-page-title">
+            企业认证
+        </div>
+        <ol class="am-breadcrumb">
+            <li class="am-active"><a style="color: #999999;">企业管理</a></li>
+            <li class="am-active">企业信息认证</li>
+        </ol>
+        <div class="tpl-portlet-components">
+            <div class="portlet-title">
+                <div class="caption font-green bold">
+                    企业管理员认证
+                </div>
+                <div class="tpl-portlet-input tpl-fz-ml">
+                    <div class="portlet-input input-small input-inline">
+                        <div class="input-icon right">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tpl-block ">
+                <div class="am-g tpl-amazeui-form">
+                    <div class="am-u-sm-12 am-u-md-9">
+                        <form class="am-form am-form-horizontal">
+                            <div class="am-form-group">
+                                <label for="user-name" class="am-u-sm-3 am-form-label">登录账号</label>
+                                <div class="am-u-sm-9">
+                                    <span id="userAccount">test</span>
+                                </div>
+                            </div>
+                            <div class="am-form-group">
+                                <label for="user-email" class="am-u-sm-3 am-form-label">管理员手机号码</label>
+                                <div class="am-u-sm-9">
+                                    <span id="userPhone">test</span>
+                                </div>
+                            </div>
+                            <div class="am-form-group">
+                                <label for="user-phone" class="am-u-sm-3 am-form-label">管理员姓名</label>
+                                <div class="am-u-sm-9">
+                                    <input type="text" name="idcardName" placeholder="请输入管理员姓名">
+                                    <span class="am-span" name="idcardNameSpan"></span>
+                                </div>
+                            </div>
+                            <div class="am-form-group">
+                                <label for="user-QQ" class="am-u-sm-3 am-form-label">管理员身份证号</label>
+                                <div class="am-u-sm-9">
+                                    <input type="text" name="idcardNo" placeholder="请入管理员身份证号">
+                                    <span class="am-span" name="idcardNoSpan"></span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tpl-portlet-components">
+            <div class="portlet-title">
+                <div class="caption font-green bold">
+                    企业信息
+                </div>
+                <div class="tpl-portlet-input tpl-fz-ml">
+                    <div class="portlet-input input-small input-inline">
+                        <div class="input-icon right">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tpl-block ">
+                <div class="am-g tpl-amazeui-form">
+                    <div class="am-u-sm-12 am-u-md-9">
+                        <form class="am-form am-form-horizontal">
+                            <div class="am-form-group">
+                                <label for="user-name" class="am-u-sm-3 am-form-label">企业名称</label>
+                                <div class="am-u-sm-9">
+                                    <input type="text" name="name" id="user-name" placeholder="请输入企业名称">
+                                    <span class="am-span" name="nameSpan"></span>
+                                </div>
+                            </div>
+                            <div class="am-form-group">
+                                <label for="user-weibo" class="am-u-sm-3 am-form-label">统一社会信用代码</label>
+                                <div class="am-u-sm-9">
+                                    <input type="text" name="socialUniformCode" id="user-weibo" placeholder="请输入统一社会信用代码">
+                                    <span class="am-span" name="socialUniformCodeSpan"></span>
+                                </div>
+                            </div>
+                            <div class="am-form-group">
+                                <label for="user-weibo" class="am-u-sm-3 am-form-label">企业规模</label>
+                                <div class="am-u-sm-9">
+                                    <div id="sel">
+                                        <select name="scale" placeholder="请选择企业规模" data-am-selected>
+                                            <option value="4">请选择企业规模</option>
+                                            <option value="A">1-19人</option>
+                                            <option value="B">20-50人</option>
+                                            <option value="C">51-100人</option>
+                                            <option value="D">101-200人</option>
+                                            <option value="E">201-500人</option>
+                                            <option value="F">500以上</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="am-form-group">
+                                <label for="user-email" class="am-u-sm-3 am-form-label">企业邮箱</label>
+                                <div class="am-u-sm-9">
+                                    <input type="email" name="email" id="user-email" placeholder="请输入企业邮箱">
+                                    <span class="am-span" name="emailSpan"></span>
+                                </div>
+                            </div>
+                            <div class="am-form-group">
+                                <label for="user-phone" class="am-u-sm-3 am-form-label">企业电话</label>
+                                <div class="am-u-sm-9">
+                                    <input type="tel" name="phone" id="user-phone" placeholder="请输入企业电话">
+                                    <span class="am-span" name="phoneSpan"></span>
+                                </div>
+                            </div>
+                            <div class="am-form-group">
+                                <label for="user-QQ" class="am-u-sm-3 am-form-label">传真</label>
+                                <div class="am-u-sm-9">
+                                    <input type="number" name="fax" pattern="[0-9]*" id="user-QQ" placeholder="请输入传真">
+                                </div>
+                            </div>
+                            <div class="am-form-group">
+                                <label for="user-weibo" class="am-u-sm-3 am-form-label">企业注册地</label>
+                                <div class="am-u-sm-9">
+                                    <input type="text" name="address" id="user-weibo" placeholder="请企业注册地">
+                                </div>
+                            </div>
+                            <div class="am-form-group">
+                                <label for="user-intro" class="am-u-sm-3 am-form-label">企业注册详细地址</label>
+                                <div class="am-u-sm-9">
+                                    <textarea class="" name="addressDetails" rows="5" id="user-intro" placeholder="请输入企业注册详细地址"></textarea>
+                                    <small>250字以内...</small>
+                                </div>
+                            </div>
+                            <div class="am-form-group">
+                                <div class="am-u-sm-9 am-u-sm-push-3">
+                                    <button name="submit" type="button" class="am-btn am-btn-primary">提 交</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
 
 <%--
     @author: JoneElmo
@@ -45,8 +252,23 @@
 --%>
 
 <%--ajax处理异步请求--%>
-<script>
+
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/amazeui.min.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/message.min.js"></script>
+<script type="text/javascript">
+    window.QMSG_GLOBALS = {
+        DEFAULTS: {
+            showClose: true,
+            timeout: 1000
+        }
+    };
+    Qmsg.success("")
     $(document).ready(function (){
+        /*自动进行认证判断并进行数据回显*/
+        EchoData();
+
         $("#white-list").on("click",function (){
             that = this;
             checkApprove()
@@ -62,7 +284,7 @@
                 url:"enterprise",
                 success:function (result){
                     if (result.data[1] == null){
-                        alert("请先认证信息")
+                        Qmsg.warning("请先认证信息")
                     }else {
                         let href = "http://localhost:8080/"+that.id
                         window.location.href = href;
@@ -80,10 +302,10 @@
                     $("#userAccount").text(result.data[0].account)
                     $("#userPhone").text(result.data[0].phone)
                     if(result.data[1] == null ){
-                        alert("请进行信息认证")
+                        Qmsg.loading("请进行信息认证")
                         /*判断企业信息为null，则证明未进行认证，须进行认证再回显数据*/
                     }else {
-                        alert("已认证")
+                        Qmsg.success("已认证")
                         /*已进行认证直接回显数据*/
                         $(".am-form-group").find("input").prop("readonly",true)
                         $("[name = 'idcardName']").val(result.data[0].idcardName)
@@ -103,8 +325,6 @@
                 }
             });
         }
-        /*自动进行认证判断并进行数据回显*/
-        EchoData();
         /*表单校验区*/
         /*校验身份证名字不超过五个*/
         function checkIdcardName() {
@@ -312,7 +532,7 @@
                                 if (result.data){
                                     EchoData();
                                 }else {
-                                    alert(result.msg)
+                                    Qmsg.warning(result.msg)
                                 }
                             },
                             error:function (result){
@@ -320,7 +540,7 @@
                             }
                         })
                     }else {
-                        alert(result.msg)
+                        Qmsg.warning(result.msg)
                     }
                 },
                 error:function (result) {
@@ -336,7 +556,7 @@
                 url:"login",
                 success:function (data){
                     if (data.data){
-                        alert(data.msg)
+                        Qmsg.success(data.msg)
                         window.location.href="http://localhost:8080"
                     }
                 }
@@ -344,218 +564,4 @@
         })
     })
 </script>
-
-
-<header class="am-topbar am-topbar-inverse admin-header">
-    <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only"
-            data-am-collapse="{target: '#topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span
-            class="am-icon-bars"></span></button>
-    <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
-        <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list tpl-header-list">
-            <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
-                <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
-                    <span class="tpl-header-list-user-nick" id="userName"></span><span class="tpl-header-list-user-ico"> <img
-                        src="assets/img/user01.png"></span>
-                </a>
-                <ul class="am-dropdown-content">
-                    <li><a href="login-page" id="logoutButton"><span class="am-icon-power-off"></span> 退出</a></li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-</header>
-<div class="tpl-page-container tpl-page-header-fixed">
-    <div class="tpl-left-nav tpl-left-nav-hover">
-        <div class="tpl-left-nav-list">
-            <ul class="tpl-left-nav-menu">
-                <li class="tpl-left-nav-item">
-                    <a href="javascript:;" class="nav-link tpl-left-nav-link-list active">
-                        <i class="am-icon-wpforms"></i>
-                        <span>企业管理</span>
-                        <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right tpl-left-nav-more-ico-rotate"></i>
-                    </a>
-                    <ul class="tpl-left-nav-sub-menu" style="display: block;">
-                        <li>
-                            <a id="enterpriseInfoVeri" href="#" class="active">
-                                <i class="am-icon-angle-right"></i>
-                                <span>企业信息认证</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="tpl-left-nav-item">
-                    <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
-                        <i class="am-icon-table"></i>
-                        <span>供应商管理</span>
-                        <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
-                    </a>
-                    <ul class="tpl-left-nav-sub-menu">
-                        <li>
-                            <a  id="white-list">
-                                <i class="am-icon-angle-right"></i>
-                                <span>供应商白名单</span>
-                            </a>
-                            <a  id="black-list">
-                                <i class="am-icon-angle-right"></i>
-                                <span>供应商黑名单</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div class="tpl-content-wrapper">
-        <div class="tpl-content-page-title">
-            企业认证
-        </div>
-        <ol class="am-breadcrumb">
-            <li class="am-active"><a style="color: #999999;">企业管理</a></li>
-            <li class="am-active">企业信息认证</li>
-        </ol>
-        <div class="tpl-portlet-components">
-            <div class="portlet-title">
-                <div class="caption font-green bold">
-                    企业管理员认证
-                </div>
-                <div class="tpl-portlet-input tpl-fz-ml">
-                    <div class="portlet-input input-small input-inline">
-                        <div class="input-icon right">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="tpl-block ">
-                <div class="am-g tpl-amazeui-form">
-                    <div class="am-u-sm-12 am-u-md-9">
-                        <form class="am-form am-form-horizontal">
-                            <div class="am-form-group">
-                                <label for="user-name" class="am-u-sm-3 am-form-label">登录账号</label>
-                                <div class="am-u-sm-9">
-                                    <span id="userAccount">test</span>
-                                </div>
-                            </div>
-                            <div class="am-form-group">
-                                <label for="user-email" class="am-u-sm-3 am-form-label">管理员手机号码</label>
-                                <div class="am-u-sm-9">
-                                    <span id="userPhone">test</span>
-                                </div>
-                            </div>
-                            <div class="am-form-group">
-                                <label for="user-phone" class="am-u-sm-3 am-form-label">管理员姓名</label>
-                                <div class="am-u-sm-9">
-                                    <input type="text" name="idcardName" placeholder="请输入管理员姓名">
-                                    <span class="am-span" name="idcardNameSpan"></span>
-                                </div>
-                            </div>
-                            <div class="am-form-group">
-                                <label for="user-QQ" class="am-u-sm-3 am-form-label">管理员身份证号</label>
-                                <div class="am-u-sm-9">
-                                    <input type="text" name="idcardNo" placeholder="请入管理员身份证号">
-                                    <span class="am-span" name="idcardNoSpan"></span>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="tpl-portlet-components">
-            <div class="portlet-title">
-                <div class="caption font-green bold">
-                    企业信息
-                </div>
-                <div class="tpl-portlet-input tpl-fz-ml">
-                    <div class="portlet-input input-small input-inline">
-                        <div class="input-icon right">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="tpl-block ">
-                <div class="am-g tpl-amazeui-form">
-                    <div class="am-u-sm-12 am-u-md-9">
-                        <form class="am-form am-form-horizontal">
-                            <div class="am-form-group">
-                                <label for="user-name" class="am-u-sm-3 am-form-label">企业名称</label>
-                                <div class="am-u-sm-9">
-                                    <input type="text" name="name" id="user-name" placeholder="请输入企业名称">
-                                    <span class="am-span" name="nameSpan"></span>
-                                </div>
-                            </div>
-                            <div class="am-form-group">
-                                <label for="user-weibo" class="am-u-sm-3 am-form-label">统一社会信用代码</label>
-                                <div class="am-u-sm-9">
-                                    <input type="text" name="socialUniformCode" id="user-weibo" placeholder="请输入统一社会信用代码">
-                                    <span class="am-span" name="socialUniformCodeSpan"></span>
-                                </div>
-                            </div>
-                            <div class="am-form-group">
-                                <label for="user-weibo" class="am-u-sm-3 am-form-label">企业规模</label>
-                                <div class="am-u-sm-9">
-                                    <div id="sel">
-                                        <select name="scale" placeholder="请选择企业规模" data-am-selected>
-                                            <option value="4">请选择企业规模</option>
-                                            <option value="A">1-19人</option>
-                                            <option value="B">20-50人</option>
-                                            <option value="C">51-100人</option>
-                                            <option value="D">101-200人</option>
-                                            <option value="E">201-500人</option>
-                                            <option value="F">500以上</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="am-form-group">
-                                <label for="user-email" class="am-u-sm-3 am-form-label">企业邮箱</label>
-                                <div class="am-u-sm-9">
-                                    <input type="email" name="email" id="user-email" placeholder="请输入企业邮箱">
-                                    <span class="am-span" name="emailSpan"></span>
-                                </div>
-                            </div>
-                            <div class="am-form-group">
-                                <label for="user-phone" class="am-u-sm-3 am-form-label">企业电话</label>
-                                <div class="am-u-sm-9">
-                                    <input type="tel" name="phone" id="user-phone" placeholder="请输入企业电话">
-                                    <span class="am-span" name="phoneSpan"></span>
-                                </div>
-                            </div>
-                            <div class="am-form-group">
-                                <label for="user-QQ" class="am-u-sm-3 am-form-label">传真</label>
-                                <div class="am-u-sm-9">
-                                    <input type="number" name="fax" pattern="[0-9]*" id="user-QQ" placeholder="请输入传真">
-                                </div>
-                            </div>
-                            <div class="am-form-group">
-                                <label for="user-weibo" class="am-u-sm-3 am-form-label">企业注册地</label>
-                                <div class="am-u-sm-9">
-                                    <input type="text" name="address" id="user-weibo" placeholder="请企业注册地">
-                                </div>
-                            </div>
-                            <div class="am-form-group">
-                                <label for="user-intro" class="am-u-sm-3 am-form-label">企业注册详细地址</label>
-                                <div class="am-u-sm-9">
-                                    <textarea class="" name="addressDetails" rows="5" id="user-intro" placeholder="请输入企业注册详细地址"></textarea>
-                                    <small>250字以内...</small>
-                                </div>
-                            </div>
-                            <div class="am-form-group">
-                                <div class="am-u-sm-9 am-u-sm-push-3">
-                                    <button name="submit" type="button" class="am-btn am-btn-primary">提 交</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script src="assets/js/jquery.min.js"></script>
-<script src="assets/js/amazeui.min.js"></script>
-<script src="assets/js/app.js"></script>
-
-</body>
-
 </html>

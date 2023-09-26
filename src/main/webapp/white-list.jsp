@@ -1,6 +1,6 @@
 <!doctype html>
 <html>
-
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
     <link rel="stylesheet" href="assets/css/admin.css">
     <link rel="stylesheet" href="assets/css/app.css">
-    <script src="assets/js/jquery.min.js"></script>
+    <link rel="stylesheet" href="assets/css/message.min.css">
     <style>
         .border {
             border: 0px solid red;
@@ -262,22 +262,33 @@
     </div>
 </div>
 
+</body>
+
 <script src="assets/js/jquery.min.js"></script>
 <script src="assets/js/amazeui.min.js"></script>
 <script src="assets/js/app.js"></script>
-<script>
+<script src="assets/js/message.min.js"></script>
+<script type="text/javascript">
     /*
     * @author: JoneElmo
     * @date: 2023-9-25 18:59
     * @email: mhangggggg@outlook.com
     * */
-    var clickedPage = 1
-    var nextPage = 1
-    /*上一页*/
-    var prePage = 1
-    var pages = 1
-
+    window.QMSG_GLOBALS = {
+        DEFAULTS: {
+            showClose: true,
+            timeout: 2000
+        }
+    };
+    const msg = Qmsg
+    Qmsg.success("")
+    msg.success("")
     $(document).ready(function () {
+        var clickedPage = 1
+        var nextPage = 1
+        /*上一页*/
+        var prePage = 1
+        var pages = 1
         /*进入页面时 通过一次get请求获取列表信息*/
         $.ajax({
             url: "http://localhost:8080/whiteList",
@@ -308,11 +319,7 @@
                     console.log(result.list)
                     replaceInfo(result)
                 }
-
-
             })
-
-
         })
 
         /*遍历展示信息方法*/
@@ -500,7 +507,6 @@
                             success: function (result) {
                                 console.log(result)
                                 if (result==true){
-                                    alert("移除成功！")
                                     $.ajax({
                                         url: "http://localhost:8080/whiteList",
                                         type: "get",
@@ -509,6 +515,7 @@
                                             startPage: clickedPage
                                         },
                                         success: function (result) {
+                                            msg.success("移除成功！")
                                             console.log(result.list)
                                             replaceInfo(result)
                                         }
@@ -535,7 +542,8 @@
                     },
                     onCancel: function () {
                         //点击取消调用函数
-                        alert("点击了取消")
+                        msg.info("取消")
+                        alert("quxiao")
                     }
                 });
             });
@@ -581,7 +589,7 @@
                         let supplierLevel = $("#doc-select-2").val()
                         console.info("选中的企业id是：" + selectSupplierId)
                         if (supplierLevel == "0") {
-                            alert("请选择企业评级!")
+                            msg.warning("请选择企业评级!")
                         } else {
                             $.ajax({
                                 url: "http://localhost:8080/whiteList",
@@ -594,7 +602,7 @@
                                 }),
                                 success: function (result) {
                                     if (result == true) {
-                                        alert("添加供应商信息成功！")
+                                        msg.success("添加供应商信息成功！")
                                         $.ajax({
                                             url: "http://localhost:8080/whiteList",
                                             type: "get",
@@ -608,7 +616,7 @@
                                             }
                                         })
                                     } else {
-                                        alert("添加供应商信息失败！")
+                                        msg.error("添加供应商信息失败！")
                                     }
                                 }
                             })
@@ -629,13 +637,14 @@
             })
         });
         /*退出登录按钮*/
+
         $("#logoutButton").click(function (){
             $.ajax({
                 type:"delete",
                 url:"login",
                 success:function (data){
                     if (data.data){
-                        alert(data.msg)
+                        msg.success(data.msg)
                         window.location.href="http://localhost:8080"
                     }
                 }
@@ -644,7 +653,4 @@
     })
 
 </script>
-<input name="hiddenSupplierId" type="hidden">
-</body>
-
 </html>
