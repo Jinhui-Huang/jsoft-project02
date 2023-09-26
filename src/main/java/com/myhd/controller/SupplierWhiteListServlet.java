@@ -51,6 +51,7 @@ public class SupplierWhiteListServlet extends   HttpServlet {
         Integer id = Integer.valueOf(req.getParameter("id"));
         String enterpriseName = req.getParameter("enterpriseName");
         String supplierLevel = req.getParameter("supplierLevel");
+        Integer startPage = Integer.valueOf(req.getParameter("startPage"));
         SelectLikeInfo sli = new SelectLikeInfo();
         log.info("拿到的id是："+id);
         log.info("拿到的name是:" + enterpriseName);
@@ -58,6 +59,7 @@ public class SupplierWhiteListServlet extends   HttpServlet {
         sli.setId(Integer.valueOf(req.getParameter("id")));
         sli.setEnterpriseName(enterpriseName);
         sli.setSupplierLevel( "0".equals(supplierLevel) ? null : supplierLevel );
+        sli.setStartPage(startPage);
         /*模糊查询*/
         PageInfo<ThreeTablesQuery> info = impl.selectWhiteInfoByEnterpriseId(sli);
         /*返回json数据*/
