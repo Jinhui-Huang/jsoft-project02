@@ -49,4 +49,13 @@ public interface EnterpriseService {
      */
     List<Enterprise> selectEnterpriseExceptBlack(Integer enterpriseId);
 
+    /**
+     * @description: 判断企业等名称，信用代码，企业邮箱是否重复,如果返回值为true则认为数据重复
+     * @param enterprise
+     * @return: java.lang.Boolean
+     * @author CYQH
+     * @date: 2023/09/26 8:40
+     */
+    Boolean judgeEnterpriseInfoIsExists(Enterprise enterprise);
+
 }

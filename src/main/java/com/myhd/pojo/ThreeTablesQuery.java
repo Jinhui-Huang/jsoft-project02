@@ -1,5 +1,6 @@
 package com.myhd.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,5 +27,6 @@ public class ThreeTablesQuery {
     private String phone;/*联系方式*/
     private String email;/*联系邮箱*/
     private String variableInfo;/*填入内容可变信息*/
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Shanghai")
     private Date updateDate;/*更新日期*/
 }

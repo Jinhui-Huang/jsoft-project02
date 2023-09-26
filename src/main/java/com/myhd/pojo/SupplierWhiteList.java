@@ -1,5 +1,6 @@
 package com.myhd.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,5 +25,6 @@ public class SupplierWhiteList {
     private Integer enterpriseId;/*企业主键id*/
     private Integer supplierId;/*供应商主键id*/
     private String supplierLevel;/*企业评级*/
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Shanghai")
     private Date updateDate;/*更新日期*/
 }

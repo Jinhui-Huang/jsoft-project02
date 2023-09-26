@@ -85,4 +85,16 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         return dao.selectEnterpriseExceptBlack(enterpriseId);
     }
 
+    /**
+     * @description: 判断企业等名称，信用代码，企业邮箱是否重复,如果返回值为true则认为数据重复
+     * @param enterprise
+     * @return: java.lang.Boolean
+     * @author CYQH
+     * @date: 2023/09/26 8:45
+     */
+    @Override
+    public Boolean judgeEnterpriseInfoIsExists(Enterprise enterprise) {
+        return dao.countEnterpriseInfo(enterprise) == 1;
+    }
+
 }
