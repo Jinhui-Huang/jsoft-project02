@@ -239,14 +239,6 @@
                                             }
                                         }
 
-
-
-
-
-
-
-
-
                                     })
 
                                 </script>
@@ -411,6 +403,9 @@
 
     // 添加供应商
     $(function () {
+
+        let selectSupplierId;
+
         $('#doc-prompt-toggle').on('click', function () {
             /*点击添加供应商按钮，查询下拉列表信息*/
             $.ajax({
@@ -431,22 +426,45 @@
                         name = result[i].name;
                         socialUniformCode = result[i].socialUniformCode;
                         /*将信用代码作为选项的value*/
-                        $("<option value='"+socialUniformCode+"'>"+name+"</option>").appendTo( $("#doc-select-1") )
-                        /*设置选项点击之间*/
+                        $("<option id='"+id+"' value='"+socialUniformCode+"'>"+name+"</option>").appendTo( $("#doc-select-1") )
+                        /*设置选项点击事件*/
                         $("#doc-select-1").on("change",function () {
+                            selectSupplierId = $("#doc-select-1").find("option:selected").attr("id");
                             console.log( "点击了信息"+$("#doc-select-1").find("option:selected").val() )
                             $("#socialUniformCode").text( $("#doc-select-1").find("option:selected").val() )
                         })
                     }
                 }
             })
-
-
+            /*输入添加供应商信息的弹出框*/
             $('#my-prompt').modal({
                 relatedTarget: this,
                 onConfirm: function (options) {
-                    //点击确认调用函数
-                    alert("点击了确认");
+                    //点击确认，插入供应商信息
+                    let supplierLevel = $("#doc-select-2").val()
+                    console.info("选中的企业id是："+selectSupplierId)
+                    if (supplierLevel=="0"){
+                        alert("请选择企业评级!")
+                    }else {
+                        $.ajax({
+                            url:"http://localhost:8080/whiteList",
+                            type:"put",
+                            contentType:"json",
+                            data: JSON.stringify({
+                                enterpriseId: ${sessionScope.enterpriseId},
+                                supplierId: selectSupplierId,
+                                supplierLevel: supplierLevel
+                            }),
+                            success: function (result) {
+                                if (result==true){
+                                    alert("添加供应商信息成功！")
+                                }else {
+                                    alert("添加供应商信息失败！")
+                                }
+                            }
+                        })
+                    }
+
                 },
                 onCancel: function (e) {
                     //点击取消调用函数
@@ -456,6 +474,7 @@
         });
     });
 </script>
+<input name="hiddenSupplierId" type="hidden">
 </body>
 
 </html>
