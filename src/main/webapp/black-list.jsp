@@ -427,10 +427,6 @@
                 $('#my-prompt').modal({
                     relatedTarget: this,
                     onConfirm: function (options) {
-                        /*清空数据*/
-                        $("#socialUniformCode").text("")
-                        $("#user-intro").val("")
-
                         //点击确认，插入供应商信息
                         let reason = $("textarea[id='user-intro']").val()
                         console.info("选中的企业id是：" + selectSupplierId)
@@ -463,7 +459,9 @@
                                 }
                             })
                         }
-
+                        /*清空数据*/
+                        $("#socialUniformCode").text("")
+                        $("#user-intro").val("")
                     },
                     onCancel: function (e) {
                         //点击取消调用函数
