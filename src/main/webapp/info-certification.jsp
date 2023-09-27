@@ -308,7 +308,7 @@
                     }else {
                         Qmsg.success("已认证")
                         /*已进行认证直接回显数据*/
-                        $(".am-form-group").find("input").prop("readonly",true)
+                        $(".am-form-group").find("input").prop("disabled",true)
                         $("[name = 'idcardName']").val(result.data[0].idcardName)
                         $("[name = 'idcardNo']").val(result.data[0].idcardNo)
                         $("[name = 'name']").val(result.data[1].name)
@@ -317,7 +317,7 @@
                         $("[name = 'phone']").val(result.data[1].phone)
                         $("[name = 'fax']").val(result.data[1].fax)
                         $("[name = 'address']").val(result.data[1].address.split("#")[0])
-                        $("textarea[name='addressDetails']").prop("readonly",true)
+                        $("textarea[name='addressDetails']").prop("disabled",true)
                         $("[name = 'addressDetails']").val(result.data[1].address.split("#")[1])
                         var scale =  $("option[value = "+result.data[1].scale+"]").text()
                         $("#sel").replaceWith($("<input type='text' value='"+scale+"' readonly>"))
