@@ -45,6 +45,7 @@
                         src="assets/img/user01.png"></span>
                 </a>
                 <ul class="am-dropdown-content">
+                    <li><a href="login-page" id="notAButton"><span class="am-badge am-badge-secondary am-radius">企业ID:</span> ${sessionScope.enterpriseId} </a></li>
                     <li><a href="login-page" id="logoutButton"><span class="am-icon-power-off"></span> 退出</a></li>
                 </ul>
             </li>
@@ -603,6 +604,10 @@
                                 success: function (result) {
                                     if (result == true) {
                                         msg.success("添加供应商信息成功！")
+                                        /*清除输入弹出框的残留信息*/
+                                        $("#socialUniformCode").text("")
+                                        $("#doc-select-2").val("0")
+
                                         $.ajax({
                                             url: "http://localhost:8080/whiteList",
                                             type: "get",
