@@ -205,15 +205,14 @@
 <script src="assets/js/app.js"></script>
 <script src="assets/js/message.min.js"></script>
 <script>
-    window.QMSG_GLOBALS = {
-        DEFAULTS: {
-            showClose: true,
-            timeout: 1000
-        }
-    };
-    Qmsg.success("")
-    const msg = Qmsg
+
     $(document).ready(function () {
+        window.QMSG_GLOBALS = {
+            DEFAULTS: {
+                showClose: true,
+                timeout: 2000,
+            }
+        };
         var clickedPage = 1;
         var nextPage = 1;
         var prePage = 1;
@@ -373,9 +372,11 @@
                             }),
                             success:function (result){
                                 if (result.data){
+                                    Qmsg.info("")
                                     Qmsg.success(result.msg)
                                     showInfo()
                                 }else {
+                                    Qmsg.info("")
                                     Qmsg.warning(result.msg)
                                 }
                             }
@@ -383,6 +384,7 @@
                     },
                     onCancel: function (e) {
                         //点击取消调用函数
+                        Qmsg.info("")
                         Qmsg.info("取消")
                     }
                 });
@@ -429,7 +431,8 @@
                         let reason = $("textarea[id='user-intro']").val()
                         console.info("选中的企业id是：" + selectSupplierId)
                         if (reason === "") {
-                            msg.warning("请输入原因!")
+                            Qmsg.warning("请完善信息")
+                            Qmsg.warning("请输入原因!")
                         } else {
                             $.ajax({
                                 url: "http://localhost:8080/blackList",
@@ -446,9 +449,11 @@
                                     $("#user-intro").val("")
 
                                     if (result.data) {
+                                        Qmsg.info("")
                                         Qmsg.success(result.msg)
                                         showInfo()
                                     } else {
+                                        Qmsg.info("")
                                         Qmsg.warning(result.msg)
                                     }
                                 }
@@ -458,7 +463,8 @@
                     },
                     onCancel: function (e) {
                         //点击取消调用函数
-                        console.log("关闭添加供应商弹出框")
+                        Qmsg.info("")
+                        Qmsg.info("取消")
                     }
                 });
             });
