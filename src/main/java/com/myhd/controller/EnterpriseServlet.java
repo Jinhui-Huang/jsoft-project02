@@ -64,8 +64,7 @@ public class EnterpriseServlet extends HttpServlet {
         Enterprise enterprise = enterpriseImpl.selectByEnterpriseId(supplierId);
         ReqRespMsgUtil.sendMsg(resp, enterprise);
     }
-
-
+    
     protected void getBlackInfo(HttpServletRequest req, HttpServletResponse resp){
         log.info("查询黑名单列表");
         resp.setContentType("application/json");
