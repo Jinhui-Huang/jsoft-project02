@@ -16,261 +16,8 @@
     <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
     <link rel="stylesheet" href="assets/css/admin.css">
     <link rel="stylesheet" href="assets/css/app.css">
-    <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/js/amazeui.min.js"></script>
-    <script src="assets/js/app.js"></script>
-    <script>
-        $(document).ready(function () {
-            var clickedPage = 1;
-            var nextPage = 1;
-            var prePage = 1;
-            var Pages = 0;
-            var pageNum = 1;
-
-            showInfo()
-
-            /*进入页面时 通过一次get请求获取列表信息*/
-            function showInfo(){
-                let name = "%"+$("input[name='enterpriseName']").val().trim()+"%"
-                $.ajax({
-                    url: "http://localhost:8080/blackList",
-                    type: "get",
-                    data: {
-                        id: ${sessionScope.enterpriseId},
-                        enterpriseName: name,
-                        startPage:clickedPage
-                    },
-                    success: function (result) {
-                        console.log(result.list)
-                        replaceInfo(result)
-                    }
-                })
-            }
-
-            /*模糊查询*/
-            $("#btn_query").on("click",function () {
-                clickedPage = 1;
-                showInfo()
-            });
-
-            /*遍历展示信息方法*/
-            function replaceInfo(pageInfo) {
-                /*总数据量*/
-                let total = pageInfo.total
-                /*当前页*/
-                pageNum = pageInfo.pageNum
-                /*页数量*/
-                let pageSize = pageInfo.pageSize
-                /*下一页*/
-                nextPage = pageInfo.nextPage
-                /*上一页*/
-                prePage = pageInfo.prePage
-                /*总页数*/
-                Pages = pageInfo.pages
-                /*白名单列表信息*/
-                let list = pageInfo.list
-                /*遍历展示,追加*/
-                $("tr[name='forRemove']").remove()
-
-                for (let i = 0; i < list.length ; i++) {
-                    $("<tr name='forRemove' data-id='2'>"+
-                        "<td>"+ (i+1) +"</td>"+
-                        "<td class='am-hide-sm-only'><a href='#'>"+ list[i].enterpriseName +"</a></td>"+
-                        "<td class='am-hide-sm-only'>"+ list[i].idcardName +"</td>"+
-                        "<td class='am-hide-sm-only'>"+ list[i].phone +"</td>"+
-                        "<td class='am-hide-sm-only'>"+ list[i].email +"</td>"+
-                        "<td class='am-hide-sm-only'>"+ list[i].variableInfo +"</td>"+
-                        "<td class='am-hide-sm-only'>"+ list[i].updateDate +"</td>"+
-                        "<td>"+
-                        "<div class='am-btn-toolbar'>"+
-                        "<div class='am-btn-group am-btn-group-xs'>"+
-                        "<span class='am-text-secondary am-icon'"+
-                        "style='margin-left: 20px;cursor:pointer' name='解除黑名单' id='"+list[i].supplierId+"'>"+
-                        " 解除黑名单"+"</span>"+
-                        " </div>"+
-                        "</div>"+
-                        "</td>"+
-                        "</tr>)").appendTo( $("#doc-modal-list") )
-                }
-                init()
-            }
-
-            function init() {
-                $("#button_body").empty()
-                let pageItem = "<li id='prePage'><a id='-1'>«</a></li>"
-
-                for (let i = 1; i <= Pages ; i++) {
-                    pageItem += "<li name='forRemove2'><a id='"+i+"'>"+i+"</a><li>"
-                }
-                pageItem += "<li id='nextPage'><a id='-1'>»</a></li>"
-
-                $(pageItem).appendTo( $("#button_body") )
-
-                // 找到当前页码对应的按钮，并添加高亮状态
-                $(".am-pagination li a").each(function() {
-                    if ($(this).attr("id") === clickedPage.toString() && $(this).attr("id") != -1) {
-                        $(this).parent().addClass("am-active");
-                    }
-                });
-
-                $(".am-pagination li a").on("click", function(e) {
-                    // 获取被点击的页码按钮的id属性
-                    if ($(this).attr("id") != -1) {
-                        clickedPage = $(this).attr("id");
-                        console.log("点击的页码是: "+clickedPage)
-                        // 发送异步请求，请求对应页码的数据
-                        showInfo()
-                    }
-                });
-
-                /*上一页下一页*/
-                $("#nextPage").on("click", function() {
-                    if (nextPage === 0) {
-                        nextPage = 1;
-                    }
-                    // 获取被点击的页码按钮的id属性
-                    clickedPage = nextPage;
-                    console.log("点击的页码是: "+clickedPage)
-                    // 发送异步请求，请求对应页码的数据
-                    showInfo()
-                });
-
-                $("#prePage").on("click", function() {
-                    if (prePage === 0) {
-                        prePage = Pages;
-                    }
-                    // 获取被点击的页码按钮的id属性
-                    clickedPage = prePage;
-                    console.log("点击的页码是: "+clickedPage)
-                    // 发送异步请求，请求对应页码的数据
-                    showInfo()
-                });
-            }
-
-            /*退出登录按钮*/
-            $("#logoutButton").click(function (){
-                $.ajax({
-                    type:"delete",
-                    url:"login",
-                    success:function (data){
-                        if (data.data){
-                            alert(data.msg)
-                            window.location.href="http://localhost:8080"
-                        }
-                    }
-                })
-            })
-            // 解除黑名单
-            $(document).on(
-                "click",
-                "span[name = '解除黑名单']",
-                function(){
-                    that = this
-                    $('#my-confirm').modal({
-                        relatedTarget: this,
-                        onConfirm: function (options) {
-                            alert("点击了确认");
-                            $.ajax({
-                                type: "delete",
-                                url: "blackList",
-                                dataType: "json",
-                                contentType:"application/json",
-                                data:JSON.stringify({
-                                    enterpriseId:${sessionScope.enterpriseId},
-                                    supplierId:that.id
-                                }),
-                                success:function (result){
-                                    if (result.data){
-                                        alert(result.msg)
-                                        showInfo()
-                                    }else {
-                                        alert(result.msg)
-                                    }
-                                }
-                            })
-                        },
-                        onCancel: function (e) {
-                            //点击取消调用函数
-                            alert("点击了取消")
-                        }
-                    });
-                });
-            // 添加供应商
-            $(function () {
-                var selectSupplierId;
-                $('#doc-prompt-toggle').on('click', function () {
-                    /*点击添加供应商按钮，查询下拉列表信息*/
-                    $.ajax({
-                        url: "http://localhost:8080/enterprise",
-                        type: "get",
-                        async: true,
-                        data: {
-                            id: ${sessionScope.enterpriseId},
-                            op: "3"
-                        },
-                        success: function (result) {
-                            console.log("获取到的list信息:" + result)
-                            let id;
-                            let name;
-                            let socialUniformCode;
-                            $("option[name='forRemove']").remove()
-                            for (let i = 0; i < result.length; i++) {
-                                id = result[i].id;
-                                name = result[i].name;
-                                socialUniformCode = result[i].socialUniformCode;
-                                /*将信用代码作为选项的value*/
-                                $("<option name='forRemove' id='" + id + "' value='" + socialUniformCode + "'>" + name + "</option>").appendTo($("#doc-select-1"))
-                                /*设置选项点击事件*/
-                                $("#doc-select-1").on("change", function () {
-                                    selectSupplierId = $("#doc-select-1").find("option:selected").attr("id");
-                                    console.log("点击了信息" + $("#doc-select-1").find("option:selected").val())
-                                    $("#socialUniformCode").text($("#doc-select-1").find("option:selected").val())
-                                })
-                            }
-                        }
-                    })
-                    /*输入添加供应商信息的弹出框*/
-                    $('#my-prompt').modal({
-                        relatedTarget: this,
-                        onConfirm: function (options) {
-                            //点击确认，插入供应商信息
-                            let reason = $("textarea[id='user-intro']").val()
-                            console.info("选中的企业id是：" + selectSupplierId)
-                            if (reason === "") {
-                                alert("请输入原因!")
-                            } else {
-                                $.ajax({
-                                    url: "http://localhost:8080/blackList",
-                                    type: "post",
-                                    contentType: "json",
-                                    data: JSON.stringify({
-                                        enterpriseId: ${sessionScope.enterpriseId},
-                                        supplierId: selectSupplierId,
-                                        reason: reason
-                                    }),
-                                    success: function (result) {
-                                        if (result.data) {
-                                            alert(result.msg)
-                                            showInfo()
-                                        } else {
-                                            alert(result.msg)
-                                        }
-                                    }
-                                })
-                            }
-
-                        },
-                        onCancel: function (e) {
-                            //点击取消调用函数
-                            console.log("关闭添加供应商弹出框")
-                        }
-                    });
-                });
-            });
-        })
-    </script>
+    <link rel="stylesheet" href="assets/css/message.min.css">
 </head>
-
 <body data-type="generalComponents">
 <header class="am-topbar am-topbar-inverse admin-header">
     <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
@@ -281,6 +28,7 @@
                         src="assets/img/user01.png"></span>
                 </a>
                 <ul class="am-dropdown-content">
+                    <li><a href="login-page" id="notAButton"><span class="am-badge am-badge-secondary am-radius">企业ID:</span> ${sessionScope.enterpriseId} </a></li>
                     <li><a href="login-page" id="logoutButton"><span class="am-icon-power-off"></span> 退出</a></li>
                 </ul>
             </li>
@@ -452,5 +200,275 @@
 
 
 </body>
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/amazeui.min.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/message.min.js"></script>
+<script>
 
+    $(document).ready(function () {
+        window.QMSG_GLOBALS = {
+            DEFAULTS: {
+                showClose: true,
+                timeout: 2000,
+            }
+        };
+        var clickedPage = 1;
+        var nextPage = 1;
+        var prePage = 1;
+        var Pages = 0;
+        var pageNum = 1;
+
+        showInfo()
+
+        /*进入页面时 通过一次get请求获取列表信息*/
+        function showInfo(){
+            let name = "%"+$("input[name='enterpriseName']").val().trim()+"%"
+            $.ajax({
+                url: "http://localhost:8080/blackList",
+                type: "get",
+                data: {
+                    id: ${sessionScope.enterpriseId},
+                    enterpriseName: name,
+                    startPage:clickedPage
+                },
+                success: function (result) {
+                    console.log(result.list)
+                    replaceInfo(result)
+                }
+            })
+        }
+
+        /*模糊查询*/
+        $("#btn_query").on("click",function () {
+            clickedPage = 1;
+            showInfo()
+        });
+
+        /*遍历展示信息方法*/
+        function replaceInfo(pageInfo) {
+            /*总数据量*/
+            let total = pageInfo.total
+            /*当前页*/
+            pageNum = pageInfo.pageNum
+            /*页数量*/
+            let pageSize = pageInfo.pageSize
+            /*下一页*/
+            nextPage = pageInfo.nextPage
+            /*上一页*/
+            prePage = pageInfo.prePage
+            /*总页数*/
+            Pages = pageInfo.pages
+            /*白名单列表信息*/
+            let list = pageInfo.list
+            /*遍历展示,追加*/
+            $("tr[name='forRemove']").remove()
+
+            for (let i = 0; i < list.length ; i++) {
+                $("<tr name='forRemove' data-id='2'>"+
+                    "<td>"+ (i+1) +"</td>"+
+                    "<td class='am-hide-sm-only'><a href='#'>"+ list[i].enterpriseName +"</a></td>"+
+                    "<td class='am-hide-sm-only'>"+ list[i].idcardName +"</td>"+
+                    "<td class='am-hide-sm-only'>"+ list[i].phone +"</td>"+
+                    "<td class='am-hide-sm-only'>"+ list[i].email +"</td>"+
+                    "<td class='am-hide-sm-only'>"+ list[i].variableInfo +"</td>"+
+                    "<td class='am-hide-sm-only'>"+ list[i].updateDate +"</td>"+
+                    "<td>"+
+                    "<div class='am-btn-toolbar'>"+
+                    "<div class='am-btn-group am-btn-group-xs'>"+
+                    "<span class='am-text-secondary am-icon'"+
+                    "style='margin-left: 20px;cursor:pointer' name='解除黑名单' id='"+list[i].supplierId+"'>"+
+                    " 解除黑名单"+"</span>"+
+                    " </div>"+
+                    "</div>"+
+                    "</td>"+
+                    "</tr>)").appendTo( $("#doc-modal-list") )
+            }
+            init()
+        }
+
+        function init() {
+            $("#button_body").empty()
+            let pageItem = "<li id='prePage'><a id='-1'>«</a></li>"
+
+            for (let i = 1; i <= Pages ; i++) {
+                pageItem += "<li name='forRemove2'><a id='"+i+"'>"+i+"</a><li>"
+            }
+            pageItem += "<li id='nextPage'><a id='-1'>»</a></li>"
+
+            $(pageItem).appendTo( $("#button_body") )
+
+            // 找到当前页码对应的按钮，并添加高亮状态
+            $(".am-pagination li a").each(function() {
+                if ($(this).attr("id") === clickedPage.toString() && $(this).attr("id") != -1) {
+                    $(this).parent().addClass("am-active");
+                }
+            });
+
+            $(".am-pagination li a").on("click", function(e) {
+                // 获取被点击的页码按钮的id属性
+                if ($(this).attr("id") != -1) {
+                    clickedPage = $(this).attr("id");
+                    console.log("点击的页码是: "+clickedPage)
+                    // 发送异步请求，请求对应页码的数据
+                    showInfo()
+                }
+            });
+
+            /*上一页下一页*/
+            $("#nextPage").on("click", function() {
+                if (nextPage === 0) {
+                    nextPage = 1;
+                }
+                // 获取被点击的页码按钮的id属性
+                clickedPage = nextPage;
+                console.log("点击的页码是: "+clickedPage)
+                // 发送异步请求，请求对应页码的数据
+                showInfo()
+            });
+
+            $("#prePage").on("click", function() {
+                if (prePage === 0) {
+                    prePage = Pages;
+                }
+                // 获取被点击的页码按钮的id属性
+                clickedPage = prePage;
+                console.log("点击的页码是: "+clickedPage)
+                // 发送异步请求，请求对应页码的数据
+                showInfo()
+            });
+        }
+
+        /*退出登录按钮*/
+        $("#logoutButton").click(function (){
+            $.ajax({
+                type:"delete",
+                url:"login",
+                success:function (data){
+                    if (data.data){
+                        Qmsg.success(data.msg)
+                        window.location.href="http://localhost:8080"
+                    }
+                }
+            })
+        })
+        // 解除黑名单
+        $(document).on(
+            "click",
+            "span[name = '解除黑名单']",
+            function(){
+                that = this
+                $('#my-confirm').modal({
+                    relatedTarget: this,
+                    onConfirm: function (options) {
+                        $.ajax({
+                            type: "delete",
+                            url: "blackList",
+                            dataType: "json",
+                            contentType:"application/json",
+                            data:JSON.stringify({
+                                enterpriseId:${sessionScope.enterpriseId},
+                                supplierId:that.id
+                            }),
+                            success:function (result){
+                                if (result.data){
+                                    Qmsg.info("")
+                                    Qmsg.success(result.msg)
+                                    showInfo()
+                                }else {
+                                    Qmsg.info("")
+                                    Qmsg.warning(result.msg)
+                                }
+                            }
+                        })
+                    },
+                    onCancel: function (e) {
+                        //点击取消调用函数
+                        Qmsg.info("")
+                        Qmsg.info("取消")
+                    }
+                });
+            });
+        // 添加供应商
+        $(function () {
+            var selectSupplierId;
+            $('#doc-prompt-toggle').on('click', function () {
+                /*点击添加供应商按钮，查询下拉列表信息*/
+                $.ajax({
+                    url: "http://localhost:8080/enterprise",
+                    type: "get",
+                    async: true,
+                    data: {
+                        id: ${sessionScope.enterpriseId},
+                        op: "3"
+                    },
+                    success: function (result) {
+                        console.log("获取到的list信息:" + result)
+                        let id;
+                        let name;
+                        let socialUniformCode;
+                        $("option[name='forRemove']").remove()
+                        for (let i = 0; i < result.length; i++) {
+                            id = result[i].id;
+                            name = result[i].name;
+                            socialUniformCode = result[i].socialUniformCode;
+                            /*将信用代码作为选项的value*/
+                            $("<option name='forRemove' id='" + id + "' value='" + socialUniformCode + "'>" + name + "</option>").appendTo($("#doc-select-1"))
+                            /*设置选项点击事件*/
+                            $("#doc-select-1").on("change", function () {
+                                selectSupplierId = $("#doc-select-1").find("option:selected").attr("id");
+                                console.log("点击了信息" + $("#doc-select-1").find("option:selected").val())
+                                $("#socialUniformCode").text($("#doc-select-1").find("option:selected").val())
+                            })
+                        }
+                    }
+                })
+                /*输入添加供应商信息的弹出框*/
+                $('#my-prompt').modal({
+                    relatedTarget: this,
+                    onConfirm: function (options) {
+                        //点击确认，插入供应商信息
+                        let reason = $("textarea[id='user-intro']").val()
+                        console.info("选中的企业id是：" + selectSupplierId)
+                        if (reason === "") {
+                            Qmsg.warning("请完善信息")
+                            Qmsg.warning("请输入原因!")
+                        } else {
+                            $.ajax({
+                                url: "http://localhost:8080/blackList",
+                                type: "post",
+                                contentType: "json",
+                                data: JSON.stringify({
+                                    enterpriseId: ${sessionScope.enterpriseId},
+                                    supplierId: selectSupplierId,
+                                    reason: reason
+                                }),
+                                success: function (result) {
+                                    /*清除输入弹出框的残留信息*/
+                                    $("#socialUniformCode").text("")
+                                    $("#user-intro").val("")
+
+                                    if (result.data) {
+                                        Qmsg.info("")
+                                        Qmsg.success(result.msg)
+                                        showInfo()
+                                    } else {
+                                        Qmsg.info("")
+                                        Qmsg.warning(result.msg)
+                                    }
+                                }
+                            })
+                        }
+
+                    },
+                    onCancel: function (e) {
+                        //点击取消调用函数
+                        Qmsg.info("")
+                        Qmsg.info("取消")
+                    }
+                });
+            });
+        });
+    })
+</script>
 </html>

@@ -85,13 +85,13 @@ public class SupplierWhiteListServlet extends   HttpServlet {
         /*设置日期*/
         sbl.setUpdateDate(date);
         /*移除白名单并添加至黑名单*/
+        Boolean b = false;
         try {
-            impl.addBlackFromWhite(sbl);
+            b = impl.addBlackFromWhite(sbl);
         } catch (Exception e) {
             log.error(e.getMessage(), "移除白名单或加入黑名单失败");
         }
-        /*查询新的数据*/
-        doGet(req, resp);
+        ReqRespMsgUtil.sendMsg(resp, b);
     }
 
     /**

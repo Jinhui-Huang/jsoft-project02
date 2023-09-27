@@ -58,7 +58,6 @@ public class SupplierBlackListServlet extends HttpServlet {
         sli.setId(id);
         sli.setEnterpriseName(enterpriseName);
         sli.setStartPage(startPage);
-        sli.setPageSize(2);
         /*模糊查询*/
         PageInfo<ThreeTablesQuery> info = impl.selectBlackInfoByEnterpriseId(sli);
         /*返回json数据*/

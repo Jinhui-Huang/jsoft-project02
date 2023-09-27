@@ -1,6 +1,6 @@
 <!doctype html>
 <html>
-
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
     <link rel="stylesheet" href="assets/css/admin.css">
     <link rel="stylesheet" href="assets/css/app.css">
-    <script src="assets/js/jquery.min.js"></script>
+    <link rel="stylesheet" href="assets/css/message.min.css">
     <style>
         .border {
             border: 0px solid red;
@@ -45,6 +45,7 @@
                         src="assets/img/user01.png"></span>
                 </a>
                 <ul class="am-dropdown-content">
+                    <li><a href="login-page" id="notAButton"><span class="am-badge am-badge-secondary am-radius">企业ID:</span> ${sessionScope.enterpriseId} </a></li>
                     <li><a href="login-page" id="logoutButton"><span class="am-icon-power-off"></span> 退出</a></li>
                 </ul>
             </li>
@@ -262,22 +263,33 @@
     </div>
 </div>
 
+</body>
+
 <script src="assets/js/jquery.min.js"></script>
 <script src="assets/js/amazeui.min.js"></script>
 <script src="assets/js/app.js"></script>
-<script>
+<script src="assets/js/message.min.js"></script>
+<script type="text/javascript">
     /*
     * @author: JoneElmo
     * @date: 2023-9-25 18:59
     * @email: mhangggggg@outlook.com
     * */
-    var clickedPage = 1
-    var nextPage = 1
-    /*上一页*/
-    var prePage = 1
-    var pages = 1
-
+    window.QMSG_GLOBALS = {
+        DEFAULTS: {
+            showClose: true,
+            timeout: 2000
+        }
+    };
+    const msg = Qmsg
+    Qmsg.success("")
+    msg.success("")
     $(document).ready(function () {
+        var clickedPage = 1
+        var nextPage = 1
+        /*上一页*/
+        var prePage = 1
+        var pages = 1
         /*进入页面时 通过一次get请求获取列表信息*/
         $.ajax({
             url: "http://localhost:8080/whiteList",
@@ -308,13 +320,8 @@
                     console.log(result.list)
                     replaceInfo(result)
                 }
-
-
             })
-
-
         })
-
 
         /*遍历展示信息方法*/
         function replaceInfo(pageInfo) {
@@ -438,7 +445,6 @@
             })
         }
 
-
         /*添加至黑名单*/
         let supplierId
         $(function () {
@@ -475,6 +481,8 @@
                     },
                     onCancel: function () {
                         //点击取消调用函数
+                        Qmsg.info("")
+                        Qmsg.info("取消")
                         console.log("添加至黑名单，点击了取消")
                     }
                 });
@@ -487,52 +495,72 @@
                         console.log("添加至黑名单，二次确认")
                         console.log("拿到的enterpriseId:" +${sessionScope.enterpriseId})
                         console.log("拿到的supplierId:" + supplierId)
-                        console.log("拿到的reason:" + $("textarea[name='bb-reason']").val())
-
-                        $.ajax({
-                            url: "http://localhost:8080/whiteList",
-                            type: "post",
-                            dataType: "json",
-                            async: false,
-                            data: JSON.stringify({
-                                enterpriseId: ${sessionScope.enterpriseId},
-                                supplierId: supplierId,
-                                reason: $("textarea[name='bb-reason']").val(),
-                            }),
-                            success: function () {
-                                alert("移除成功！")
-
-                                $.ajax({
-                                    url: "http://localhost:8080/whiteList",
-                                    type: "get",
-                                    async: false,
-                                    data: {
-                                        id: ${sessionScope.enterpriseId},
-                                    },
-                                    success: function (result) {
-                                        console.log(result.list)
-                                        replaceInfo(result)
+                        let reason = $("textarea[name='bb-reason']").val()
+                        console.log("拿到的reason:" + reason)
+                        if (reason.trim()==""){
+                            console.log("判空处理..")
+                            alert("原因不能为空！")
+                        }else {
+                            $.ajax({
+                                url: "http://localhost:8080/whiteList",
+                                type: "post",
+                                dataType: "json",
+                                async: true,
+                                data: JSON.stringify({
+                                    enterpriseId: ${sessionScope.enterpriseId},
+                                    supplierId: supplierId,
+                                    reason: $("textarea[name='bb-reason']").val(),
+                                }),
+                                success: function (result) {
+                                    console.log(result)
+                                    if (result==true){
+                                        $.ajax({
+                                            url: "http://localhost:8080/whiteList",
+                                            type: "get",
+                                            data: {
+                                                id: ${sessionScope.enterpriseId},
+                                                startPage: clickedPage
+                                            },
+                                            success: function (result) {
+                                                msg.success("移除成功！")
+                                                console.log(result.list)
+                                                replaceInfo(result)
+                                            }
+                                        })
                                     }
-                                })
 
-                            }
-                        })
-
+                                },
+                                error: function (){
+                                    $.ajax({
+                                        url: "http://localhost:8080/whiteList",
+                                        type: "get",
+                                        data: {
+                                            id: ${sessionScope.enterpriseId},
+                                            startPage: clickedPage
+                                        },
+                                        success: function (result) {
+                                            console.log(result.list)
+                                            replaceInfo(result)
+                                        }
+                                    })
+                                }
+                            })
+                        }
                     },
                     onCancel: function () {
                         //点击取消调用函数
-                        alert("点击了取消")
+                        Qmsg.info("")
+                        Qmsg.info("取消")
                     }
                 });
+
             });
 
         });
 
         // 添加供应商
         $(function () {
-
             let selectSupplierId;
-
             $('#doc-prompt-toggle').on('click', function () {
                 $("#doc-select-1").empty();
                 $("<option value=''>"+"请选择企业"+"</option>").appendTo("#doc-select-1")
@@ -569,7 +597,8 @@
                         let supplierLevel = $("#doc-select-2").val()
                         console.info("选中的企业id是：" + selectSupplierId)
                         if (supplierLevel == "0") {
-                            alert("请选择企业评级!")
+                            Qmsg.warning("请完善信息")
+                            Qmsg.warning("请选择企业评级!")
                         } else {
                             $.ajax({
                                 url: "http://localhost:8080/whiteList",
@@ -582,14 +611,19 @@
                                 }),
                                 success: function (result) {
                                     if (result == true) {
-                                        alert("添加供应商信息成功！")
-                                        window.location.href="http://localhost:8080/white-list"
+                                        Qmsg.info("")
+                                        Qmsg.success("添加供应商信息成功！")
+                                        msg.success("添加供应商信息成功！")
+                                        /*清除输入弹出框的残留信息*/
+                                        $("#socialUniformCode").text("")
+                                        $("#doc-select-2").val("0")
+
                                         $.ajax({
                                             url: "http://localhost:8080/whiteList",
                                             type: "get",
-                                            async: true,
                                             data: {
                                                 id: ${sessionScope.enterpriseId},
+                                                startPage: clickedPage
                                             },
                                             success: function (result) {
                                                 console.log(result.list)
@@ -597,7 +631,8 @@
                                             }
                                         })
                                     } else {
-                                        alert("添加供应商信息失败！")
+                                        Qmsg.info("")
+                                        Qmsg.error("添加供应商信息失败！")
                                     }
                                 }
                             })
@@ -606,6 +641,8 @@
                     },
                     onCancel: function (e) {
                         //点击取消调用函数
+                        Qmsg.info("")
+                        Qmsg.info("取消")
                         console.log("关闭添加供应商弹出框")
                     }
                 });
@@ -618,13 +655,15 @@
             })
         });
         /*退出登录按钮*/
+
         $("#logoutButton").click(function (){
             $.ajax({
                 type:"delete",
                 url:"login",
                 success:function (data){
                     if (data.data){
-                        alert(data.msg)
+                        Qmsg.info("")
+                        Qmsg.success(data.msg)
                         window.location.href="http://localhost:8080"
                     }
                 }
@@ -633,7 +672,4 @@
     })
 
 </script>
-<input name="hiddenSupplierId" type="hidden">
-</body>
-
 </html>
