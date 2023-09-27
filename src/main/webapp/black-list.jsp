@@ -440,6 +440,10 @@
                                     reason: reason
                                 }),
                                 success: function (result) {
+                                    /*清除输入弹出框的残留信息*/
+                                    $("#socialUniformCode").text("")
+                                    $("#user-intro").val("")
+
                                     if (result.data) {
                                         Qmsg.success(result.msg)
                                         showInfo()
