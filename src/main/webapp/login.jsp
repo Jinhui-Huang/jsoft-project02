@@ -76,6 +76,7 @@
         }
     };
     Qmsg.warning("请登陆访问")
+
     $(document).ready(function (){
         function login(){
             $.ajax({
