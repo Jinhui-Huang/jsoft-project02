@@ -42,7 +42,7 @@
                 <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
                     <span class="tpl-header-list-user-nick">${sessionScope.userName}</span><span
                         class="tpl-header-list-user-ico"> <img
-                        src="assets/img/user01.png"></span>
+                        src="http://www.98qy.com/sjbz/api.php"></span>
                 </a>
                 <ul class="am-dropdown-content">
                     <li><a href="login-page" id="notAButton"><span class="am-badge am-badge-secondary am-radius">企业ID:</span> ${sessionScope.enterpriseId} </a></li>
