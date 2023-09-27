@@ -10,8 +10,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
     <meta http-equiv="Cache-Control" content="no-siteapp"/>
-    <link rel="icon" type="image/png" href="assets/i/favicon.png">
-    <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+    <link rel="icon" type="image/png" href="assets/ico/fanvicon.ico">
+    <link rel="apple-touch-icon-precomposed" href="">
     <meta name="apple-mobile-web-app-title" content="Amaze UI"/>
     <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
     <link rel="stylesheet" href="assets/css/admin.css">
@@ -50,6 +50,7 @@
                         src="assets/img/user01.png"></span>
                 </a>
                 <ul class="am-dropdown-content">
+                    <li><a href="login-page" id="notAButton"><span class="am-badge am-badge-secondary am-radius">企业ID:</span> ${sessionScope.enterpriseId} </a></li>
                     <li><a href="login-page" id="logoutButton"><span class="am-icon-power-off"></span> 退出</a></li>
                 </ul>
             </li>
@@ -286,7 +287,7 @@
                     if (result.data[1] == null){
                         Qmsg.warning("请先认证信息")
                     }else {
-                        let href = "http://localhost:8080/"+that.id
+                        let href = "http://192.168.1.147:8080/"+that.id
                         window.location.href = href;
                     }
                 }
@@ -307,7 +308,7 @@
                     }else {
                         Qmsg.success("已认证")
                         /*已进行认证直接回显数据*/
-                        $(".am-form-group").find("input").prop("readonly",true)
+                        $(".am-form-group").find("input").prop("disabled",true)
                         $("[name = 'idcardName']").val(result.data[0].idcardName)
                         $("[name = 'idcardNo']").val(result.data[0].idcardNo)
                         $("[name = 'name']").val(result.data[1].name)
@@ -316,7 +317,7 @@
                         $("[name = 'phone']").val(result.data[1].phone)
                         $("[name = 'fax']").val(result.data[1].fax)
                         $("[name = 'address']").val(result.data[1].address.split("#")[0])
-                        $("textarea[name='addressDetails']").prop("readonly",true)
+                        $("textarea[name='addressDetails']").prop("disabled",true)
                         $("[name = 'addressDetails']").val(result.data[1].address.split("#")[1])
                         var scale =  $("option[value = "+result.data[1].scale+"]").text()
                         $("#sel").replaceWith($("<input type='text' value='"+scale+"' readonly>"))
@@ -495,7 +496,7 @@
             var address = address1 + "#" + address2
             console.log(address)
             $.ajax({
-                url: "http://localhost:8080/enterprise",
+                url: "http://192.168.1.147:8080/enterprise",
                 type: "put",
                 dataType: "json",
                 async:false,
@@ -517,7 +518,7 @@
                         var idcardNo = $("input[name='idcardNo']").val()
                         /*发送post请求，处理用户认证信息*/
                         $.ajax({
-                            url: "http://localhost:8080/enterprise",
+                            url: "http://192.168.1.147:8080/enterprise",
                             type: "post",
                             dataType: "json",
                             data:JSON.stringify({
@@ -557,7 +558,7 @@
                 success:function (data){
                     if (data.data){
                         Qmsg.success(data.msg)
-                        window.location.href="http://localhost:8080"
+                        window.location.href="http://192.168.1.147:8080/login-page"
                     }
                 }
             })

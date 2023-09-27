@@ -10,8 +10,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
     <meta http-equiv="Cache-Control" content="no-siteapp"/>
-    <link rel="icon" type="image/png" href="assets/i/favicon.png">
-    <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+    <link rel="icon" type="image/png" href="assets/ico/fanvicon.ico">
+    <link rel="apple-touch-icon-precomposed" href="">
     <meta name="apple-mobile-web-app-title" content="Amaze UI"/>
     <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
     <link rel="stylesheet" href="assets/css/admin.css">
@@ -28,6 +28,7 @@
                         src="assets/img/user01.png"></span>
                 </a>
                 <ul class="am-dropdown-content">
+                    <li><a href="login-page" id="notAButton"><span class="am-badge am-badge-secondary am-radius">企业ID:</span> ${sessionScope.enterpriseId} </a></li>
                     <li><a href="login-page" id="logoutButton"><span class="am-icon-power-off"></span> 退出</a></li>
                 </ul>
             </li>
@@ -224,7 +225,7 @@
         function showInfo(){
             let name = "%"+$("input[name='enterpriseName']").val().trim()+"%"
             $.ajax({
-                url: "http://localhost:8080/blackList",
+                url: "http://192.168.1.147:8080/blackList",
                 type: "get",
                 data: {
                     id: ${sessionScope.enterpriseId},
@@ -346,7 +347,7 @@
                 success:function (data){
                     if (data.data){
                         Qmsg.success(data.msg)
-                        window.location.href="http://localhost:8080"
+                        window.location.href="http://192.168.1.147:8080/login-page"
                     }
                 }
             })
@@ -371,11 +372,11 @@
                             }),
                             success:function (result){
                                 if (result.data){
-                                    Qmsg.info("")
+                                    Qmsg.success("请求数据成功")
                                     Qmsg.success(result.msg)
                                     showInfo()
                                 }else {
-                                    Qmsg.info("")
+                                    Qmsg.error("参数错误")
                                     Qmsg.warning(result.msg)
                                 }
                             }
@@ -383,7 +384,7 @@
                     },
                     onCancel: function (e) {
                         //点击取消调用函数
-                        Qmsg.info("")
+                        Qmsg.info("取消 ")
                         Qmsg.info("取消")
                     }
                 });
@@ -394,7 +395,7 @@
             $('#doc-prompt-toggle').on('click', function () {
                 /*点击添加供应商按钮，查询下拉列表信息*/
                 $.ajax({
-                    url: "http://localhost:8080/enterprise",
+                    url: "http://192.168.1.147:8080/enterprise",
                     type: "get",
                     async: true,
                     data: {
@@ -426,6 +427,10 @@
                 $('#my-prompt').modal({
                     relatedTarget: this,
                     onConfirm: function (options) {
+                        /*清空数据*/
+                        $("#socialUniformCode").text("")
+                        $("#user-intro").val("")
+
                         //点击确认，插入供应商信息
                         let reason = $("textarea[id='user-intro']").val()
                         console.info("选中的企业id是：" + selectSupplierId)
@@ -434,7 +439,7 @@
                             Qmsg.warning("请输入原因!")
                         } else {
                             $.ajax({
-                                url: "http://localhost:8080/blackList",
+                                url: "http://192.168.1.147:8080/blackList",
                                 type: "post",
                                 contentType: "json",
                                 data: JSON.stringify({
@@ -443,12 +448,16 @@
                                     reason: reason
                                 }),
                                 success: function (result) {
+                                    /*清除输入弹出框的残留信息*/
+                                    $("#socialUniformCode").text("")
+                                    $("#user-intro").val("")
+
                                     if (result.data) {
-                                        Qmsg.info("")
+                                        Qmsg.success("请求数据成功")
                                         Qmsg.success(result.msg)
                                         showInfo()
                                     } else {
-                                        Qmsg.info("")
+                                        Qmsg.error("参数错误")
                                         Qmsg.warning(result.msg)
                                     }
                                 }
@@ -458,8 +467,10 @@
                     },
                     onCancel: function (e) {
                         //点击取消调用函数
-                        Qmsg.info("")
+                        Qmsg.info("取消 ")
                         Qmsg.info("取消")
+                        $("#socialUniformCode").text("")
+                        $("#user-intro").val("")
                     }
                 });
             });

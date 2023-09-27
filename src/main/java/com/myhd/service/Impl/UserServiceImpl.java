@@ -4,7 +4,6 @@ import com.myhd.dao.UserDao;
 import com.myhd.pojo.User;
 import com.myhd.service.UserService;
 import com.myhd.util.MyBatisUtil;
-import com.mysql.cj.Session;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
@@ -21,12 +20,12 @@ import org.apache.ibatis.session.SqlSession;
  */
 @Slf4j
 public class UserServiceImpl implements UserService {
-    public static final  SqlSession session =  MyBatisUtil.singleSession(true);
-     private UserDao userDaoImpl =  session.getMapper(UserDao.class);
+    public static final SqlSession session = MyBatisUtil.singleSession(true);
+    private UserDao userDaoImpl = session.getMapper(UserDao.class);
 
     @Override
     public Boolean judgeUserIsExists(String account) {
-        if (account == null || "".equals(account)){
+        if (account == null || "".equals(account)) {
             return false;
         }
         return userDaoImpl.countAccount(account) == 1;
@@ -34,7 +33,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User selectByUserAccountPwd(User user) {
-        if (user.getPassword() == null){
+        if (user.getPassword() == null) {
             return null;
         }
         return userDaoImpl.selectUserByAccountPwd(user);

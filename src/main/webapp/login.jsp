@@ -10,8 +10,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
     <meta http-equiv="Cache-Control" content="no-siteapp"/>
-    <link rel="icon" type="image/png" href="assets/i/favicon.png">
-    <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+    <link rel="icon" type="image/png" href="assets/ico/fanvicon.ico">
+    <link rel="apple-touch-icon-precomposed" href="">
     <meta name="apple-mobile-web-app-title" content="Amaze UI"/>
     <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
     <link rel="stylesheet" href="assets/css/admin.css">
@@ -23,9 +23,9 @@
             type: "get",
             url: "login",
             async: false,
-            success: function (data){
+            success: function (data) {
                 if (data.data) {
-                    window.location.href="http://localhost:8080/info-certification"
+                    window.location.href = "http://192.168.1.147:8080/info-certification"
                 }
             }
         })
@@ -49,7 +49,8 @@
                     <div class="am-form-group">
                         <input type="password" class="" id="doc-ipt-pwd-1" placeholder="请输入密码">
                     </div>
-                    <a <%--href="info-certification"--%> style="margin-top: 20px;color:#fff;font-size:18px" id="loginButton">
+                    <a <%--href="info-certification"--%> style="margin-top: 20px;color:#fff;font-size:18px"
+                                                         id="loginButton">
                         <div style="    width: 100%;height: 40px;text-align: center;
 						border-radius: 6px;
 						background: #53d192;
@@ -68,7 +69,7 @@
 <script src="assets/js/amazeui.min.js"></script>
 <script src="assets/js/app.js"></script>
 <script src="assets/js/message.min.js"></script>
-<script type="text/javascript" >
+<script type="text/javascript">
     window.QMSG_GLOBALS = {
         DEFAULTS: {
             showClose: true,
@@ -76,21 +77,22 @@
         }
     };
     Qmsg.warning("请登陆访问")
-    $(document).ready(function (){
-        function login(){
+
+    $(document).ready(function () {
+        function login() {
             $.ajax({
                 type: "POST",
                 url: "login",
                 dataType: "json",
-                contentType:"application/json",
-                data:JSON.stringify({
-                    "account":$("#doc-ipt-email-1").val(),
-                    "password":$("#doc-ipt-pwd-1").val(),
+                contentType: "application/json",
+                data: JSON.stringify({
+                    "account": $("#doc-ipt-email-1").val(),
+                    "password": $("#doc-ipt-pwd-1").val(),
                 }),
                 async: true,
-                success: function (data){
+                success: function (data) {
                     if (data.data) {
-                        window.location.href="http://localhost:8080/info-certification"
+                        window.location.href = "http://192.168.1.147:8080/info-certification"
                     } else {
                         Qmsg.warning(data.msg)
                     }
@@ -100,11 +102,12 @@
                 }
             })
         }
+
         /*发送请求进行异步验证*/
-        $("#loginButton").click(function (){
+        $("#loginButton").click(function () {
             login()
         })
-        $("input[type = 'password']").keypress(function(event) {
+        $("input[type = 'password']").keypress(function (event) {
             // 检查按下的键是否是回车键（keyCode 13）
             if (event.which === 13) {
                 // 执行登录操作

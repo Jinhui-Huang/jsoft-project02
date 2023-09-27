@@ -10,8 +10,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
     <meta http-equiv="Cache-Control" content="no-siteapp"/>
-    <link rel="icon" type="image/png" href="assets/i/favicon.png">
-    <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+    <link rel="icon" type="image/png" href="assets/ico/fanvicon.ico">
+    <link rel="apple-touch-icon-precomposed" href="">
     <meta name="apple-mobile-web-app-title" content="Amaze UI"/>
     <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
     <link rel="stylesheet" href="assets/css/admin.css">
@@ -45,6 +45,7 @@
                         src="assets/img/user01.png"></span>
                 </a>
                 <ul class="am-dropdown-content">
+                    <li><a href="login-page" id="notAButton"><span class="am-badge am-badge-secondary am-radius">企业ID:</span> ${sessionScope.enterpriseId} </a></li>
                     <li><a href="login-page" id="logoutButton"><span class="am-icon-power-off"></span> 退出</a></li>
                 </ul>
             </li>
@@ -280,6 +281,7 @@
             timeout: 2000
         }
     };
+    Qmsg.success("")
     $(document).ready(function () {
         var clickedPage = 1
         var nextPage = 1
@@ -288,7 +290,7 @@
         var pages = 1
         /*进入页面时 通过一次get请求获取列表信息*/
         $.ajax({
-            url: "http://localhost:8080/whiteList",
+            url: "http://192.168.1.147:8080/whiteList",
             type: "get",
             data: {
                 id: ${sessionScope.enterpriseId},
@@ -304,7 +306,7 @@
             let name = "%" + $("input[name='enterpriseName']").val() + "%"
             let lv = $("select[name='supplierLevel']").val()
             $.ajax({
-                url: "http://localhost:8080/whiteList",
+                url: "http://192.168.1.147:8080/whiteList",
                 type: "get",
                 data: {
                     id: ${sessionScope.enterpriseId},
@@ -422,7 +424,7 @@
 
         function showInfo(){
             $.ajax({
-                url: "http://localhost:8080/whiteList",
+                url: "http://192.168.1.147:8080/whiteList",
                 type: "get",
                 async: true,
                 data: {
@@ -454,7 +456,7 @@
 
                 /*点击添加至黑名单，查询弹出框信息*/
                 $.ajax({
-                    url: "http://localhost:8080/enterprise",
+                    url: "http://192.168.1.147:8080/enterprise",
                     type: "get",
                     async: true,
                     data: {
@@ -477,9 +479,9 @@
                     },
                     onCancel: function () {
                         //点击取消调用函数
-                        Qmsg.info("")
+                        Qmsg.info("取消 ")
                         Qmsg.info("取消")
-                        console.log("添加至黑名单，点击了取消")
+                        $("textarea[name='bb-reason']").val("")
                     }
                 });
             });
@@ -491,61 +493,68 @@
                         console.log("添加至黑名单，二次确认")
                         console.log("拿到的enterpriseId:" +${sessionScope.enterpriseId})
                         console.log("拿到的supplierId:" + supplierId)
-                        console.log("拿到的reason:" + $("textarea[name='bb-reason']").val())
+                        let reason = $("textarea[name='bb-reason']").val()
+                        console.log("拿到的reason:" + reason)
+                        if (reason.trim()==""){
+                            console.log("判空处理..")
+                            Qmsg.warning("请完善信息")
+                            Qmsg.warning("原因不能为空！")
+                        }else {
+                            $.ajax({
+                                url: "http://192.168.1.147:8080/whiteList",
+                                type: "post",
+                                dataType: "json",
+                                async: true,
+                                data: JSON.stringify({
+                                    enterpriseId: ${sessionScope.enterpriseId},
+                                    supplierId: supplierId,
+                                    reason: $("textarea[name='bb-reason']").val(),
+                                }),
+                                success: function (result) {
+                                    console.log(result)
+                                    if (result==true){
+                                        $.ajax({
+                                            url: "http://192.168.1.147:8080/whiteList",
+                                            type: "get",
+                                            data: {
+                                                id: ${sessionScope.enterpriseId},
+                                                startPage: clickedPage
+                                            },
+                                            success: function (result) {
+                                            Qmsg.success("请求信息成功")
+                                            Qmsg.success("移除成功！")
+                                                console.log(result.list)
+                                                replaceInfo(result)
+                                            }
+                                        })
+                                    }
 
-                        $.ajax({
-                            url: "http://localhost:8080/whiteList",
-                            type: "post",
-                            dataType: "json",
-                            async: true,
-                            data: JSON.stringify({
-                                enterpriseId: ${sessionScope.enterpriseId},
-                                supplierId: supplierId,
-                                reason: $("textarea[name='bb-reason']").val(),
-                            }),
-                            success: function (result) {
-                                console.log(result)
-                                if (result==true){
+                                },
+                                error: function (){
                                     $.ajax({
-                                        url: "http://localhost:8080/whiteList",
+                                        url: "http://192.168.1.147:8080/whiteList",
                                         type: "get",
                                         data: {
                                             id: ${sessionScope.enterpriseId},
                                             startPage: clickedPage
                                         },
                                         success: function (result) {
-                                            Qmsg.info("")
-                                            Qmsg.success("移除成功！")
                                             console.log(result.list)
                                             replaceInfo(result)
                                         }
                                     })
                                 }
-
-                            },
-                            error: function (){
-                                $.ajax({
-                                    url: "http://localhost:8080/whiteList",
-                                    type: "get",
-                                    data: {
-                                        id: ${sessionScope.enterpriseId},
-                                        startPage: clickedPage
-                                    },
-                                    success: function (result) {
-                                        console.log(result.list)
-                                        replaceInfo(result)
-                                    }
-                                })
-                            }
-                        })
-
+                            })
+                        }
                     },
                     onCancel: function () {
                         //点击取消调用函数
-                        Qmsg.info("")
+                        Qmsg.info("取消 ")
                         Qmsg.info("取消")
+                        $("textarea[name='bb-reason']").val("")
                     }
                 });
+
             });
 
         });
@@ -558,7 +567,7 @@
                 $("<option value=''>"+"请选择企业"+"</option>").appendTo("#doc-select-1")
                 /*点击添加供应商按钮，查询下拉列表信息*/
                 $.ajax({
-                    url: "http://localhost:8080/enterprise",
+                    url: "http://192.168.1.147:8080/enterprise",
                     type: "get",
                     async: true,
                     data: {
@@ -591,9 +600,11 @@
                         if (supplierLevel == "0") {
                             Qmsg.warning("请完善信息")
                             Qmsg.warning("请选择企业评级!")
+                            $("#socialUniformCode").text("")
+                            $("#doc-select-2").val("0")
                         } else {
                             $.ajax({
-                                url: "http://localhost:8080/whiteList",
+                                url: "http://192.168.1.147:8080/whiteList",
                                 type: "put",
                                 contentType: "json",
                                 data: JSON.stringify({
@@ -603,10 +614,14 @@
                                 }),
                                 success: function (result) {
                                     if (result == true) {
-                                        Qmsg.info("")
+                                        Qmsg.success("请求成功")
                                         Qmsg.success("添加供应商信息成功！")
+                                        /*清除输入弹出框的残留信息*/
+                                        $("#socialUniformCode").text("")
+                                        $("#doc-select-2").val("0")
+
                                         $.ajax({
-                                            url: "http://localhost:8080/whiteList",
+                                            url: "http://192.168.1.147:8080/whiteList",
                                             type: "get",
                                             data: {
                                                 id: ${sessionScope.enterpriseId},
@@ -618,7 +633,7 @@
                                             }
                                         })
                                     } else {
-                                        Qmsg.info("")
+                                        Qmsg.error("参数错误")
                                         Qmsg.error("添加供应商信息失败！")
                                     }
                                 }
@@ -628,9 +643,11 @@
                     },
                     onCancel: function (e) {
                         //点击取消调用函数
-                        Qmsg.info("")
+                        Qmsg.info("取消 ")
                         Qmsg.info("取消")
                         console.log("关闭添加供应商弹出框")
+                        $("#socialUniformCode").text("")
+                        $("#doc-select-2").val("0")
                     }
                 });
             });
@@ -649,9 +666,9 @@
                 url:"login",
                 success:function (data){
                     if (data.data){
-                        Qmsg.info("")
+                        Qmsg.success("请求数据成功")
                         Qmsg.success(data.msg)
-                        window.location.href="http://localhost:8080"
+                        window.location.href="http://192.168.1.147:8080/login-page"
                     }
                 }
             })

@@ -3,10 +3,8 @@ package com.myhd.filter;
 import com.myhd.exception.SystemException;
 import com.myhd.pojo.User;
 import com.myhd.service.Impl.UserServiceImpl;
-import com.myhd.util.ReqRespMsgUtil;
 import com.myhd.util.TokenUtil;
 import com.myhd.util.code.Code;
-import com.myhd.util.Result;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.*;
@@ -80,7 +78,6 @@ public class WebFilter implements Filter {
         /*分割路径*/
         String[] split = requestURI.split("/");
         if (split.length > 1 && paths.contains(split[1])) {
-            log.info("过滤路径：" + split[1]);
             request.setCharacterEncoding("UTF-8");
             if (requestURI.equals("/login-page") || requestURI.equals("/login") || split[1].equals("assets")) {
                 chain.doFilter(request, response);
@@ -88,7 +85,7 @@ public class WebFilter implements Filter {
                 verifyToken(request, response, chain);
             }
         } else {
-            response.sendRedirect("http://localhost:8080");
+            response.sendRedirect("http://192.168.1.147:8080/login-page");
         }
     }
 
@@ -98,26 +95,29 @@ public class WebFilter implements Filter {
         try {
             if (paths.contains(request.getRequestURI().substring(1))) {
                 Cookie[] cookies = request.getCookies();
-                if (cookies != null){
+                if (cookies != null) {
                     for (Cookie cookie : cookies) {
-                        if (cookie.getName().equals("token")){
+                        if (cookie.getName().equals("token")) {
                             String token = cookie.getValue();
-                            if (token != null){
+                            if (token != null) {
                                 Map<String, Object> verify = TokenUtil.verify(token, User.class);
                                 Boolean status = (Boolean) verify.get("status");
-                                log.info("验证状态为"+status);
-                                if (status){
+                                log.info("验证状态为" + status);
+                                if (status) {
                                     User user = (User) verify.get(User.class.getSimpleName());
                                     User datebaseUser = usi.selectByUserAccountPwd(user);
-                                    if (datebaseUser != null){
-                                        log.info("token用户信息为："+user);
+                                    if (datebaseUser != null) {
+                                        log.info("token用户信息为：" + user);
                                         TokenUtil.SERVER_LOCAL.set(datebaseUser);
-                                        chain.doFilter(request,response);
+                                        chain.doFilter(request, response);
                                         TokenUtil.SERVER_LOCAL.remove();
                                         return;
-                                    }else {
-                                        response.addCookie(new Cookie("token",""));
-                                        response.sendRedirect("http://localhost:8080");
+                                    } else {
+                                        Cookie newCookie = new Cookie("token", null);
+                                        newCookie.setPath("/");
+                                        newCookie.setMaxAge(0);
+                                        response.addCookie(newCookie);
+                                        response.sendRedirect("http://192.168.1.147:8080/login-page");
                                     }
 
                                 }
@@ -125,9 +125,9 @@ public class WebFilter implements Filter {
                         }
                     }
                 }
-                response.sendRedirect("http://localhost:8080");
+                response.sendRedirect("http://192.168.1.147:8080/login-page");
             } else {
-                response.sendRedirect("http://localhost:8080");
+                response.sendRedirect("http://192.168.1.147:8080/login-page");
             }
         } catch (IOException | ServletException | RuntimeException e) {
             throw new SystemException(Code.SYSTEM_ERR, "系统未知异常", e);

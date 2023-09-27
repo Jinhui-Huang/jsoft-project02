@@ -6,8 +6,6 @@ import com.myhd.pojo.SupplierBlackList;
 import com.myhd.pojo.SupplierWhiteList;
 import com.myhd.pojo.ThreeTablesQuery;
 
-import java.util.List;
-
 /**
  * className SupplierWhiteListService
  * packageName com.myhd.service

@@ -7,7 +7,6 @@ import com.myhd.service.EnterpriseService;
 import com.myhd.util.MyBatisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.exceptions.PersistenceException;
-import org.apache.ibatis.jdbc.Null;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.List;
@@ -29,11 +28,11 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     private EnterpriseDao dao = session.getMapper(EnterpriseDao.class);
 
     /**
+     * @param enterprise
+     * @return java.lang.Boolean
      * @description 在企业信息认证界面，输入认证信息后，将认证信息插入到数据库，调用此方法
      * @author JoneElmo
      * @date 2023-09-24 09:12
-     * @param enterprise
-     * @return java.lang.Boolean
      */
     @Override
     public Boolean addEnterprise(Enterprise enterprise) {
@@ -43,18 +42,18 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         } catch (PersistenceException e) {
             log.error("插入数据重复");
             return false;
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             log.error("存在字段为空,请检查字段值");
             return false;
         }
     }
 
     /**
+     * @param enterpriseId
+     * @return com.myhd.pojo.Enterprise
      * @description 根据企业id获取企业信息。用于回显数据到信息认证界面
      * @author JoneElmo
      * @date 2023-09-24 09:12
-     * @param enterpriseId
-     * @return com.myhd.pojo.Enterprise
      */
     @Override
     public Enterprise selectByEnterpriseId(Integer enterpriseId) {
@@ -62,11 +61,11 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     }
 
     /**
+     * @param enterpriseId
+     * @return java.util.List<com.myhd.pojo.Enterprise>
      * @description 查询企业信息。白名单添加供应商时，展示下拉列表信息和统一社会信用代码信息
      * @author JoneElmo
      * @date 2023-09-24 09:58
-     * @param enterpriseId
-     * @return java.util.List<com.myhd.pojo.Enterprise>
      */
     @Override
     public List<Enterprise> selectEnterpriseExceptWhiteAndBlack(Integer enterpriseId) {
@@ -74,11 +73,11 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     }
 
     /**
+     * @param enterpriseId
+     * @return java.util.List<com.myhd.pojo.Enterprise>
      * @description 查询企业信息。黑名单添加供应商时，展示下拉列表信息和统一社会信用代码信息
      * @author JoneElmo
      * @date 2023-09-24 09:40
-     * @param enterpriseId
-     * @return java.util.List<com.myhd.pojo.Enterprise>
      */
     @Override
     public List<Enterprise> selectEnterpriseExceptBlack(Integer enterpriseId) {
@@ -86,8 +85,8 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     }
 
     /**
-     * @description: 判断企业等名称，信用代码，企业邮箱是否重复,如果返回值为true则认为数据重复
      * @param enterprise
+     * @description: 判断企业等名称，信用代码，企业邮箱是否重复,如果返回值为true则认为数据重复
      * @return: java.lang.Boolean
      * @author CYQH
      * @date: 2023/09/26 8:45
