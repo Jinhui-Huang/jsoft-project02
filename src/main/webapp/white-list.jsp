@@ -479,7 +479,7 @@
                     },
                     onCancel: function () {
                         //点击取消调用函数
-                        Qmsg.info("")
+                        Qmsg.info("取消")
                         Qmsg.info("取消")
                     }
                 });
@@ -496,7 +496,7 @@
                         console.log("拿到的reason:" + reason)
                         if (reason.trim()==""){
                             console.log("判空处理..")
-                            Qmsg.info("")
+                            Qmsg.warning("请完善信息")
                             Qmsg.warning("原因不能为空！")
                         }else {
                             $.ajax({
@@ -520,7 +520,7 @@
                                                 startPage: clickedPage
                                             },
                                             success: function (result) {
-                                            Qmsg.info("")
+                                            Qmsg.success("请求信息成功")
                                             Qmsg.success("移除成功！")
                                                 console.log(result.list)
                                                 replaceInfo(result)
@@ -548,7 +548,7 @@
                     },
                     onCancel: function () {
                         //点击取消调用函数
-                        Qmsg.info("")
+                        Qmsg.info("取消")
                         Qmsg.info("取消")
                     }
                 });
@@ -610,9 +610,8 @@
                                 }),
                                 success: function (result) {
                                     if (result == true) {
-                                        Qmsg.info("")
+                                        Qmsg.success("请求成功")
                                         Qmsg.success("添加供应商信息成功！")
-                                        msg.success("添加供应商信息成功！")
                                         /*清除输入弹出框的残留信息*/
                                         $("#socialUniformCode").text("")
                                         $("#doc-select-2").val("0")
@@ -630,7 +629,7 @@
                                             }
                                         })
                                     } else {
-                                        Qmsg.info("")
+                                        Qmsg.error("参数错误")
                                         Qmsg.error("添加供应商信息失败！")
                                     }
                                 }
@@ -640,7 +639,7 @@
                     },
                     onCancel: function (e) {
                         //点击取消调用函数
-                        Qmsg.info("")
+                        Qmsg.info("取消")
                         Qmsg.info("取消")
                         console.log("关闭添加供应商弹出框")
                     }
@@ -661,7 +660,7 @@
                 url:"login",
                 success:function (data){
                     if (data.data){
-                        Qmsg.info("")
+                        Qmsg.success("请求数据成功")
                         Qmsg.success(data.msg)
                         window.location.href="http://localhost:8080"
                     }
