@@ -9,7 +9,7 @@
  </a>
 <a href="https://github.com/Yuexinliang"> <img alt="GitHub followers" src="https://img.shields.io/github/followers/Yuexinliang?label=Yuexinliang&logo=github">
  </a>
-<a href="https://github.com/zeusYaoDDD"> <img alt="GitHub followers" src="https://img.shields.io/github/followers/zeusYaoDDD?label=zeusYaoDDD&logo=github">
+<a href="https://github.com/zeusYaoDDD"> <img alt="GitHub followers" src="https://img.shields.io/github/followers/Feilixyao?label=Feilixyao&logo=github">
   </a>
 
 欢迎来到我们的项目介绍页面, 我们的组织是
