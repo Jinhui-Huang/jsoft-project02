@@ -1,8 +1,6 @@
 package com.myhd.dao;
 
 import com.myhd.pojo.Enterprise;
-import com.myhd.pojo.SelectLikeInfo;
-import com.myhd.pojo.ThreeTablesQuery;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;

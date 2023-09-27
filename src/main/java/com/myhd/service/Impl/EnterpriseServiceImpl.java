@@ -7,7 +7,6 @@ import com.myhd.service.EnterpriseService;
 import com.myhd.util.MyBatisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.exceptions.PersistenceException;
-import org.apache.ibatis.jdbc.Null;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.List;

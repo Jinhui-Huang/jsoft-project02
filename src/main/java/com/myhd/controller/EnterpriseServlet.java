@@ -1,11 +1,9 @@
 package com.myhd.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myhd.pojo.Enterprise;
 import com.myhd.pojo.User;
 import com.myhd.service.Impl.EnterpriseServiceImpl;
 import com.myhd.service.Impl.UserServiceImpl;
-import com.myhd.util.ReqRespMsgUtil;
 import com.myhd.util.ReqRespMsgUtil;
 import com.myhd.util.Result;
 import com.myhd.util.TokenUtil;
@@ -16,9 +14,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author JoneElmo && CYQH

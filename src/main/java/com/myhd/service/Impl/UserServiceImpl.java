@@ -4,7 +4,6 @@ import com.myhd.dao.UserDao;
 import com.myhd.pojo.User;
 import com.myhd.service.UserService;
 import com.myhd.util.MyBatisUtil;
-import com.mysql.cj.Session;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;

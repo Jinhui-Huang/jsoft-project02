@@ -3,10 +3,8 @@ package com.myhd.filter;
 import com.myhd.exception.SystemException;
 import com.myhd.pojo.User;
 import com.myhd.service.Impl.UserServiceImpl;
-import com.myhd.util.ReqRespMsgUtil;
 import com.myhd.util.TokenUtil;
 import com.myhd.util.code.Code;
-import com.myhd.util.Result;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.*;
