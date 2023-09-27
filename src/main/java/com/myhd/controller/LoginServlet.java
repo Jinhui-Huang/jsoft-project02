@@ -56,7 +56,6 @@ public class LoginServlet extends HttpServlet {
                 log.info(user.toString());
                 log.info("登录成功");
                 String token = TokenUtil.sign(user);
-                log.info("生成token====="+token);
                 Cookie cookie = new Cookie("token",token);
                 /*cookie等有效时间以秒为单位*/
                 cookie.setMaxAge(60*60*24*2);

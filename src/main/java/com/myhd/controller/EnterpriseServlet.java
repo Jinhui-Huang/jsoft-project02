@@ -45,10 +45,8 @@ public class EnterpriseServlet extends HttpServlet {
     protected void getInfo(HttpServletRequest req, HttpServletResponse resp){
         resp.setContentType("application/json");
         Integer enterpriseId = Integer.valueOf(req.getParameter("id"));
-        log.info(String.valueOf(enterpriseId));
         List<Enterprise> list = enterpriseImpl.selectEnterpriseExceptWhiteAndBlack(enterpriseId);
         /*将list以json格式返给前端*/
-        log.info("list信息"+String.valueOf(list));
         ReqRespMsgUtil.sendMsg(resp, list);
     }
 
@@ -63,9 +61,7 @@ public class EnterpriseServlet extends HttpServlet {
     protected void getSupplierInfo(HttpServletRequest req, HttpServletResponse resp){
         resp.setContentType("application/json");
         Integer supplierId = Integer.valueOf(req.getParameter("id"));
-        log.info(String.valueOf(supplierId));
         Enterprise enterprise = enterpriseImpl.selectByEnterpriseId(supplierId);
-        log.info("enterprise对象："+enterprise);
         ReqRespMsgUtil.sendMsg(resp, enterprise);
     }
 
@@ -74,10 +70,8 @@ public class EnterpriseServlet extends HttpServlet {
         log.info("查询黑名单列表");
         resp.setContentType("application/json");
         Integer enterpriseId = Integer.valueOf(req.getParameter("id"));
-        log.info(String.valueOf(enterpriseId));
         List<Enterprise> list = enterpriseImpl.selectEnterpriseExceptBlack(enterpriseId);
         /*将list以json格式返给前端*/
-        log.info(list.toString());
         ReqRespMsgUtil.sendMsg(resp, list);
     }
 
@@ -92,10 +86,10 @@ public class EnterpriseServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (req.getParameter("op")!=null && req.getParameter("op").equals("1")){
-            log.info("准备进入getInfo方法");
+            log.info("进入getInfo");
             getInfo(req, resp);
         }else if (req.getParameter("op")!=null && req.getParameter("op").equals("2")){
-            log.info("准备进入getSupplierInfo方法");
+            log.info("进入getSupplierInfo");
             getSupplierInfo(req,resp);
         }else if(req.getParameter("op")!=null && req.getParameter("op").equals("3") ){
             log.info("黑名单添加供应商");
@@ -107,7 +101,6 @@ public class EnterpriseServlet extends HttpServlet {
             objects[0]=tokenUser;
             Enterprise returnInfo = enterpriseImpl.selectByEnterpriseId(tokenUser.getEnterpriseId());
             objects[1]=returnInfo;
-            log.info(Arrays.toString(objects));
             req.getSession().setAttribute("enterpriseId", tokenUser.getEnterpriseId());
             req.getSession().setAttribute("userName", tokenUser.getName());
             ReqRespMsgUtil.sendMsg(resp,new Result(Code.UPDATE_OK,objects,"用户信息回显"));
@@ -180,10 +173,8 @@ public class EnterpriseServlet extends HttpServlet {
         Boolean isExists = enterpriseImpl.judgeEnterpriseInfoIsExists(enterprise);
         if (isExists){
             /*如果企业名称或企业邮箱或信用代码存在则返回一个true*/
-            log.info("企业信息重复");
             ReqRespMsgUtil.sendMsg(resp,new Result(Code.SAVE_ERR,true,"企业信息重复"));
         }else {
-            log.info("企业信息无重复");
             ReqRespMsgUtil.sendMsg(resp,new Result(Code.SAVE_OK,false,"企业信息无重复"));
         }
     }

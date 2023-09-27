@@ -51,9 +51,6 @@ public class SupplierBlackListServlet extends HttpServlet {
         Integer id = Integer.valueOf(req.getParameter("id"));
         String enterpriseName = req.getParameter("enterpriseName");
         Integer startPage = Integer.valueOf(req.getParameter("startPage"));
-        log.info("拿到的id是："+id);
-        log.info("拿到的name是:" + enterpriseName);
-        log.info("拿到的startPage是:" + startPage);
         SelectLikeInfo sli = new SelectLikeInfo();
         sli.setId(id);
         sli.setEnterpriseName(enterpriseName);
@@ -75,8 +72,7 @@ public class SupplierBlackListServlet extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         /*获取Json数据*/
         SupplierBlackList sbl = ReqRespMsgUtil.getMsg(req, SupplierBlackList.class);
-        log.info("企业id"+sbl.getEnterpriseId().toString());
-        log.info("供应商id"+sbl.getSupplierId().toString());
+        log.info("移除黑名单");
         /*移除黑名单*/
         try {
             Boolean removeBlack = impl.removeBlack(sbl.getEnterpriseId(), sbl.getSupplierId());
