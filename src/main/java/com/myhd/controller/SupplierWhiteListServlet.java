@@ -23,25 +23,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @description
  * @author JoneElmo
- * @date 2023-09-24 19:11
  * @version 1.0
+ * @description
+ * @date 2023-09-24 19:11
  * @package com.myhd.controller
  * @class SupplierWhiteListServlet
  */
 @Slf4j
 @WebServlet("/whiteList")
-public class SupplierWhiteListServlet extends   HttpServlet {
+public class SupplierWhiteListServlet extends HttpServlet {
     private SupplierWhiteListServiceImpl impl = new SupplierWhiteListServiceImpl();
 
     /**
-     * @description 用于处理数据显示请求
-     * @author JoneElmo
-     * @date 2023-09-24 16:42
      * @param req
      * @param resp
      * @return void
+     * @description 用于处理数据显示请求
+     * @author JoneElmo
+     * @date 2023-09-24 16:42
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -55,7 +55,7 @@ public class SupplierWhiteListServlet extends   HttpServlet {
         SelectLikeInfo sli = new SelectLikeInfo();
         sli.setId(Integer.valueOf(req.getParameter("id")));
         sli.setEnterpriseName(enterpriseName);
-        sli.setSupplierLevel( "0".equals(supplierLevel) ? null : supplierLevel );
+        sli.setSupplierLevel("0".equals(supplierLevel) ? null : supplierLevel);
         sli.setStartPage(startPage);
         /*模糊查询*/
         PageInfo<ThreeTablesQuery> info = impl.selectWhiteInfoByEnterpriseId(sli);
@@ -65,12 +65,12 @@ public class SupplierWhiteListServlet extends   HttpServlet {
     }
 
     /**
-     * @description 处理'添加至黑名单'操作,操作完成再次查询
-     * @author JoneElmo
-     * @date 2023-09-24 16:43
      * @param req
      * @param resp
      * @return void
+     * @description 处理'添加至黑名单'操作,操作完成再次查询
+     * @author JoneElmo
+     * @date 2023-09-24 16:43
      */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -91,12 +91,12 @@ public class SupplierWhiteListServlet extends   HttpServlet {
     }
 
     /**
-     * @description 处理前端的‘添加供应商’请求
-     * @author JoneElmo
-     * @date 2023-09-26 10:35
      * @param req
      * @param resp
      * @return void
+     * @description 处理前端的‘添加供应商’请求
+     * @author JoneElmo
+     * @date 2023-09-26 10:35
      */
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

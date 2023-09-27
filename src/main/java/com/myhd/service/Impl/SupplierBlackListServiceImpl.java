@@ -26,40 +26,40 @@ import java.util.List;
  */
 @Slf4j
 public class SupplierBlackListServiceImpl implements SupplierBlackListService {
-    public static final  SqlSession session =  MyBatisUtil.singleSession(true);
-    public SupplierBlackListDao sbd =  session.getMapper(SupplierBlackListDao.class);
-    public SupplierWhiteListDao swl =  session.getMapper(SupplierWhiteListDao.class);
+    public static final SqlSession session = MyBatisUtil.singleSession(true);
+    public SupplierBlackListDao sbd = session.getMapper(SupplierBlackListDao.class);
+    public SupplierWhiteListDao swl = session.getMapper(SupplierWhiteListDao.class);
 
     /**
-     * @description: 根据用户表查询到的企业id查询本企业的黑名单表信息，再根据黑名单表信息中的供应商id查询对应用户表信息和企业表信息，将数据存入到三表联查实体类中，并进行分页展示.
      * @param selectLikeInfo
+     * @description: 根据用户表查询到的企业id查询本企业的黑名单表信息，再根据黑名单表信息中的供应商id查询对应用户表信息和企业表信息，将数据存入到三表联查实体类中，并进行分页展示.
      * @return: com.github.pagehelper.PageInfo<com.myhd.pojo.ThreeTablesQuery>
      * @author DY
      * @date: 2023/09/23 8:29
      */
     @Override
     public PageInfo<ThreeTablesQuery> selectBlackInfoByEnterpriseId(SelectLikeInfo selectLikeInfo) {
-            PageHelper.startPage(selectLikeInfo.getStartPage(),selectLikeInfo.getPageSize());
-            List<ThreeTablesQuery> trq = sbd.selectBlackInfoByEnterpriseId(selectLikeInfo);
-            return new PageInfo<>(trq);
+        PageHelper.startPage(selectLikeInfo.getStartPage(), selectLikeInfo.getPageSize());
+        List<ThreeTablesQuery> trq = sbd.selectBlackInfoByEnterpriseId(selectLikeInfo);
+        return new PageInfo<>(trq);
     }
 
     /**
-     * @description: 根据本企业id和选择的供应商id确定唯一一条黑名单数据并移除黑名单表
      * @param enterpriseId
      * @param supplierId
+     * @description: 根据本企业id和选择的供应商id确定唯一一条黑名单数据并移除黑名单表
      * @return: java.lang.Boolean
      * @author DY
      * @date: 2023/09/23 8:31
      */
     @Override
     public Boolean removeBlack(Integer enterpriseId, Integer supplierId) {
-            return sbd.deleteBlack(enterpriseId,supplierId) == 1;
+        return sbd.deleteBlack(enterpriseId, supplierId) == 1;
     }
 
     /**
-     * @description: 根据添加供应商获取的黑名单信息,先查询本企业所有白名单企业，判断要要加入黑名单的企业是否位于白名单，如果位于白名单要先移除白名单再更新黑名单表。
      * @param supplierBlackList
+     * @description: 根据添加供应商获取的黑名单信息, 先查询本企业所有白名单企业，判断要要加入黑名单的企业是否位于白名单，如果位于白名单要先移除白名单再更新黑名单表。
      * @return: java.lang.Boolean
      * @author DY
      * @date: 2023/09/23 8:36
@@ -69,9 +69,9 @@ public class SupplierBlackListServiceImpl implements SupplierBlackListService {
         try {
             swl.deleteWhite(supplierBlackList.getEnterpriseId(), supplierBlackList.getSupplierId());
             Integer j = sbd.insertBlack(supplierBlackList);
-            return j==1;
+            return j == 1;
         } catch (RuntimeException e) {
-            log.error(e.getMessage(),e);
+            log.error(e.getMessage(), e);
             return false;
         }
     }

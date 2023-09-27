@@ -33,10 +33,11 @@ import java.util.Map;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
     private UserServiceImpl usi = new UserServiceImpl();
+
     /**
-     * @description: TODO 点击登录按钮进行登录认证，登录成功后将用户账号密码存入token中进行后续的令牌校验。
      * @param req
      * @param resp
+     * @description: TODO 点击登录按钮进行登录认证，登录成功后将用户账号密码存入token中进行后续的令牌校验。
      * @return: void
      * @author CYQH
      * @date: 2023/09/25 11:56
@@ -48,33 +49,34 @@ public class LoginServlet extends HttpServlet {
         User user = ReqRespMsgUtil.getMsg(req, User.class);
         /*判断用户是否存在*/
         boolean userIsExists = user != null && usi.judgeUserIsExists(user.getAccount());
-        if (userIsExists){
+        if (userIsExists) {
             /*用户登录方法*/
             log.info(user.toString());
             user = usi.selectByUserAccountPwd(user);
-            if (user != null){
+            if (user != null) {
                 log.info(user.toString());
                 log.info("登录成功");
                 String token = TokenUtil.sign(user);
-                Cookie cookie = new Cookie("token",token);
+                Cookie cookie = new Cookie("token", token);
                 /*cookie等有效时间以秒为单位*/
-                cookie.setMaxAge(60*60*24*2);
+                cookie.setMaxAge(60 * 60 * 24 * 2);
                 cookie.setPath("/");
                 cookie.setSecure(true);
                 cookie.setHttpOnly(true);
                 resp.addCookie(cookie);
-                ReqRespMsgUtil.sendMsg(resp,new Result(Code.GET_OK,true,"账号登录成功"));
-            }else {
-                ReqRespMsgUtil.sendMsg(resp,new Result(Code.BUSINESS_ERR,false,"账号登录失败"));
+                ReqRespMsgUtil.sendMsg(resp, new Result(Code.GET_OK, true, "账号登录成功"));
+            } else {
+                ReqRespMsgUtil.sendMsg(resp, new Result(Code.BUSINESS_ERR, false, "账号登录失败"));
             }
-        }else {
-            ReqRespMsgUtil.sendMsg(resp,new Result(Code.BUSINESS_ERR,false,"该账户不存在"));
+        } else {
+            ReqRespMsgUtil.sendMsg(resp, new Result(Code.BUSINESS_ERR, false, "该账户不存在"));
         }
     }
+
     /**
-     * @description: TODO 每次进入Login-page页面时都会发送一个get请求，用以判断token是否存在，如果存在并且校验正确则进行自动登录，如果不存在或过期就提示请登录访问。
      * @param req
      * @param resp
+     * @description: TODO 每次进入Login-page页面时都会发送一个get请求，用以判断token是否存在，如果存在并且校验正确则进行自动登录，如果不存在或过期就提示请登录访问。
      * @return: void
      * @author CYQH
      * @date: 2023/09/25 11:57
@@ -84,24 +86,24 @@ public class LoginServlet extends HttpServlet {
         log.info("进入loginGet");
         Cookie[] cookies = req.getCookies();
         boolean flag = false;
-        if (cookies != null){
+        if (cookies != null) {
             log.info("cookies存在");
             for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")){
+                if (cookie.getName().equals("token")) {
                     String token = cookie.getValue();
-                    if (token != null){
+                    if (token != null) {
                         log.info("token存在");
                         Map<String, Object> verify = TokenUtil.verify(token, User.class);
                         Boolean status = (Boolean) verify.get("status");
-                        if (status){
+                        if (status) {
                             log.info("token正确");
                             /*用户名密码校验*/
                             User user = (User) verify.get(User.class.getSimpleName());
                             User datebaseUser = usi.selectByUserAccountPwd(user);
-                            if (datebaseUser != null){
+                            if (datebaseUser != null) {
                                 log.info("账号登录成功");
                                 flag = true;
-                                ReqRespMsgUtil.sendMsg(resp,new Result(Code.GET_OK,true,"账号登录成功"));
+                                ReqRespMsgUtil.sendMsg(resp, new Result(Code.GET_OK, true, "账号登录成功"));
                                 break;
                             } else {
                                 log.warn("账号登录失败");
@@ -117,13 +119,14 @@ public class LoginServlet extends HttpServlet {
             }
         }
         if (!flag) {
-            ReqRespMsgUtil.sendMsg(resp,new Result(Code.GET_ERR, false,"请登录访问"));
+            ReqRespMsgUtil.sendMsg(resp, new Result(Code.GET_ERR, false, "请登录访问"));
         }
     }
+
     /**
-     * @description: TODO 账号退出登录功能
      * @param req
      * @param resp
+     * @description: TODO 账号退出登录功能
      * @return: void
      * @author CYQH
      * @date: 2023/09/25 18:55
@@ -136,6 +139,6 @@ public class LoginServlet extends HttpServlet {
         newCookie.setMaxAge(0);
         resp.addCookie(newCookie);
         TokenUtil.SERVER_LOCAL.remove();
-        ReqRespMsgUtil.sendMsg(resp,new Result(Code.DELETE_OK,true,"账号退出成功"));
+        ReqRespMsgUtil.sendMsg(resp, new Result(Code.DELETE_OK, true, "账号退出成功"));
     }
 }
