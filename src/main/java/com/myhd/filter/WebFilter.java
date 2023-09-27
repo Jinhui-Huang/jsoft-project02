@@ -88,7 +88,7 @@ public class WebFilter implements Filter {
                 verifyToken(request, response, chain);
             }
         } else {
-            response.sendRedirect("http://localhost:8080/info-certification");
+            response.sendRedirect("http://localhost:8080/login-page");
         }
     }
 
@@ -117,7 +117,7 @@ public class WebFilter implements Filter {
                                         return;
                                     }else {
                                         response.addCookie(new Cookie("token",""));
-                                        response.sendRedirect("http://localhost:8080/info-certification");
+                                        response.sendRedirect("http://localhost:8080/login-page");
                                     }
 
                                 }
@@ -125,9 +125,9 @@ public class WebFilter implements Filter {
                         }
                     }
                 }
-                response.sendRedirect("http://localhost:8080/info-certification");
+                response.sendRedirect("http://localhost:8080/login-page");
             } else {
-                response.sendRedirect("http://localhost:8080/info-certification");
+                response.sendRedirect("http://localhost:8080/login-page");
             }
         } catch (IOException | ServletException | RuntimeException e) {
             throw new SystemException(Code.SYSTEM_ERR, "系统未知异常", e);

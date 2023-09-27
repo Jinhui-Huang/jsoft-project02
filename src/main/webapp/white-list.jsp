@@ -668,7 +668,7 @@
                     if (data.data){
                         Qmsg.success("请求数据成功")
                         Qmsg.success(data.msg)
-                        window.location.href="http://localhost:8080/info-certification"
+                        window.location.href="http://localhost:8080/login-page"
                     }
                 }
             })
