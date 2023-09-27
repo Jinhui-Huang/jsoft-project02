@@ -481,6 +481,8 @@
                     },
                     onCancel: function () {
                         //点击取消调用函数
+                        Qmsg.info("")
+                        Qmsg.info("取消")
                         console.log("添加至黑名单，点击了取消")
                     }
                 });
@@ -547,10 +549,11 @@
                     },
                     onCancel: function () {
                         //点击取消调用函数
-                        msg.info("取消")
-                        alert("quxiao")
+                        Qmsg.info("")
+                        Qmsg.info("取消")
                     }
                 });
+
             });
 
         });
@@ -594,7 +597,8 @@
                         let supplierLevel = $("#doc-select-2").val()
                         console.info("选中的企业id是：" + selectSupplierId)
                         if (supplierLevel == "0") {
-                            msg.warning("请选择企业评级!")
+                            Qmsg.warning("请完善信息")
+                            Qmsg.warning("请选择企业评级!")
                         } else {
                             $.ajax({
                                 url: "http://localhost:8080/whiteList",
@@ -607,6 +611,8 @@
                                 }),
                                 success: function (result) {
                                     if (result == true) {
+                                        Qmsg.info("")
+                                        Qmsg.success("添加供应商信息成功！")
                                         msg.success("添加供应商信息成功！")
                                         /*清除输入弹出框的残留信息*/
                                         $("#socialUniformCode").text("")
@@ -625,7 +631,8 @@
                                             }
                                         })
                                     } else {
-                                        msg.error("添加供应商信息失败！")
+                                        Qmsg.info("")
+                                        Qmsg.error("添加供应商信息失败！")
                                     }
                                 }
                             })
@@ -634,6 +641,8 @@
                     },
                     onCancel: function (e) {
                         //点击取消调用函数
+                        Qmsg.info("")
+                        Qmsg.info("取消")
                         console.log("关闭添加供应商弹出框")
                     }
                 });
@@ -653,7 +662,8 @@
                 url:"login",
                 success:function (data){
                     if (data.data){
-                        msg.success(data.msg)
+                        Qmsg.info("")
+                        Qmsg.success(data.msg)
                         window.location.href="http://localhost:8080"
                     }
                 }
