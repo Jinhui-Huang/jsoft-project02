@@ -481,6 +481,7 @@
                         //点击取消调用函数
                         Qmsg.info("取消")
                         Qmsg.info("取消")
+                        $("textarea[name='bb-reason']").val("")
                     }
                 });
             });
@@ -550,6 +551,7 @@
                         //点击取消调用函数
                         Qmsg.info("取消")
                         Qmsg.info("取消")
+                        $("textarea[name='bb-reason']").val("")
                     }
                 });
 
@@ -598,6 +600,8 @@
                         if (supplierLevel == "0") {
                             Qmsg.warning("请完善信息")
                             Qmsg.warning("请选择企业评级!")
+                            $("#socialUniformCode").text("")
+                            $("#doc-select-2").val("0")
                         } else {
                             $.ajax({
                                 url: "http://localhost:8080/whiteList",
@@ -642,6 +646,8 @@
                         Qmsg.info("取消")
                         Qmsg.info("取消")
                         console.log("关闭添加供应商弹出框")
+                        $("#socialUniformCode").text("")
+                        $("#doc-select-2").val("0")
                     }
                 });
             });
