@@ -225,7 +225,7 @@
         function showInfo(){
             let name = "%"+$("input[name='enterpriseName']").val().trim()+"%"
             $.ajax({
-                url: "http://localhost:8080/blackList",
+                url: "http://192.168.1.147:8080/blackList",
                 type: "get",
                 data: {
                     id: ${sessionScope.enterpriseId},
@@ -347,7 +347,7 @@
                 success:function (data){
                     if (data.data){
                         Qmsg.success(data.msg)
-                        window.location.href="http://localhost:8080/login-page"
+                        window.location.href="http://192.168.1.147:8080/login-page"
                     }
                 }
             })
@@ -395,7 +395,7 @@
             $('#doc-prompt-toggle').on('click', function () {
                 /*点击添加供应商按钮，查询下拉列表信息*/
                 $.ajax({
-                    url: "http://localhost:8080/enterprise",
+                    url: "http://192.168.1.147:8080/enterprise",
                     type: "get",
                     async: true,
                     data: {
@@ -439,7 +439,7 @@
                             Qmsg.warning("请输入原因!")
                         } else {
                             $.ajax({
-                                url: "http://localhost:8080/blackList",
+                                url: "http://192.168.1.147:8080/blackList",
                                 type: "post",
                                 contentType: "json",
                                 data: JSON.stringify({
