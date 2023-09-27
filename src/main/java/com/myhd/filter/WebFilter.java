@@ -116,7 +116,10 @@ public class WebFilter implements Filter {
                                         TokenUtil.SERVER_LOCAL.remove();
                                         return;
                                     } else {
-                                        response.addCookie(new Cookie("token", ""));
+                                        Cookie newCookie = new Cookie("token", null);
+                                        newCookie.setPath("/");
+                                        newCookie.setMaxAge(0);
+                                        response.addCookie(newCookie);
                                         response.sendRedirect("http://localhost:8080/login-page");
                                     }
 
