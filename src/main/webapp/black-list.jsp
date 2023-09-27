@@ -347,7 +347,7 @@
                 success:function (data){
                     if (data.data){
                         Qmsg.success(data.msg)
-                        window.location.href="http://localhost:8080"
+                        window.location.href="http://localhost:8080/info-certification"
                     }
                 }
             })
@@ -384,7 +384,7 @@
                     },
                     onCancel: function (e) {
                         //点击取消调用函数
-                        Qmsg.info("取消")
+                        Qmsg.info("取消 ")
                         Qmsg.info("取消")
                     }
                 });
@@ -463,7 +463,7 @@
                     },
                     onCancel: function (e) {
                         //点击取消调用函数
-                        Qmsg.info("取消")
+                        Qmsg.info("取消 ")
                         Qmsg.info("取消")
                     }
                 });

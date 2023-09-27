@@ -479,7 +479,7 @@
                     },
                     onCancel: function () {
                         //点击取消调用函数
-                        Qmsg.info("取消")
+                        Qmsg.info("取消 ")
                         Qmsg.info("取消")
                     }
                 });
@@ -548,7 +548,7 @@
                     },
                     onCancel: function () {
                         //点击取消调用函数
-                        Qmsg.info("取消")
+                        Qmsg.info("取消 ")
                         Qmsg.info("取消")
                     }
                 });
@@ -639,7 +639,7 @@
                     },
                     onCancel: function (e) {
                         //点击取消调用函数
-                        Qmsg.info("取消")
+                        Qmsg.info("取消 ")
                         Qmsg.info("取消")
                         console.log("关闭添加供应商弹出框")
                     }
@@ -662,7 +662,7 @@
                     if (data.data){
                         Qmsg.success("请求数据成功")
                         Qmsg.success(data.msg)
-                        window.location.href="http://localhost:8080"
+                        window.location.href="http://localhost:8080/info-certification"
                     }
                 }
             })

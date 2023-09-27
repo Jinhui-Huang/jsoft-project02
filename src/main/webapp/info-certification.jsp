@@ -558,7 +558,7 @@
                 success:function (data){
                     if (data.data){
                         Qmsg.success(data.msg)
-                        window.location.href="http://localhost:8080"
+                        window.location.href="http://localhost:8080/info-certification"
                     }
                 }
             })
