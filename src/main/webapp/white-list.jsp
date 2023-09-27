@@ -45,6 +45,7 @@
                         src="assets/img/user01.png"></span>
                 </a>
                 <ul class="am-dropdown-content">
+                    <li><a href="login-page" id="notAButton"><span class="am-badge am-badge-secondary am-radius">企业ID:</span> ${sessionScope.enterpriseId} </a></li>
                     <li><a href="login-page" id="logoutButton"><span class="am-icon-power-off"></span> 退出</a></li>
                 </ul>
             </li>
@@ -280,6 +281,7 @@
             timeout: 2000
         }
     };
+    Qmsg.success("")
     $(document).ready(function () {
         var clickedPage = 1
         var nextPage = 1
@@ -479,7 +481,6 @@
                         //点击取消调用函数
                         Qmsg.info("")
                         Qmsg.info("取消")
-                        console.log("添加至黑名单，点击了取消")
                     }
                 });
             });
@@ -491,21 +492,44 @@
                         console.log("添加至黑名单，二次确认")
                         console.log("拿到的enterpriseId:" +${sessionScope.enterpriseId})
                         console.log("拿到的supplierId:" + supplierId)
-                        console.log("拿到的reason:" + $("textarea[name='bb-reason']").val())
+                        let reason = $("textarea[name='bb-reason']").val()
+                        console.log("拿到的reason:" + reason)
+                        if (reason.trim()==""){
+                            console.log("判空处理..")
+                            Qmsg.info("")
+                            Qmsg.warning("原因不能为空！")
+                        }else {
+                            $.ajax({
+                                url: "http://localhost:8080/whiteList",
+                                type: "post",
+                                dataType: "json",
+                                async: true,
+                                data: JSON.stringify({
+                                    enterpriseId: ${sessionScope.enterpriseId},
+                                    supplierId: supplierId,
+                                    reason: $("textarea[name='bb-reason']").val(),
+                                }),
+                                success: function (result) {
+                                    console.log(result)
+                                    if (result==true){
+                                        $.ajax({
+                                            url: "http://localhost:8080/whiteList",
+                                            type: "get",
+                                            data: {
+                                                id: ${sessionScope.enterpriseId},
+                                                startPage: clickedPage
+                                            },
+                                            success: function (result) {
+                                            Qmsg.info("")
+                                            Qmsg.success("移除成功！")
+                                                console.log(result.list)
+                                                replaceInfo(result)
+                                            }
+                                        })
+                                    }
 
-                        $.ajax({
-                            url: "http://localhost:8080/whiteList",
-                            type: "post",
-                            dataType: "json",
-                            async: true,
-                            data: JSON.stringify({
-                                enterpriseId: ${sessionScope.enterpriseId},
-                                supplierId: supplierId,
-                                reason: $("textarea[name='bb-reason']").val(),
-                            }),
-                            success: function (result) {
-                                console.log(result)
-                                if (result==true){
+                                },
+                                error: function (){
                                     $.ajax({
                                         url: "http://localhost:8080/whiteList",
                                         type: "get",
@@ -514,31 +538,13 @@
                                             startPage: clickedPage
                                         },
                                         success: function (result) {
-                                            Qmsg.info("")
-                                            Qmsg.success("移除成功！")
                                             console.log(result.list)
                                             replaceInfo(result)
                                         }
                                     })
                                 }
-
-                            },
-                            error: function (){
-                                $.ajax({
-                                    url: "http://localhost:8080/whiteList",
-                                    type: "get",
-                                    data: {
-                                        id: ${sessionScope.enterpriseId},
-                                        startPage: clickedPage
-                                    },
-                                    success: function (result) {
-                                        console.log(result.list)
-                                        replaceInfo(result)
-                                    }
-                                })
-                            }
-                        })
-
+                            })
+                        }
                     },
                     onCancel: function () {
                         //点击取消调用函数
@@ -546,6 +552,7 @@
                         Qmsg.info("取消")
                     }
                 });
+
             });
 
         });
@@ -605,6 +612,11 @@
                                     if (result == true) {
                                         Qmsg.info("")
                                         Qmsg.success("添加供应商信息成功！")
+                                        msg.success("添加供应商信息成功！")
+                                        /*清除输入弹出框的残留信息*/
+                                        $("#socialUniformCode").text("")
+                                        $("#doc-select-2").val("0")
+
                                         $.ajax({
                                             url: "http://localhost:8080/whiteList",
                                             type: "get",
