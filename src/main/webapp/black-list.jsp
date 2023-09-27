@@ -28,6 +28,7 @@
                         src="assets/img/user01.png"></span>
                 </a>
                 <ul class="am-dropdown-content">
+                    <li><a href="login-page" id="notAButton"><span class="am-badge am-badge-secondary am-radius">企业ID:</span> ${sessionScope.enterpriseId} </a></li>
                     <li><a href="login-page" id="logoutButton"><span class="am-icon-power-off"></span> 退出</a></li>
                 </ul>
             </li>
