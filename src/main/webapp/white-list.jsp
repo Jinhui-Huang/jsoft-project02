@@ -290,7 +290,7 @@
         var pages = 1
         /*进入页面时 通过一次get请求获取列表信息*/
         $.ajax({
-            url: "http://192.168.1.147:8080/whiteList",
+            url: "http://192.168.1.107:8080/whiteList",
             type: "get",
             data: {
                 id: ${sessionScope.enterpriseId},
@@ -306,7 +306,7 @@
             let name = "%" + $("input[name='enterpriseName']").val() + "%"
             let lv = $("select[name='supplierLevel']").val()
             $.ajax({
-                url: "http://192.168.1.147:8080/whiteList",
+                url: "http://192.168.1.107:8080/whiteList",
                 type: "get",
                 data: {
                     id: ${sessionScope.enterpriseId},
@@ -424,7 +424,7 @@
 
         function showInfo(){
             $.ajax({
-                url: "http://192.168.1.147:8080/whiteList",
+                url: "http://192.168.1.107:8080/whiteList",
                 type: "get",
                 async: true,
                 data: {
@@ -456,7 +456,7 @@
 
                 /*点击添加至黑名单，查询弹出框信息*/
                 $.ajax({
-                    url: "http://192.168.1.147:8080/enterprise",
+                    url: "http://192.168.1.107:8080/enterprise",
                     type: "get",
                     async: true,
                     data: {
@@ -501,7 +501,7 @@
                             Qmsg.warning("原因不能为空！")
                         }else {
                             $.ajax({
-                                url: "http://192.168.1.147:8080/whiteList",
+                                url: "http://192.168.1.107:8080/whiteList",
                                 type: "post",
                                 dataType: "json",
                                 async: true,
@@ -514,7 +514,7 @@
                                     console.log(result)
                                     if (result==true){
                                         $.ajax({
-                                            url: "http://192.168.1.147:8080/whiteList",
+                                            url: "http://192.168.1.107:8080/whiteList",
                                             type: "get",
                                             data: {
                                                 id: ${sessionScope.enterpriseId},
@@ -532,7 +532,7 @@
                                 },
                                 error: function (){
                                     $.ajax({
-                                        url: "http://192.168.1.147:8080/whiteList",
+                                        url: "http://192.168.1.107:8080/whiteList",
                                         type: "get",
                                         data: {
                                             id: ${sessionScope.enterpriseId},
@@ -567,7 +567,7 @@
                 $("<option value=''>"+"请选择企业"+"</option>").appendTo("#doc-select-1")
                 /*点击添加供应商按钮，查询下拉列表信息*/
                 $.ajax({
-                    url: "http://192.168.1.147:8080/enterprise",
+                    url: "http://192.168.1.107:8080/enterprise",
                     type: "get",
                     async: true,
                     data: {
@@ -604,7 +604,7 @@
                             $("#doc-select-2").val("0")
                         } else {
                             $.ajax({
-                                url: "http://192.168.1.147:8080/whiteList",
+                                url: "http://192.168.1.107:8080/whiteList",
                                 type: "put",
                                 contentType: "json",
                                 data: JSON.stringify({
@@ -621,7 +621,7 @@
                                         $("#doc-select-2").val("0")
 
                                         $.ajax({
-                                            url: "http://192.168.1.147:8080/whiteList",
+                                            url: "http://192.168.1.107:8080/whiteList",
                                             type: "get",
                                             data: {
                                                 id: ${sessionScope.enterpriseId},
@@ -668,7 +668,7 @@
                     if (data.data){
                         Qmsg.success("请求数据成功")
                         Qmsg.success(data.msg)
-                        window.location.href="http://192.168.1.147:8080/login-page"
+                        window.location.href="http://192.168.1.107:8080/login-page"
                     }
                 }
             })
