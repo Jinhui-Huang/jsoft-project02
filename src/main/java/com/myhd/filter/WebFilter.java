@@ -97,24 +97,28 @@ public class WebFilter implements Filter {
         try {
             if (paths.contains(request.getRequestURI().substring(1))) {
                 Cookie[] cookies = request.getCookies();
-                if (cookies != null){
+                if (cookies != null) {
                     for (Cookie cookie : cookies) {
-                        if (cookie.getName().equals("token")){
+                        if (cookie.getName().equals("token")) {
                             String token = cookie.getValue();
-                            if (token != null){
+                            if (token != null) {
                                 Map<String, Object> verify = TokenUtil.verify(token, User.class);
                                 Boolean status = (Boolean) verify.get("status");
-                                log.info("验证状态为: "+status);
-                                if (status){
+                                log.info("验证状态为" + status);
+                                if (status) {
                                     User user = (User) verify.get(User.class.getSimpleName());
                                     User datebaseUser = usi.selectByUserAccountPwd(user);
-                                    if (datebaseUser != null){
+                                    if (datebaseUser != null) {
+                                        log.info("token用户信息为：" + user);
                                         TokenUtil.SERVER_LOCAL.set(datebaseUser);
-                                        chain.doFilter(request,response);
+                                        chain.doFilter(request, response);
                                         TokenUtil.SERVER_LOCAL.remove();
                                         return;
-                                    }else {
-                                        response.addCookie(new Cookie("token",""));
+                                    } else {
+                                        Cookie newCookie = new Cookie("token", null);
+                                        newCookie.setPath("/");
+                                        newCookie.setMaxAge(0);
+                                        response.addCookie(newCookie);
                                         response.sendRedirect("http://localhost:8080/login-page");
                                     }
 

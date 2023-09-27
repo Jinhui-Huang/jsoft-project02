@@ -36,8 +36,8 @@ public class SupplierBlackListServlet extends HttpServlet {
     private SupplierBlackListServiceImpl impl = new SupplierBlackListServiceImpl();
 
     /**
-     * @description: 用于处理数据显示请求
      * @param req,resp
+     * @description: 用于处理数据显示请求
      * @return: void
      * @author DY
      * @date: 2023/09/24 20:36
@@ -63,7 +63,7 @@ public class SupplierBlackListServlet extends HttpServlet {
 
     /**
      * @description: 处理‘解除黑名单’操作,操作完成再次查询
-     * @param: req,resp
+     * @param: req, resp
      * @return: void
      * @author DY252
      * @date: 2023/9/24 21:10
@@ -76,23 +76,23 @@ public class SupplierBlackListServlet extends HttpServlet {
         /*移除黑名单*/
         try {
             Boolean removeBlack = impl.removeBlack(sbl.getEnterpriseId(), sbl.getSupplierId());
-            if (removeBlack){
-                ReqRespMsgUtil.sendMsg(resp,new Result(Code.DELETE_OK,true,"移除黑名单成功"));
-            }else {
-                ReqRespMsgUtil.sendMsg(resp,new Result(Code.DELETE_ERR,false,"移除黑名单失败"));
+            if (removeBlack) {
+                ReqRespMsgUtil.sendMsg(resp, new Result(Code.DELETE_OK, true, "移除黑名单成功"));
+            } else {
+                ReqRespMsgUtil.sendMsg(resp, new Result(Code.DELETE_ERR, false, "移除黑名单失败"));
             }
         } catch (Exception e) {
-            ReqRespMsgUtil.sendMsg(resp,new Result(Code.DELETE_ERR,false,"移除黑名单失败"));
+            ReqRespMsgUtil.sendMsg(resp, new Result(Code.DELETE_ERR, false, "移除黑名单失败"));
         }
     }
 
-    /** 
+    /**
      * @description: 添加供应商到黑名单
-     * @param: req,resp
+     * @param: req, resp
      * @return: void
      * @author DY252
      * @date: 2023/9/25 14:26
-     */ 
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         /*获取Json数据*/
@@ -103,14 +103,15 @@ public class SupplierBlackListServlet extends HttpServlet {
         sbl.setUpdateDate(date);
         /*移除白名单并添加至黑名单*/
         try {
-            Boolean removeBlack = impl.addBlack(sbl);;
-            if (removeBlack){
-                ReqRespMsgUtil.sendMsg(resp,new Result(Code.DELETE_OK,true,"添加供应商成功"));
-            }else {
-                ReqRespMsgUtil.sendMsg(resp,new Result(Code.DELETE_ERR,false,"添加供应商失败"));
+            Boolean removeBlack = impl.addBlack(sbl);
+            ;
+            if (removeBlack) {
+                ReqRespMsgUtil.sendMsg(resp, new Result(Code.DELETE_OK, true, "添加供应商成功"));
+            } else {
+                ReqRespMsgUtil.sendMsg(resp, new Result(Code.DELETE_ERR, false, "添加供应商失败"));
             }
         } catch (Exception e) {
-            ReqRespMsgUtil.sendMsg(resp,new Result(Code.DELETE_ERR,false,"添加供应商失败"));
+            ReqRespMsgUtil.sendMsg(resp, new Result(Code.DELETE_ERR, false, "添加供应商失败"));
         }
     }
 

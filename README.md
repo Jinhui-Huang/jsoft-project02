@@ -17,9 +17,9 @@
 
 ## 项目介绍
 
-前端技术栈：JQuery, CSS(AmazeUI)
+前端技术栈：JQuery, CSS(AmazeUI)，ajax
 
-后端技术栈: Mybatis, Druid-JDBC
+后端技术栈: Mybatis, Druid-JDBC，junit，jwt(令牌验证)，logback+sl4j+lombok(日志记录框架)，servlet+jsp+connector(服务器-数据库连接接口)，maven(项目管理框架)
 
 数据库: MySQL
 
