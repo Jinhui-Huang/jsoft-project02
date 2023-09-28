@@ -444,9 +444,6 @@
                                     reason: reason
                                 }),
                                 success: function (result) {
-                                    /*清除输入弹出框的残留信息*/
-                                    $("#socialUniformCode").text("")
-                                    $("#user-intro").val("")
 
                                     if (result.data) {
                                         Qmsg.success("请求数据成功")
@@ -458,9 +455,6 @@
                                     }
                                 }
                             })
-                            /*清空数据*/
-                            $("#socialUniformCode").text("")
-                            $("#user-intro").val("")
                         }
                         /*清空数据*/
                         $("#socialUniformCode").text("")
