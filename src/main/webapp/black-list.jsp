@@ -25,7 +25,7 @@
             <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
                 <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
                     <span class="tpl-header-list-user-nick">${sessionScope.userName}</span><span class="tpl-header-list-user-ico"> <img
-                        src="assets/img/user01.png"></span>
+                        src="http://www.98qy.com/sjbz/api.php"></span>
                 </a>
                 <ul class="am-dropdown-content">
                     <li><a href="login-page" id="notAButton"><span class="am-badge am-badge-secondary am-radius">企业ID:</span> ${sessionScope.enterpriseId} </a></li>
@@ -225,7 +225,7 @@
         function showInfo(){
             let name = "%"+$("input[name='enterpriseName']").val().trim()+"%"
             $.ajax({
-                url: "http://192.168.1.147:8080/blackList",
+                url: window.location.protocol + "/blackList",
                 type: "get",
                 data: {
                     id: ${sessionScope.enterpriseId},
@@ -347,7 +347,7 @@
                 success:function (data){
                     if (data.data){
                         Qmsg.success(data.msg)
-                        window.location.href="http://192.168.1.147:8080/login-page"
+                        window.location.href=window.location.protocol + "/login-page"
                     }
                 }
             })
@@ -395,7 +395,7 @@
             $('#doc-prompt-toggle').on('click', function () {
                 /*点击添加供应商按钮，查询下拉列表信息*/
                 $.ajax({
-                    url: "http://192.168.1.147:8080/enterprise",
+                    url: window.location.protocol + "/enterprise",
                     type: "get",
                     async: true,
                     data: {
@@ -435,7 +435,7 @@
                             Qmsg.warning("请输入原因!")
                         } else {
                             $.ajax({
-                                url: "http://192.168.1.147:8080/blackList",
+                                url: window.location.protocol + "/blackList",
                                 type: "post",
                                 contentType: "json",
                                 data: JSON.stringify({
@@ -462,7 +462,9 @@
                             $("#socialUniformCode").text("")
                             $("#user-intro").val("")
                         }
-
+                        /*清空数据*/
+                        $("#socialUniformCode").text("")
+                        $("#user-intro").val("")
                     },
                     onCancel: function (e) {
                         //点击取消调用函数

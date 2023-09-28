@@ -64,6 +64,7 @@ public class WebFilter implements Filter {
         response.setHeader("Access-Control-Allow-Credentials", "true");
 
         String requestURI = request.getRequestURI();
+        
         /*单/进入*/
         if (requestURI.equals("/")) {
             response.sendRedirect("login-page");
@@ -85,7 +86,7 @@ public class WebFilter implements Filter {
                 verifyToken(request, response, chain);
             }
         } else {
-            response.sendRedirect("http://192.168.1.147:8080/login-page");
+            response.sendRedirect(request.getContextPath() + "/login-page");
         }
     }
 
@@ -117,7 +118,7 @@ public class WebFilter implements Filter {
                                         newCookie.setPath("/");
                                         newCookie.setMaxAge(0);
                                         response.addCookie(newCookie);
-                                        response.sendRedirect("http://192.168.1.147:8080/login-page");
+                                        response.sendRedirect(request.getContextPath() + "/login-page");
                                     }
 
                                 }
@@ -125,9 +126,9 @@ public class WebFilter implements Filter {
                         }
                     }
                 }
-                response.sendRedirect("http://192.168.1.147:8080/login-page");
+                response.sendRedirect(request.getContextPath() + "/login-page");
             } else {
-                response.sendRedirect("http://192.168.1.147:8080/login-page");
+                response.sendRedirect(request.getContextPath() + "/login-page");
             }
         } catch (IOException | ServletException | RuntimeException e) {
             throw new SystemException(Code.SYSTEM_ERR, "系统未知异常", e);
