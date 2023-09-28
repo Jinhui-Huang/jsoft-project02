@@ -47,7 +47,7 @@
             <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
                 <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
                     <span class="tpl-header-list-user-nick" id="userName"></span><span class="tpl-header-list-user-ico"> <img
-                        src="assets/img/user01.png"></span>
+                        src="http://www.98qy.com/sjbz/api.php"></span>
                 </a>
                 <ul class="am-dropdown-content">
                     <li><a href="login-page" id="notAButton"><span class="am-badge am-badge-secondary am-radius">企业ID:</span> ${sessionScope.enterpriseId} </a></li>
@@ -287,7 +287,7 @@
                     if (result.data[1] == null){
                         Qmsg.warning("请先认证信息")
                     }else {
-                        let href = "http://localhost:8080/"+that.id
+                        let href = window.location.protocol + "/"+that.id
                         window.location.href = href;
                     }
                 }
@@ -496,7 +496,7 @@
             var address = address1 + "#" + address2
             console.log(address)
             $.ajax({
-                url: "http://localhost:8080/enterprise",
+                url: window.location.protocol + "/enterprise",
                 type: "put",
                 dataType: "json",
                 async:false,
@@ -518,7 +518,7 @@
                         var idcardNo = $("input[name='idcardNo']").val()
                         /*发送post请求，处理用户认证信息*/
                         $.ajax({
-                            url: "http://localhost:8080/enterprise",
+                            url: window.location.protocol + "/enterprise",
                             type: "post",
                             dataType: "json",
                             data:JSON.stringify({
@@ -558,7 +558,7 @@
                 success:function (data){
                     if (data.data){
                         Qmsg.success(data.msg)
-                        window.location.href="http://localhost:8080/login-page"
+                        window.location.href=window.location.protocol + "/login-page"
                     }
                 }
             })

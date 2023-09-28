@@ -59,7 +59,6 @@ public class LoginServlet extends HttpServlet {
                 /*cookie等有效时间以秒为单位*/
                 cookie.setMaxAge(60 * 60 * 24 * 2);
                 cookie.setPath("/");
-                cookie.setSecure(true);
                 cookie.setHttpOnly(true);
                 resp.addCookie(cookie);
                 ReqRespMsgUtil.sendMsg(resp, new Result(Code.GET_OK, true, "账号登录成功"));

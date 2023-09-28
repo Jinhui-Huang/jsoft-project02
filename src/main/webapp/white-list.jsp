@@ -42,7 +42,7 @@
                 <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
                     <span class="tpl-header-list-user-nick">${sessionScope.userName}</span><span
                         class="tpl-header-list-user-ico"> <img
-                        src="assets/img/user01.png"></span>
+                        src="http://www.98qy.com/sjbz/api.php"></span>
                 </a>
                 <ul class="am-dropdown-content">
                     <li><a href="login-page" id="notAButton"><span class="am-badge am-badge-secondary am-radius">企业ID:</span> ${sessionScope.enterpriseId} </a></li>
@@ -290,7 +290,7 @@
         var pages = 1
         /*进入页面时 通过一次get请求获取列表信息*/
         $.ajax({
-            url: "http://localhost:8080/whiteList",
+            url: window.location.protocol + "/whiteList",
             type: "get",
             data: {
                 id: ${sessionScope.enterpriseId},
@@ -306,7 +306,7 @@
             let name = "%" + $("input[name='enterpriseName']").val() + "%"
             let lv = $("select[name='supplierLevel']").val()
             $.ajax({
-                url: "http://localhost:8080/whiteList",
+                url: window.location.protocol + "/whiteList",
                 type: "get",
                 data: {
                     id: ${sessionScope.enterpriseId},
@@ -424,7 +424,7 @@
 
         function showInfo(){
             $.ajax({
-                url: "http://localhost:8080/whiteList",
+                url: window.location.protocol + "/whiteList",
                 type: "get",
                 async: true,
                 data: {
@@ -456,7 +456,7 @@
 
                 /*点击添加至黑名单，查询弹出框信息*/
                 $.ajax({
-                    url: "http://localhost:8080/enterprise",
+                    url: window.location.protocol + "/enterprise",
                     type: "get",
                     async: true,
                     data: {
@@ -501,7 +501,7 @@
                             Qmsg.warning("原因不能为空！")
                         }else {
                             $.ajax({
-                                url: "http://localhost:8080/whiteList",
+                                url: window.location.protocol + "/whiteList",
                                 type: "post",
                                 dataType: "json",
                                 async: true,
@@ -514,7 +514,7 @@
                                     console.log(result)
                                     if (result==true){
                                         $.ajax({
-                                            url: "http://localhost:8080/whiteList",
+                                            url: window.location.protocol + "/whiteList",
                                             type: "get",
                                             data: {
                                                 id: ${sessionScope.enterpriseId},
@@ -532,7 +532,7 @@
                                 },
                                 error: function (){
                                     $.ajax({
-                                        url: "http://localhost:8080/whiteList",
+                                        url: window.location.protocol + "/whiteList",
                                         type: "get",
                                         data: {
                                             id: ${sessionScope.enterpriseId},
@@ -567,7 +567,7 @@
                 $("<option value=''>"+"请选择企业"+"</option>").appendTo("#doc-select-1")
                 /*点击添加供应商按钮，查询下拉列表信息*/
                 $.ajax({
-                    url: "http://localhost:8080/enterprise",
+                    url: window.location.protocol + "/enterprise",
                     type: "get",
                     async: true,
                     data: {
@@ -604,7 +604,7 @@
                             $("#doc-select-2").val("0")
                         } else {
                             $.ajax({
-                                url: "http://localhost:8080/whiteList",
+                                url: window.location.protocol + "/whiteList",
                                 type: "put",
                                 contentType: "json",
                                 data: JSON.stringify({
@@ -621,7 +621,7 @@
                                         $("#doc-select-2").val("0")
 
                                         $.ajax({
-                                            url: "http://localhost:8080/whiteList",
+                                            url: window.location.protocol + "/whiteList",
                                             type: "get",
                                             data: {
                                                 id: ${sessionScope.enterpriseId},
@@ -668,7 +668,7 @@
                     if (data.data){
                         Qmsg.success("请求数据成功")
                         Qmsg.success(data.msg)
-                        window.location.href="http://localhost:8080/login-page"
+                        window.location.href= window.location.protocol + "/login-page"
                     }
                 }
             })

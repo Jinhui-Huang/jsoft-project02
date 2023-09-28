@@ -25,7 +25,7 @@
             async: false,
             success: function (data) {
                 if (data.data) {
-                    window.location.href = "http://localhost:8080/info-certification"
+                    window.location.href = window.location.protocol + "/info-certification"
                 }
             }
         })
@@ -92,7 +92,7 @@
                 async: true,
                 success: function (data) {
                     if (data.data) {
-                        window.location.href = "http://localhost:8080/info-certification"
+                        window.location.href = window.location.protocol + "/info-certification"
                     } else {
                         Qmsg.warning(data.msg)
                     }
