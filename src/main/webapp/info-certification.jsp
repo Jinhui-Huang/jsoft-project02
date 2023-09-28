@@ -287,7 +287,7 @@
                     if (result.data[1] == null){
                         Qmsg.warning("请先认证信息")
                     }else {
-                        let href = "http://192.168.1.107:8080/"+that.id
+                        let href = window.location.protocol + "/"+that.id
                         window.location.href = href;
                     }
                 }
@@ -496,7 +496,7 @@
             var address = address1 + "#" + address2
             console.log(address)
             $.ajax({
-                url: "http://192.168.1.107:8080/enterprise",
+                url: window.location.protocol + "/enterprise",
                 type: "put",
                 dataType: "json",
                 async:false,
@@ -518,7 +518,7 @@
                         var idcardNo = $("input[name='idcardNo']").val()
                         /*发送post请求，处理用户认证信息*/
                         $.ajax({
-                            url: "http://192.168.1.107:8080/enterprise",
+                            url: window.location.protocol + "/enterprise",
                             type: "post",
                             dataType: "json",
                             data:JSON.stringify({
@@ -558,7 +558,7 @@
                 success:function (data){
                     if (data.data){
                         Qmsg.success(data.msg)
-                        window.location.href="http://192.168.1.107:8080/login-page"
+                        window.location.href=window.location.protocol + "/login-page"
                     }
                 }
             })
